@@ -1,4 +1,4 @@
-package com.cmpe295.service;
+package edu.sjsu.cmpe275.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -9,9 +9,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cmpe295.model.Role;
-import com.cmpe295.model.User;
-import com.cmpe295.repository.UserRepository;
+import edu.sjsu.cmpe275.model.Role;
+import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.repository.UserRepository;
 
 import java.util.HashSet;
 import java.util.Set;

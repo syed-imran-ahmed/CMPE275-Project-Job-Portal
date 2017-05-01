@@ -1,4 +1,4 @@
-package com.cmpe295.model;
+package edu.sjsu.cmpe275.model;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

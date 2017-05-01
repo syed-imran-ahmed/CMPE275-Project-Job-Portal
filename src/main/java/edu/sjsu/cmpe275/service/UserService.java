@@ -1,7 +1,7 @@
-package com.cmpe295.service;
+package edu.sjsu.cmpe275.service;
 
-import com.cmpe295.model.Profile;
-import com.cmpe295.model.User;
+import edu.sjsu.cmpe275.model.Profile;
+import edu.sjsu.cmpe275.model.User;
 
 public interface UserService {
     void save(User user);

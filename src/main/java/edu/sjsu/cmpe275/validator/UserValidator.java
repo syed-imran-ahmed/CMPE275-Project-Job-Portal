@@ -1,4 +1,4 @@
-package com.cmpe295.validator;
+package edu.sjsu.cmpe275.validator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -6,8 +6,8 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
-import com.cmpe295.model.User;
-import com.cmpe295.service.UserService;
+import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.service.UserService;
 
 @Component
 public class UserValidator implements Validator {

@@ -1,4 +1,4 @@
-package com.cmpe295.service;
+package edu.sjsu.cmpe275.service;
 
 public interface SecurityService {
     String findLoggedInUsername();

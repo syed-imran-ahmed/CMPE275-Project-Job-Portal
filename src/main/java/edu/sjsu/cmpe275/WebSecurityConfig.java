@@ -1,4 +1,4 @@
-package com.cmpe295;
+package edu.sjsu.cmpe275;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

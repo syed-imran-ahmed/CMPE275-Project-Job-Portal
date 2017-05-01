@@ -1,4 +1,4 @@
-package com.cmpe295.service;
+package edu.sjsu.cmpe275.service;
 
 import java.util.HashSet;
 
@@ -7,10 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.cmpe295.model.Profile;
-import com.cmpe295.model.User;
-import com.cmpe295.repository.RoleRepository;
-import com.cmpe295.repository.UserRepository;
+import edu.sjsu.cmpe275.model.Profile;
+import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.repository.RoleRepository;
+import edu.sjsu.cmpe275.repository.UserRepository;
 
 @Service
 public class UserServiceImpl implements UserService {

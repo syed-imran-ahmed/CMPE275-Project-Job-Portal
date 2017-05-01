@@ -1,4 +1,4 @@
-package com.cmpe295;
+package edu.sjsu.cmpe275;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

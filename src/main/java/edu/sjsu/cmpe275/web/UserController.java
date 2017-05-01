@@ -1,4 +1,4 @@
-package com.cmpe295.web;
+package edu.sjsu.cmpe275.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,12 +9,12 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.cmpe295.model.Profile;
-import com.cmpe295.model.User;
-import com.cmpe295.service.SecurityService;
-import com.cmpe295.service.UserService;
-import com.cmpe295.validator.ProfileValidator;
-import com.cmpe295.validator.UserValidator;
+import edu.sjsu.cmpe275.model.Profile;
+import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.service.SecurityService;
+import edu.sjsu.cmpe275.service.UserService;
+import edu.sjsu.cmpe275.validator.ProfileValidator;
+import edu.sjsu.cmpe275.validator.UserValidator;
 
 @Controller
 public class UserController {
