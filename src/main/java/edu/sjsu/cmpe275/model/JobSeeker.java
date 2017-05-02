@@ -19,12 +19,11 @@ import javax.persistence.ManyToMany;
 public class JobSeeker {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id",nullable = false, unique = true)
 	private long id;
 	
 	@Column(name = "first_name",nullable = false, unique = false)
-	private String fistname;
+	private String firstname;
 	
 	@Column(name = "last_name",nullable = false, unique = false)
 	private String lastname;
@@ -55,7 +54,7 @@ public class JobSeeker {
 			String education, String skills, List<CompanyJobPosts> jobs) {
 		super();
 		this.id = id;
-		this.fistname = fistname;
+		this.firstname = fistname;
 		this.lastname = lastname;
 		this.picture = picture;
 		this.introduction = introduction;
@@ -75,12 +74,12 @@ public class JobSeeker {
 		this.id = id;
 	}
 
-	public String getFistname() {
-		return fistname;
+	public String getFirstname() {
+		return firstname;
 	}
 
-	public void setFistname(String fistname) {
-		this.fistname = fistname;
+	public void setFirstname(String fistname) {
+		this.firstname = fistname;
 	}
 
 	public String getLastname() {

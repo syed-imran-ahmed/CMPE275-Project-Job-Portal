@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -9,10 +11,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.SecurityService;
 import edu.sjsu.cmpe275.service.UserService;
+import edu.sjsu.cmpe275.validator.JobseekerValidator;
 import edu.sjsu.cmpe275.validator.ProfileValidator;
 import edu.sjsu.cmpe275.validator.UserValidator;
 
@@ -22,13 +28,16 @@ public class UserController {
     private UserService userService;
 
     @Autowired
+    private JobseekerService jobseekerService;
+    
+    @Autowired
     private SecurityService securityService;
 
     @Autowired
     private UserValidator userValidator;
     
     @Autowired
-    private ProfileValidator profileValidator;
+    private JobseekerValidator jobseekerValidator;
 
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -83,17 +92,46 @@ public class UserController {
         }
         return "profile";
     }
+//    
+//    @RequestMapping(value = "/profile", method = RequestMethod.POST)
+//    public String profile(@ModelAttribute("profileForm") Profile profileForm, BindingResult bindingResult, Model model) {
+//        profileValidator.validate(profileForm, bindingResult);
+//
+//        if (bindingResult.hasErrors()) {
+//            return "profile";
+//        }
+//        
+//        userService.saveProfile(profileForm);
+//
+//        return "profile";
+//    }
     
-    @RequestMapping(value = "/profile", method = RequestMethod.POST)
-    public String profile(@ModelAttribute("profileForm") Profile profileForm, BindingResult bindingResult, Model model) {
-        profileValidator.validate(profileForm, bindingResult);
+    
+    @RequestMapping(value = "/job_seeker", method = RequestMethod.GET)
+    public String jobseeker(Model model) {
+        String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        JobSeeker js=jobseekerService.findById(user.getId());
+        if(js != null){
+        	model.addAttribute("jobseeker", js);
+         }else{
+        	model.addAttribute("jobseeker", new JobSeeker());
+        }
+        return "job_seeker";
+    }
+    
+    @RequestMapping(value = "/job_seeker", method = RequestMethod.POST)
+    public String jobseeker(@ModelAttribute("jobseeker") JobSeeker j,BindingResult bindingResult, Model model) {
+    	jobseekerValidator.validate(j, bindingResult);
 
         if (bindingResult.hasErrors()) {
-            return "profile";
+            return "job_seeker";
         }
-        
-        userService.saveProfile(profileForm);
+        String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        j.setId(user.getId());
+        jobseekerService.save(j);
 
-        return "profile";
+        return "job_seeker";
     }
 }
