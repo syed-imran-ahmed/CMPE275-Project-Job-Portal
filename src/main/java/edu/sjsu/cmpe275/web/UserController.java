@@ -1,7 +1,5 @@
 package edu.sjsu.cmpe275.web;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -10,16 +8,19 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.email.ActivationEmail;
+import edu.sjsu.cmpe275.email.TokenGenerator;
+import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.SecurityService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.validator.JobseekerValidator;
-import edu.sjsu.cmpe275.validator.ProfileValidator;
 import edu.sjsu.cmpe275.validator.UserValidator;
 
 @Controller
@@ -38,7 +39,10 @@ public class UserController {
     
     @Autowired
     private JobseekerValidator jobseekerValidator;
-
+    
+    @Autowired
+    private CompanyService companyService;
+    
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -55,10 +59,13 @@ public class UserController {
             return "registration";
         }
 
+        String tokenID = TokenGenerator.randomToken();
+        userForm.setTokenId(tokenID.substring(0, 6));
+ 
+        ActivationEmail.emailRecommendTrigger(userForm.getFirstName() + " " + userForm.getLastName(), userForm.getEmailid(), userForm.getTokenId());
         userService.save(userForm);
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
-
         return "redirect:/welcome";
     }
 
@@ -75,10 +82,37 @@ public class UserController {
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(Model model) {
-        return "welcome";
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        if(user.getIsVerified()==null || user.getIsVerified().equals("NO"))
+        {
+        	return "emailverification";
+        }
+        else{   	
+        	return "welcome";
+        }
+    }
+    
+    
+    @RequestMapping(value = "/verification", method = RequestMethod.POST)
+	public String verification( @RequestParam("token") String token, Model model) {
+    	
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        if(token!=null && user.getTokenId().equals(token))
+        {
+           	userService.saveUserVerification("YES");
+        	return "welcome";
+        }
+        else
+        {
+        	model.addAttribute("error", "The verification code entered is invalid. Please enter valid code.");
+        	return "emailverification";
+        }
+        	
+    	
     }
 
-    
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -92,6 +126,7 @@ public class UserController {
         }
         return "profile";
     }
+    
 //    
 //    @RequestMapping(value = "/profile", method = RequestMethod.POST)
 //    public String profile(@ModelAttribute("profileForm") Profile profileForm, BindingResult bindingResult, Model model) {
@@ -134,4 +169,5 @@ public class UserController {
 
         return "job_seeker";
     }
+   
 }

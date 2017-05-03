@@ -28,7 +28,7 @@
 <body>
 <div class="container">
 
-    <form:form method="POST" action="${contextPath}/company" modelAttribute="companyform" class="form-signin">
+    <form:form method="POST" action="${contextPath}/company" modelAttribute="company" class="form-signin">
         <h2 class="form-signin-heading">Create Company Profile</h2>
          <spring:bind path="Name">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -45,10 +45,10 @@
             </div>
         </spring:bind>
 
-        <spring:bind path="Url">
+        <spring:bind path="logo">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="url" path="Url" class="form-control" placeholder="Logo image URL"></form:input>
-                <form:errors path="Url"></form:errors>
+                <form:input type="url" path="logo" class="form-control" placeholder="Logo image URL"></form:input>
+                <form:errors path="logo"></form:errors>
             </div>
         </spring:bind>
         

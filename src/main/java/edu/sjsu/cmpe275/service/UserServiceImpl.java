@@ -40,4 +40,14 @@ public class UserServiceImpl implements UserService {
 		user.setProfile(profile);
 		userRepository.save(user);
 	}
+
+	@Override
+	public void saveUserVerification(String isVerified) {
+		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userRepository.findByUsername(currentUserName);
+        user.setIsVerified(isVerified);
+		userRepository.save(user);		
+	}
+	
+	
 }

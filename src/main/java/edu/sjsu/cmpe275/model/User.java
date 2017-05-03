@@ -12,8 +12,45 @@ public class User {
     private String passwordConfirm;
     private Set<Role> roles;
     private Profile profile;
+    private String tokenId;
+    private String firstName;
+    private String lastName;
+    private String emailid;
+    private String isVerified;
 
-    @Id
+	public String getIsVerified() {
+		return isVerified;
+	}
+
+	public void setIsVerified(String isVerified) {
+		this.isVerified = isVerified;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getEmailid() {
+		return emailid;
+	}
+
+	public void setEmailid(String emailid) {
+		this.emailid = emailid;
+	}
+
+	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
@@ -38,6 +75,14 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    
+    public String getTokenId() {
+		return tokenId;
+	}
+
+	public void setTokenId(String tokenId) {
+		this.tokenId = tokenId;
+	}
 
     @Transient
     public String getPasswordConfirm() {

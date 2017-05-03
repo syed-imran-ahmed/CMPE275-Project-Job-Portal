@@ -9,4 +9,6 @@ public interface UserService {
     void saveProfile(Profile profile);
 
     User findByUsername(String username);
+    
+    void saveUserVerification(String isVerified);
 }

@@ -20,11 +20,11 @@ public class Company {
 	@Column(name = "logo",nullable = true, unique = false)
 	private String logo;
 
-	@Column(name = "HQadd",nullable = false, unique = false)
-	private String hqadd;
+	@Column(name = "address",nullable = false, unique = false)
+	private String address;
 	
-	@Column(name = "descrip",nullable = true, unique = false)
-	private String descrip;
+	@Column(name = "description",nullable = true, unique = false)
+	private String description;
 
 	
 	
@@ -60,30 +60,30 @@ public class Company {
 		this.logo = logo;
 	}
 
-	public String getHqadd() {
-		return hqadd;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setHqadd(String hqadd) {
-		this.hqadd = hqadd;
+	public void setAddress(String address) {
+		this.address = address;
 	}
 
-	public String getDesc() {
-		return descrip;
+	public String getDescription() {
+		return description;
 	}
 
-	public void setDesc(String desc) {
-		this.descrip = desc;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-	public Company(long cid, String name, String website, String logo, String hqadd, String desc) {
+	public Company(long cid, String name, String website, String logo, String address, String description) {
 		super();
 		this.cid = cid;
 		this.name = name;
 		this.website = website;
 		this.logo = logo;
-		this.hqadd = hqadd;
-		this.descrip = desc;
+		this.address = address;
+		this.description = description;
 	}
 	public Company(){}
 }
