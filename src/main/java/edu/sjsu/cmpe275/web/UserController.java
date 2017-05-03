@@ -101,7 +101,9 @@ public class UserController {
         User user = userService.findByUsername(currentUserName);
         if(token!=null && user.getTokenId().equals(token))
         {
+        	String verified = "You have successfully verified your mail-Id.";
            	userService.saveUserVerification("YES");
+           	ActivationEmail.emailAckTrigger(user.getFirstName() + " " + user.getLastName(), user.getEmailid(), verified);
         	return "welcome";
         }
         else

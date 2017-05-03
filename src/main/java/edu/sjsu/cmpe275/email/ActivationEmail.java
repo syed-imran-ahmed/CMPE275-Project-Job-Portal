@@ -84,10 +84,9 @@ public class ActivationEmail {
 	            for (int i = 0; i < to.length; i++) {
 	                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to[i]));
 	            }
-	            message.setSubject("Activation Email");
+	            message.setSubject("Thank you for verification");
 	            message.setText("Dear "+ name  + ",\n" 
-	                    + "\n Your Verification Code "+tokenID+
-	                                        "\n\nRegards,\n" + "275 Project Team");
+	                    + "\n"+tokenID+"\n\nRegards,\n" + "275 Project Team");
 	            System.out.println("message"+receiverMail);
 	            Transport.send(message);
 	        } catch (MessagingException e) {
