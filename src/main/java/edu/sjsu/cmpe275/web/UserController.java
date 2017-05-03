@@ -12,11 +12,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.email.TokenGenerator;
-import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
-import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.SecurityService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -38,11 +36,7 @@ public class UserController {
     private UserValidator userValidator;
     
     @Autowired
-    private JobseekerValidator jobseekerValidator;
-    
-    @Autowired
-    private CompanyService companyService;
-    
+    private JobseekerValidator jobseekerValidator;  
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -62,7 +56,7 @@ public class UserController {
         String tokenID = TokenGenerator.randomToken();
         userForm.setTokenId(tokenID.substring(0, 6));
  
-        ActivationEmail.emailRecommendTrigger(userForm.getFirstName() + " " + userForm.getLastName(), userForm.getEmailid(), userForm.getTokenId());
+        ActivationEmail.emailRecommendTrigger(userForm.getEmailid(), userForm.getTokenId());
         userService.save(userForm);
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
@@ -103,7 +97,7 @@ public class UserController {
         {
         	String verified = "You have successfully verified your mail-Id.";
            	userService.saveUserVerification("YES");
-           	ActivationEmail.emailAckTrigger(user.getFirstName() + " " + user.getLastName(), user.getEmailid(), verified);
+           	ActivationEmail.emailAckTrigger(user.getEmailid(), verified);
         	return "welcome";
         }
         else

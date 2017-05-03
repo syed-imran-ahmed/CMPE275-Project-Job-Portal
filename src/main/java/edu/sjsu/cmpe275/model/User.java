@@ -13,8 +13,6 @@ public class User {
     private Set<Role> roles;
     private Profile profile;
     private String tokenId;
-    private String firstName;
-    private String lastName;
     private String emailid;
     private String isVerified;
 
@@ -24,22 +22,6 @@ public class User {
 
 	public void setIsVerified(String isVerified) {
 		this.isVerified = isVerified;
-	}
-
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
 	}
 
 	public String getEmailid() {

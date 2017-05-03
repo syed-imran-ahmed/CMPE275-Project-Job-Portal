@@ -47,22 +47,6 @@
             </div>
         </spring:bind>
         
-        <spring:bind path="firstName">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="firstName" class="form-control" placeholder="First Name"
-                            autofocus="true"></form:input>
-                <form:errors path="firstName"></form:errors>
-            </div>
-        </spring:bind>
-        
-        <spring:bind path="lastName">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="lastName" class="form-control" placeholder="Last Name"
-                            autofocus="true"></form:input>
-                <form:errors path="lastName"></form:errors>
-            </div>
-        </spring:bind>
-
         <spring:bind path="password">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
