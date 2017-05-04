@@ -1,8 +1,6 @@
 package edu.sjsu.cmpe275.model;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,7 +20,7 @@ public class CompanyJobPosts {
 	
 	@Column(name = "descrip",nullable = false, unique = false)
 	private String descrip;
-	
+
 	@Column(name = "resp",nullable = false, unique = false)
 	private String resp;
 
@@ -31,9 +29,12 @@ public class CompanyJobPosts {
 	
 	@Column(name = "sal",nullable = false, unique = false)
 	private String sal;
+	
+	@Column(name = "status",nullable = true, unique = false)
+	private String status;
 
-	@ManyToOne(fetch = FetchType.EAGER, cascade={CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name = "Company_ID")
+	@ManyToOne
+	@JoinColumn(name = "company_cid")
     private Company company;
 	
 	public long getJobid() {
@@ -50,14 +51,6 @@ public class CompanyJobPosts {
 
 	public void setTitle(String title) {
 		this.title = title;
-	}
-
-	public String getDesc() {
-		return descrip;
-	}
-
-	public void setDesc(String desc) {
-		this.descrip = desc;
 	}
 
 	public String getResp() {
@@ -90,6 +83,22 @@ public class CompanyJobPosts {
 
 	public void setCompany(Company company) {
 		this.company = company;
+	}
+	
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
+	public String getDescrip() {
+		return descrip;
+	}
+
+	public void setDescrip(String descrip) {
+		this.descrip = descrip;
 	}
 
 	public CompanyJobPosts(long jobid, String title, String desc, String resp, String loc, String sal,

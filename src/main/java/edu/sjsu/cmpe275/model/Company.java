@@ -4,6 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 @Entity
 public class Company {
@@ -25,9 +30,18 @@ public class Company {
 	
 	@Column(name = "description",nullable = true, unique = false)
 	private String description;
+	
+	@OneToMany(orphanRemoval=true, mappedBy = "company", cascade = CascadeType.ALL)
+	private List<CompanyJobPosts> jobPosts;
 
-	
-	
+	public List<CompanyJobPosts> getJobPosts() {
+		return jobPosts;
+	}
+
+	public void setJobPosts(List<CompanyJobPosts> jobPosts) {
+		this.jobPosts = jobPosts;
+	}
+
 	public long getCid() {
 		return cid;
 	}

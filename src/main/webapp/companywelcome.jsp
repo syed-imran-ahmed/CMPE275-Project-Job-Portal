@@ -34,6 +34,7 @@
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
 		
 		<h4 class="text-right"><a href="${contextPath}/company">Create Company Profile</a></h4>
+		<h4 class="text-left"><a href="${contextPath}/postjob">Post a job</a></h4>
     </c:if>
 
 </div>
