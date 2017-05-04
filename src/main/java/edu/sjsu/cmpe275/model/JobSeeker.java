@@ -28,9 +28,6 @@ public class JobSeeker {
 	@Column(name = "last_name",nullable = false, unique = false)
 	private String lastname;
 	
-	@Column(name = "picture",nullable = true, unique = false)
-	private byte[] picture;
-	
 	@Column(name = "intro",nullable = true, unique = false)
 	private String introduction;
 	
@@ -50,13 +47,12 @@ public class JobSeeker {
 			inverseJoinColumns={@JoinColumn(name="JobID", referencedColumnName="jobid")})
 	private List< CompanyJobPosts > jobs= new ArrayList<>();
 
-	public JobSeeker(long id, String fistname, String lastname, byte[] picture, String introduction, String wrk_exp,
+	public JobSeeker(long id, String fistname, String lastname, String introduction, String wrk_exp,
 			String education, String skills, List<CompanyJobPosts> jobs) {
 		super();
 		this.id = id;
 		this.firstname = fistname;
 		this.lastname = lastname;
-		this.picture = picture;
 		this.introduction = introduction;
 		this.wrk_exp = wrk_exp;
 		this.education = education;
@@ -88,14 +84,6 @@ public class JobSeeker {
 
 	public void setLastname(String lastname) {
 		this.lastname = lastname;
-	}
-
-	public byte[] getPicture() {
-		return picture;
-	}
-
-	public void setPicture(byte[] picture) {
-		this.picture = picture;
 	}
 
 	public String getIntroduction() {
