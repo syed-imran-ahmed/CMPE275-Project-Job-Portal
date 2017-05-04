@@ -13,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Create an account</title>
+    <title>Company Welcome page</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 
@@ -32,8 +32,8 @@
         </form>
 
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
-		<h4 class="text-center"><a href="${contextPath}/job_seeker">View my profile</a></h4>
 		
+		<h4 class="text-right"><a href="${contextPath}/company">Create Company Profile</a></h4>
     </c:if>
 
 </div>

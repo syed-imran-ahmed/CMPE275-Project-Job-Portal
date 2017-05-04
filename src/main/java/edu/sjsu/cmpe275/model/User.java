@@ -15,10 +15,26 @@ public class User {
     private String tokenId;
     private String emailid;
     private String isVerified;
+    private String usertype;
+    
+   
+
+    
+    
+	public String getUsertype() {
+		return usertype;
+	}
+
+
+	public void setUsertype(String usertype) {
+		this.usertype = usertype;
+	}
+
 
 	public String getIsVerified() {
 		return isVerified;
 	}
+	
 
 	public void setIsVerified(String isVerified) {
 		this.isVerified = isVerified;

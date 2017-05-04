@@ -82,11 +82,16 @@ public class UserController {
         {
         	return "emailverification";
         }
-        else{   	
+        else 
+        {
+        	if(user.getUsertype().equals("JobSeeker")){   	
         	return "welcome";
+        	}
+        else{
+        	return "companywelcome";
         }
     }
-    
+    }
     
     @RequestMapping(value = "/verification", method = RequestMethod.POST)
 	public String verification( @RequestParam("token") String token, Model model) {
@@ -98,7 +103,13 @@ public class UserController {
         	String verified = "You have successfully verified your mail-Id.";
            	userService.saveUserVerification("YES");
            	ActivationEmail.emailAckTrigger(user.getEmailid(), verified);
-        	return "welcome";
+           	
+           	if(user.getUsertype().equals("JobSeeker")){   	
+            	return "welcome";
+            	}
+            else{
+            	return "companywelcome";
+            }
         }
         else
         {

@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +14,7 @@ import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.UserService;
 
+@Controller
 public class CompanyController {
 
 	  @Autowired

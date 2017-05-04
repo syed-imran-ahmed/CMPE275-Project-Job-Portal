@@ -61,7 +61,16 @@
                 <form:errors path="passwordConfirm"></form:errors>
             </div>
         </spring:bind>
-
+       <spring:bind path="usertype">
+        <div class="form-group ${status.error ? 'has-error' : ''}">
+		       <form:radiobutton path="usertype" value="JobSeeker"/>
+		       Job seeker &nbsp;&nbsp;
+		       <form:radiobutton path="usertype" value="Company"/>
+		       Company
+		      <br>
+		       </div>
+		      
+</spring:bind>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit</button>
     </form:form>
 
