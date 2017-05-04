@@ -39,7 +39,6 @@ public class JobseekerServiceImpl implements JobseekerService{
 	        j.setIntroduction(js.getIntroduction());
 	        j.setJobs(js.getJobs());
 	        j.setLastname(js.getLastname());
-	        j.setPicture(js.getPicture());
 	        j.setSkills(js.getSkills());
 	        j.setWrk_exp(js.getWrk_exp());
 	        JobSeekerRepository.save(j);
