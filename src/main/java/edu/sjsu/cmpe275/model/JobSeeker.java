@@ -47,7 +47,7 @@ public class JobSeeker {
 			inverseJoinColumns={@JoinColumn(name="JobID", referencedColumnName="jobid")})
 	private List< CompanyJobPosts > jobs= new ArrayList<>();
 
-	public JobSeeker(long id, String fistname, String lastname, byte[] picture, String introduction, String wrk_exp,
+	public JobSeeker(long id, String fistname, String lastname, String introduction, String wrk_exp,
 			String education, String skills, List<CompanyJobPosts> jobs) {
 		super();
 		this.id = id;
