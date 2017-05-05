@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
@@ -23,9 +25,12 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.email.TokenGenerator;
+import edu.sjsu.cmpe275.model.Company;
+import edu.sjsu.cmpe275.model.CompanyJobPosts;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.SecurityService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -48,6 +53,9 @@ public class UserController {
     
     @Autowired
     private JobseekerValidator jobseekerValidator;  
+    
+    @Autowired
+    private CompanyService companyService;
 
     private static String IMAGE_FOLDER = "src/main/webapp/images/";
     
@@ -93,17 +101,31 @@ public class UserController {
         User user = userService.findByUsername(currentUserName);
         if(user.getIsVerified()==null || user.getIsVerified().equals("NO"))
         {
-        	return "emailverification";
+            return "emailverification";
         }
         else 
         {
-        	if(user.getUsertype().equals("JobSeeker")){   	
-        	return "welcome";
-        	}
-        else{
-        	return "companywelcome";
+            if(user.getUsertype().equals("JobSeeker")){       
+                return "welcome";
+            }
+            else{
+
+                Company company = companyService.findByCid(user.getId());
+                if(company!=null)
+                {
+                    List<String> jobTitles = new ArrayList<String>();
+
+                    for(CompanyJobPosts jobPost:company.getJobPosts())
+                    {
+                        jobTitles.add(jobPost.getTitle());
+                    }
+                    model.addAttribute("jobslist", company.getJobPosts());
+                }
+
+                return "companywelcome";
+            }
         }
-    }
+   
     }
     
     @RequestMapping(value = "/verification", method = RequestMethod.POST)

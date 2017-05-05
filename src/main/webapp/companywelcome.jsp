@@ -34,8 +34,20 @@
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
 		
 		<h4 class="text-right"><a href="${contextPath}/company">Create Company Profile</a></h4>
-		<h4 class="text-left"><a href="${contextPath}/postjob">Post a job</a></h4>
+		<h4 class="text-right"><a href="${contextPath}/postjob">Post a job</a></h4>
+		
     </c:if>
+    <h3>List of posted jobs</h3>
+	<c:if test="${not empty jobslist}">
+		<ul>
+			<c:forEach var="job" items="${jobslist}">
+			<div>
+				<h5 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <c:out value="${job.title}" /> </a></h5>
+				<c:out value="${job.descrip}" />
+			</div>
+			</c:forEach>
+		</ul>
+	</c:if>
 
 </div>
 <!-- /container -->

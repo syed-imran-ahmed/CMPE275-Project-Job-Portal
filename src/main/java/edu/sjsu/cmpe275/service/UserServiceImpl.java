@@ -48,6 +48,11 @@ public class UserServiceImpl implements UserService {
         user.setIsVerified(isVerified);
 		userRepository.save(user);		
 	}
+
+	@Override
+	public User findByEmailid(String emailid) {
+		return userRepository.findByEmailid(emailid);
+	}
 	
 	
 }

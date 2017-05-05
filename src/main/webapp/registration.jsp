@@ -36,21 +36,21 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="username" class="form-control" placeholder="Username"
                             autofocus="true"></form:input>
-                <form:errors path="username"></form:errors>
+                <form:errors path="username" />
             </div>
         </spring:bind>
         <spring:bind path="emailid">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="emailid" class="form-control" placeholder="Email ID"
                             autofocus="true"></form:input>
-                <form:errors path="emailid"></form:errors>
+                <form:errors path="emailid"/>
             </div>
         </spring:bind>
         
         <spring:bind path="password">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="password" path="password" class="form-control" placeholder="Password"></form:input>
-                <form:errors path="password"></form:errors>
+                <form:errors path="password"/>
             </div>
         </spring:bind>
 
@@ -58,7 +58,7 @@
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="password" path="passwordConfirm" class="form-control"
                             placeholder="Confirm your password"></form:input>
-                <form:errors path="passwordConfirm"></form:errors>
+                <form:errors path="passwordConfirm"/>
             </div>
         </spring:bind>
        <spring:bind path="usertype">
@@ -67,6 +67,7 @@
 		       Job seeker &nbsp;&nbsp;
 		       <form:radiobutton path="usertype" value="Company"/>
 		       Company
+		       <form:errors path="usertype"/>
 		      <br>
 		       </div>
 		      

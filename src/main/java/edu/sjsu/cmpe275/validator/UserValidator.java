@@ -30,7 +30,12 @@ public class UserValidator implements Validator {
         if (userService.findByUsername(user.getUsername()) != null) {
             errors.rejectValue("username", "Duplicate.userForm.username");
         }
-
+        
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "emailid", "NotEmpty");
+        if (userService.findByEmailid(user.getEmailid()) != null) {
+            errors.rejectValue("emailid", "Duplicate.userForm.emailid");
+        }
+        
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "password", "NotEmpty");
         if (user.getPassword().length() < 8 || user.getPassword().length() > 32) {
             errors.rejectValue("password", "Size.userForm.password");
@@ -39,5 +44,7 @@ public class UserValidator implements Validator {
         if (!user.getPasswordConfirm().equals(user.getPassword())) {
             errors.rejectValue("passwordConfirm", "Diff.userForm.passwordConfirm");
         }
+        
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "usertype", "NotEmpty");
     }
 }

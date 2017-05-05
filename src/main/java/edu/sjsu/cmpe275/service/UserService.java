@@ -10,5 +10,7 @@ public interface UserService {
 
     User findByUsername(String username);
     
+    User findByEmailid(String emailid);
+    
     void saveUserVerification(String isVerified);
 }
