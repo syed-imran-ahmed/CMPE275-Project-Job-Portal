@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import javax.servlet.http.HttpSession;
 
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,12 +27,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.email.TokenGenerator;
+import org.springframework.web.servlet.ModelAndView;
 import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.CompanyService;
+import edu.sjsu.cmpe275.repository.SearchRepository;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.SecurityService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -56,6 +60,8 @@ public class UserController {
     
     @Autowired
     private CompanyService companyService;
+    
+   
 
     private static String IMAGE_FOLDER = "src/main/webapp/images/";
     
@@ -247,4 +253,15 @@ public class UserController {
         return "upload";
     }
    
+    @Autowired
+    SearchRepository sr;
+    @RequestMapping(value = "/search", method = RequestMethod.GET)
+    public String search(ModelMap model) {
+       List<CompanyJobPosts> c=sr.findAll();
+        System.out.println(" jobs "+c.get(0).getDescrip());
+    	String heading = "Search";
+		model.addAttribute("heading", heading);
+		model.addAttribute("result1", c);
+        return "search";
+    }
 }
