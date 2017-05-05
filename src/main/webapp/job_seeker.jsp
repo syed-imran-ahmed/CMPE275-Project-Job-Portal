@@ -1,7 +1,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
-
+<%@ page session="true"%>
 <c:set var="contextPath" value="${pageContext.request.contextPath}"/>
 
 <!DOCTYPE html>
@@ -28,10 +28,22 @@
 
 <body>
 
-<div class="container">
-
+<div class="form-signin">
+<%
+if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("")) {
+%>
+<h3 class="form-signin-heading">Profile Picture</h3>
+<br>
+<img src="${contextPath}/images/<%=session.getAttribute("id")%>.JPG" width="250" height="250" alt="Upload Image" />
+<br>
+<%
+//session.removeAttribute("pictureuploaded");
+}
+%>
+	<a href="upload" class="form-signin">Upload/replace profile picture</a>
+</div>
     <form:form method="POST" action="${contextPath}/job_seeker" modelAttribute="jobseeker" class="form-signin">
-        <h2 class="form-signin-heading">View/edit your profile</h2>
+        <h2 class="form-signin-heading">View/Edit Profile</h2>
          <spring:bind path="Id">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="hidden" path="Id" class="form-control" value = "1010101010101010"
@@ -53,17 +65,10 @@
                 <form:errors path="Lastname"></form:errors>
             </div>
         </spring:bind>
-        
-        <spring:bind path="Picture">
-            <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="image" path="Picture" class="form-control" placeholder="Picture"></form:input>
-                <form:errors path="Picture"></form:errors>
-            </div>
-        </spring:bind>
 
         <spring:bind path="Introduction">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Introduction" class="form-control" placeholder="Introduction"></form:input>
+                <form:input type="text" path="Introduction" class="form-control" placeholder="Introduction" ></form:input>
                 <form:errors path="Introduction"></form:errors>
             </div>
         </spring:bind>
@@ -91,7 +96,7 @@
         <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
     </form:form>
 
-</div>
+
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

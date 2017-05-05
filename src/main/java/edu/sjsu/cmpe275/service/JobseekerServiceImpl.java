@@ -1,10 +1,7 @@
 package edu.sjsu.cmpe275.service;
 
-import java.util.HashSet;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.sjsu.cmpe275.model.JobSeeker;

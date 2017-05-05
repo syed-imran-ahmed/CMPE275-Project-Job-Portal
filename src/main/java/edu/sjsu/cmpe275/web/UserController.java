@@ -1,14 +1,25 @@
 package edu.sjsu.cmpe275.web;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.email.TokenGenerator;
@@ -38,6 +49,8 @@ public class UserController {
     @Autowired
     private JobseekerValidator jobseekerValidator;  
 
+    private static String IMAGE_FOLDER = "src/main/webapp/images/";
+    
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -150,7 +163,7 @@ public class UserController {
     
     
     @RequestMapping(value = "/job_seeker", method = RequestMethod.GET)
-    public String jobseeker(Model model) {
+    public String jobseeker(Model model,HttpSession session) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(currentUserName);
         JobSeeker js=jobseekerService.findById(user.getId());
@@ -159,11 +172,15 @@ public class UserController {
          }else{
         	model.addAttribute("jobseeker", new JobSeeker());
         }
+        File f = new File(IMAGE_FOLDER + user.getId()+".JPG");
+        if(f.exists() && !f.isDirectory() && session.getAttribute("id")==null) { 
+        	session.setAttribute("id", user.getId());
+        }
         return "job_seeker";
     }
     
     @RequestMapping(value = "/job_seeker", method = RequestMethod.POST)
-    public String jobseeker(@ModelAttribute("jobseeker") JobSeeker j,BindingResult bindingResult, Model model) {
+    public String jobseeker(@ModelAttribute("jobseeker") JobSeeker j,BindingResult bindingResult, Model model,Object command) {
     	jobseekerValidator.validate(j, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -172,9 +189,40 @@ public class UserController {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(currentUserName);
         j.setId(user.getId());
+        
         jobseekerService.save(j);
 
         return "job_seeker";
+    }
+    
+    @PostMapping("/upload")
+    public String imageUpload(@RequestParam("file") MultipartFile file,HttpSession session) {
+
+        if (file.isEmpty()) {
+            System.out.println("its empty");
+            return "job_seeker";
+        }
+
+        try {
+
+            byte[] bytes = file.getBytes();
+            String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+            User user = userService.findByUsername(currentUserName);
+            Path path = Paths.get(IMAGE_FOLDER + user.getId()+".JPG");
+            Files.write(path, bytes);
+            session.setAttribute("id", user.getId());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:job_seeker";
+    }
+    
+    @GetMapping("/upload")
+    public String uploadStatus() {
+  
+        return "upload";
     }
    
 }
