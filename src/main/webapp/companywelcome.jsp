@@ -30,9 +30,13 @@
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
-
-        <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
+        <br>
+		<div class="thumbnail-container" style="float:left;height:60px;width:60px">
+		<img src="${companylogo}" width="50" height="50" />
+		</div>
 		
+        <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
+	
 		<h4 class="text-right"><a href="${contextPath}/company">Create Company Profile</a></h4>
 		<h4 class="text-right"><a href="${contextPath}/postjob">Post a job</a></h4>
 		
@@ -42,9 +46,12 @@
 		<ul>
 			<c:forEach var="job" items="${jobslist}">
 			<div>
+			
+				<!-- <img src="job.logo" width="250" height="250" alt="Upload Image" /> -->
 				<h5 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <c:out value="${job.title}" /> </a></h5>
 				<c:out value="${job.descrip}" />
 			</div>
+			<hr>
 			</c:forEach>
 		</ul>
 	</c:if>

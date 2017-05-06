@@ -125,6 +125,7 @@ public class UserController {
                     {
                         jobTitles.add(jobPost.getTitle());
                     }
+                    model.addAttribute("companylogo",company.getLogo());
                     model.addAttribute("jobslist", company.getJobPosts());
                 }
 

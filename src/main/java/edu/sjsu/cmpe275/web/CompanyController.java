@@ -53,9 +53,14 @@ public class CompanyController {
 	        company.setCid(user.getId());
 	        companyService.save(company);
 
-	        return "company";
+	        return "redirect:/";
 	    }
 	    
+	    
+	    @RequestMapping(value = "/companywelcome", method = RequestMethod.GET)
+	    public String welcome(Model model) {
+	    	return "welcome";
+	    }
 	    
 	    @RequestMapping(value = "/postjob", method = RequestMethod.GET)
 	    public String companyJob(Model model) {
@@ -74,7 +79,7 @@ public class CompanyController {
 	        cmpJobPost.setCompany(company);
 	        companyJobsService.save(cmpJobPost);
 
-	        return "postjob";
+	        return "redirect:/";
 	    }
 	    
 }
