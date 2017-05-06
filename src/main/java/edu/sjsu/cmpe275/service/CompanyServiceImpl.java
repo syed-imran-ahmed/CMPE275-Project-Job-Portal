@@ -36,7 +36,7 @@ public class CompanyServiceImpl implements CompanyService{
 	        company.setAddress(comp.getAddress());
 	        company.setDescription(comp.getDescription());
 	        company.setLogo(comp.getLogo());
-	        company.setJobposition(comp.getJobposition());
+	        
 	  
 	        companyRepository.save(company);
 		}

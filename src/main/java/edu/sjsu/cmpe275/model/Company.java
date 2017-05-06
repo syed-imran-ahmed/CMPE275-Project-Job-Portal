@@ -31,10 +31,8 @@ public class Company {
 	@Column(name = "description",nullable = true, unique = false)
 	private String description;
 	
-	@Column(name = "jobposition",nullable = true, unique = false)
-	private String jobposition;
-	
-	
+
+
 	
 	@OneToMany(orphanRemoval=true, mappedBy = "company", cascade = CascadeType.ALL)
 	private List<CompanyJobPosts> jobPosts;
@@ -55,14 +53,7 @@ public class Company {
 		this.cid = cid;
 	}
 	
-	public String getJobposition() {
-		return jobposition;
-	}
-
-	public void setJobposition(String jobposition) {
-		this.jobposition = jobposition;
-	}
-
+	
 	public String getName() {
 		return name;
 	}
@@ -111,7 +102,6 @@ public class Company {
 		this.logo = logo;
 		this.address = address;
 		this.description = description;
-		this.jobposition = jobposition;
 	}
 	public Company(){}
 }

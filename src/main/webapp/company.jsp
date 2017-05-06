@@ -66,19 +66,7 @@
             </div>
         </spring:bind>
         
-         <spring:bind path="jobposition">
-        <div class="form-group ${status.error ? 'has-error' : ''}">
-		       <form:radiobutton path="jobposition" value="Open"/>
-		       Open &nbsp;&nbsp;
-		       <form:radiobutton path="jobposition" value="Filled"/>
-		       Filled &nbsp;&nbsp;
-		       <form:radiobutton path="jobposition" value="Cancelled"/>
-		       Cancelled
-		       <form:errors path="jobposition"/>
-		      <br>
-		       </div>
-		      
-</spring:bind>
+         
         
         <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
     </form:form>

@@ -39,15 +39,15 @@
         </spring:bind>
         <spring:bind path="Descrip">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Descrip" class="form-control" placeholder="Description"
-                            autofocus="true"></form:input>
+                <form:textarea path="Descrip" class="form-control" placeholder="Description"
+                            autofocus="true"/>
                 <form:errors path="Descrip"></form:errors>
             </div>
         </spring:bind>
 
         <spring:bind path="Resp">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Resp" class="form-control" placeholder="Responsibilities"></form:input>
+                <form:textarea path="Resp" class="form-control" placeholder="Responsibilities"/>
                 <form:errors path="Resp"></form:errors>
             </div>
         </spring:bind>
@@ -65,6 +65,20 @@
                 <form:errors path="Sal"></form:errors>
             </div>
         </spring:bind>
+        
+        <spring:bind path="jobposition">
+        <div class="form-group ${status.error ? 'has-error' : ''}">
+		       <form:radiobutton path="jobposition" value="Open"/>
+		       Open &nbsp;&nbsp;
+		       <form:radiobutton path="jobposition" value="Filled"/>
+		       Filled &nbsp;&nbsp;
+		       <form:radiobutton path="jobposition" value="Cancelled"/>
+		       Cancelled
+		       <form:errors path="jobposition"/>
+		      <br>
+		       </div>
+		      
+</spring:bind>
         
         <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
     </form:form>

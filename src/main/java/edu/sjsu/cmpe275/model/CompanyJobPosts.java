@@ -30,9 +30,11 @@ public class CompanyJobPosts {
 	@Column(name = "sal",nullable = false, unique = false)
 	private String sal;
 	
-	@Column(name = "status",nullable = true, unique = false)
-	private String status;
+	
 
+	@Column(name = "jobposition",nullable = true, unique = false)
+	private String jobposition;
+	
 	@ManyToOne
 	@JoinColumn(name = "company_cid")
     private Company company;
@@ -60,6 +62,14 @@ public class CompanyJobPosts {
 	public void setResp(String resp) {
 		this.resp = resp;
 	}
+	
+	public String getJobposition() {
+		return jobposition;
+	}
+
+	public void setJobposition(String jobposition) {
+		this.jobposition = jobposition;
+	}
 
 	public String getLoc() {
 		return loc;
@@ -85,13 +95,8 @@ public class CompanyJobPosts {
 		this.company = company;
 	}
 	
-	public String getStatus() {
-		return status;
-	}
-
-	public void setStatus(String status) {
-		this.status = status;
-	}
+	
+	
 	
 	public String getDescrip() {
 		return descrip;
@@ -101,7 +106,7 @@ public class CompanyJobPosts {
 		this.descrip = descrip;
 	}
 
-	public CompanyJobPosts(long jobid, String title, String desc, String resp, String loc, String sal,
+	public CompanyJobPosts(long jobid, String title, String jobposition, String desc, String resp, String loc, String sal,
 			Company company) {
 		super();
 		this.jobid = jobid;
@@ -111,6 +116,7 @@ public class CompanyJobPosts {
 		this.loc = loc;
 		this.sal = sal;
 		this.company = company;
+		this.jobposition = jobposition;
 	}
 
 	public CompanyJobPosts(){}

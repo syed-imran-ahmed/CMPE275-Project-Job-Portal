@@ -27,8 +27,8 @@ public class CompanyJobsServiceImpl implements CompanyJobsService{
 	        companyJobPost.setLoc(jobPost.getLoc());
 	        companyJobPost.setResp(jobPost.getResp());
 	        companyJobPost.setSal(jobPost.getSal());
-	        companyJobPost.setStatus(jobPost.getStatus());
 	        companyJobPost.setCompany(jobPost.getCompany());
+	        companyJobPost.setJobposition(jobPost.getJobposition());
 	  
 	        companyJobsRepository.save(companyJobPost);
 		}
