@@ -32,13 +32,13 @@
         </form>
         <br>
 		<div class="thumbnail-container" style="float:left;height:60px;width:60px">
-		<img src="${companylogo}" width="50" height="50" />
+			<img src="${companylogo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
 		</div>
 		
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
 	
-		<h4 class="text-right"><a href="${contextPath}/company">Create Company Profile</a></h4>
-		<h4 class="text-right"><a href="${contextPath}/postjob">Post a job</a></h4>
+		<h4 class="text-right"><a href="${contextPath}/company">Create/Update Company Profile</a></h4>
+		<h4 class="text-right"><a href="${contextPath}/postjob">Post a New Job</a></h4>
 		
     </c:if>
     <h3>List of posted jobs</h3>
