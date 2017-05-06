@@ -54,18 +54,31 @@
         
         <spring:bind path="Address">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Address" class="form-control" placeholder="Address of Headquarters"></form:input>
+                <form:textarea path="Address" class="form-control" placeholder="Address of Headquarters"/>
                 <form:errors path="Address"></form:errors>
             </div>
         </spring:bind>
 
         <spring:bind path="Description">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Description" class="form-control" placeholder="Description"></form:input>
+                <form:textarea path="Description" class="form-control" placeholder="Description"/>
                 <form:errors path="Description"></form:errors>
             </div>
         </spring:bind>
         
+         <spring:bind path="jobposition">
+        <div class="form-group ${status.error ? 'has-error' : ''}">
+		       <form:radiobutton path="jobposition" value="Open"/>
+		       Open &nbsp;&nbsp;
+		       <form:radiobutton path="jobposition" value="Filled"/>
+		       Filled &nbsp;&nbsp;
+		       <form:radiobutton path="jobposition" value="Cancelled"/>
+		       Cancelled
+		       <form:errors path="jobposition"/>
+		      <br>
+		       </div>
+		      
+</spring:bind>
         
         <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
     </form:form>

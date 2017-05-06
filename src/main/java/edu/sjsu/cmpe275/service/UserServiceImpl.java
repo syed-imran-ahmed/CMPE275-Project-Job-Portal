@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.service;
 
 import java.util.HashSet;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,6 +12,9 @@ import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.repository.RoleRepository;
 import edu.sjsu.cmpe275.repository.UserRepository;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -54,5 +58,16 @@ public class UserServiceImpl implements UserService {
 		return userRepository.findByEmailid(emailid);
 	}
 	
+	@Override
+	public boolean emailValidation(String emailid){
+
+		String reg = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";
+		 
+		Pattern pattern = Pattern.compile(reg);
+	
+		    Matcher matcher = pattern.matcher(emailid);
+		    return matcher.matches();
+		
+	}	
 	
 }

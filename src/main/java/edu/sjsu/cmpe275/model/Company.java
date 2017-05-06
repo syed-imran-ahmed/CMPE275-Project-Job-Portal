@@ -31,6 +31,11 @@ public class Company {
 	@Column(name = "description",nullable = true, unique = false)
 	private String description;
 	
+	@Column(name = "jobposition",nullable = true, unique = false)
+	private String jobposition;
+	
+	
+	
 	@OneToMany(orphanRemoval=true, mappedBy = "company", cascade = CascadeType.ALL)
 	private List<CompanyJobPosts> jobPosts;
 
@@ -48,6 +53,14 @@ public class Company {
 
 	public void setCid(long cid) {
 		this.cid = cid;
+	}
+	
+	public String getJobposition() {
+		return jobposition;
+	}
+
+	public void setJobposition(String jobposition) {
+		this.jobposition = jobposition;
 	}
 
 	public String getName() {
@@ -90,7 +103,7 @@ public class Company {
 		this.description = description;
 	}
 
-	public Company(long cid, String name, String website, String logo, String address, String description) {
+	public Company(long cid, String name, String website, String logo, String address, String description, String jobposition) {
 		super();
 		this.cid = cid;
 		this.name = name;
@@ -98,6 +111,7 @@ public class Company {
 		this.logo = logo;
 		this.address = address;
 		this.description = description;
+		this.jobposition = jobposition;
 	}
 	public Company(){}
 }

@@ -6,12 +6,15 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.UserService;
 
 @Component
-public class UserValidator implements Validator {
-    @Autowired
+public class CompanyValidator implements Validator {
+	
+	@Autowired
     private UserService userService;
 
     @Override
@@ -53,4 +56,6 @@ public class UserValidator implements Validator {
         
         ValidationUtils.rejectIfEmptyOrWhitespace(errors, "usertype", "NotEmpty");
     }
+	
+
 }
