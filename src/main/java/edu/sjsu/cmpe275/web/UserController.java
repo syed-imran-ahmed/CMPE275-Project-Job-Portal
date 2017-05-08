@@ -131,7 +131,7 @@ public class UserController {
             		List<CompanyJobPosts> jobPosts = companyJobsService.findAllJobs();
             	
                      PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(jobPosts);
-                     pagedListHolder.setPageSize(2);
+                     pagedListHolder.setPageSize(4);
                      model.addAttribute("maxPages", pagedListHolder.getPageCount());
 
                      if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
@@ -162,7 +162,7 @@ public class UserController {
                     model.addAttribute("companylogo",company.getLogo());
                     
                     PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(company.getJobPosts());
-                    pagedListHolder.setPageSize(2);
+                    pagedListHolder.setPageSize(4);
                     model.addAttribute("maxPages", pagedListHolder.getPageCount());
 
                     if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;

@@ -32,8 +32,7 @@
         </form>
 
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
-		<h4 class="text-center"><a href="${contextPath}/job_seeker">View my profile</a></h4>
-		
+		<h4 class="text-right"><a href="${contextPath}/job_seeker">View my profile</a></h4>
     </c:if>
     
 
@@ -41,6 +40,9 @@
 	<c:if test="${not empty jobslist}">
 		<ul>
 		 	<c:forEach var="job" items="${jobslist}">
+		 	<div class="thumbnail-container" style="float:left;height:60px;width:60px">
+				<img src="${job.company.logo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
+			</div>
 			<div>
 				
 				<h4 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
