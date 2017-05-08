@@ -30,6 +30,13 @@
 
     <form:form method="POST" action="${contextPath}/postjob" modelAttribute="companyjobposts" class="form-signin">
         <h2 class="form-signin-heading">Post A Job</h2>
+        <spring:bind path="jobid">
+            <div class="form-group ${status.error ? 'has-error' : ''}">
+                <form:input type="hidden" path="jobid" class="form-control" placeholder = "Job ID"
+                            autofocus="true"></form:input>
+                <form:errors path="jobid"></form:errors>
+            </div>
+        </spring:bind>
          <spring:bind path="Title">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="text" path="Title" class="form-control" placeholder = "Job Title"
@@ -68,11 +75,32 @@
         
         <spring:bind path="jobposition">
         <div class="form-group ${status.error ? 'has-error' : ''}">
-		       <form:radiobutton path="jobposition" value="Open"/>
+        		<c:choose>
+  					<c:when test="${jobposition eq 'Open'}">
+		       			<form:radiobutton path="jobposition" value="Open" checked="checked" />
+		       		</c:when>
+		       		<c:otherwise>
+		       			<form:radiobutton path="jobposition" value="Open" />
+		       		</c:otherwise>
+		       </c:choose>
 		       Open &nbsp;&nbsp;
-		       <form:radiobutton path="jobposition" value="Filled"/>
+		       <c:choose>
+  					<c:when test="${jobposition eq 'Filled'}">
+		       			<form:radiobutton path="jobposition" value="Filled" checked="checked" />
+		       		</c:when>
+		       		<c:otherwise>
+		       			<form:radiobutton path="jobposition" value="Filled"/>
+		       		</c:otherwise>
+		       </c:choose>
 		       Filled &nbsp;&nbsp;
-		       <form:radiobutton path="jobposition" value="Cancelled"/>
+		       <c:choose>
+  					<c:when test="${jobposition eq 'Cancelled'}">
+		       			<form:radiobutton path="jobposition" value="Cancelled" checked="checked" />
+		       		</c:when>
+		       		<c:otherwise>
+		       			<form:radiobutton path="jobposition" value="Cancelled"/>
+		       		</c:otherwise>
+		       </c:choose>
 		       Cancelled
 		       <form:errors path="jobposition"/>
 		      <br>

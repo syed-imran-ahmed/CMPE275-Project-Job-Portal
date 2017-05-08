@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
@@ -81,5 +82,16 @@ public class CompanyController {
 
 	        return "redirect:/";
 	    }
+	    
+	    @RequestMapping(value = "/postjob/{jobid}", method = RequestMethod.GET)
+	    public String companyJob(@PathVariable("jobid") Long jobid, Model model) {
+	       
+	    	CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
+	    	model.addAttribute("jobid", jobPost.getJobid());
+	    	model.addAttribute("jobposition", jobPost.getJobposition());
+	        model.addAttribute("companyjobposts", jobPost);
+	        return "postjob";
+	    }
+	    
 	    
 }

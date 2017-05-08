@@ -46,9 +46,9 @@
 		<ul>
 			<c:forEach var="job" items="${jobslist}">
 			<div>
-			
 				<!-- <img src="job.logo" width="250" height="250" alt="Upload Image" /> -->
-				<h5 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <c:out value="${job.title}" /> </a></h5>
+				<h4 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
+				<p style="color:grey"><c:out value="${job.loc}" /></p>
 				<c:out value="${job.descrip}" />
 			</div>
 			<hr>

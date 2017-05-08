@@ -20,7 +20,11 @@ public class CompanyJobsServiceImpl implements CompanyJobsService{
 		@Override
 		public void save(CompanyJobPosts jobPost) {
 	       
-	        CompanyJobPosts companyJobPost = new CompanyJobPosts();
+			CompanyJobPosts companyJobPost = companyJobsRepository.findByJobid(jobPost.getJobid());
+			if(companyJobPost==null)
+			{
+				companyJobPost = new CompanyJobPosts();
+			}
 	        
 	        companyJobPost.setTitle(jobPost.getTitle());
 	        companyJobPost.setDescrip(jobPost.getDescrip());
