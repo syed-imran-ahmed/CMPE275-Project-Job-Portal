@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,5 +38,14 @@ public class CompanyJobsServiceImpl implements CompanyJobsService{
 	  
 	        companyJobsRepository.save(companyJobPost);
 		}
+
+		@Override
+		public List<CompanyJobPosts> findAllJobs() {
+			return companyJobsRepository.findAll();
+			
+		}
+		
+		
+		
 	}
 

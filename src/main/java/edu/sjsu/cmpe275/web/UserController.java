@@ -11,6 +11,7 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,6 +33,7 @@ import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.repository.SearchRepository;
+import edu.sjsu.cmpe275.service.CompanyJobsService;
 import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.SecurityService;
@@ -58,6 +60,11 @@ public class UserController {
     
     @Autowired
     private CompanyService companyService;
+    
+    @Autowired
+    private CompanyJobsService companyJobsService;
+    
+    
     
    
 
@@ -100,7 +107,7 @@ public class UserController {
     }
 
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
-    public String welcome(Model model) {
+    public String welcome(@RequestParam(required = false) Integer page,Model model) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(currentUserName);
         if(user.getIsVerified()==null || user.getIsVerified().equals("NO"))
@@ -109,7 +116,36 @@ public class UserController {
         }
         else 
         {
-            if(user.getUsertype().equals("JobSeeker")){       
+            if(user.getUsertype().equals("JobSeeker")){  
+            	
+//            	 Company company = companyService.findByCid(user.getId());
+//                 
+//                     List<String> jobTitles = new ArrayList<String>();
+//
+//                     for(CompanyJobPosts jobPost:company.getJobPosts())
+//                     {
+//                         jobTitles.add(jobPost.getTitle());
+//                     }
+//                     model.addAttribute("companylogo",company.getLogo());
+                     
+            		List<CompanyJobPosts> jobPosts = companyJobsService.findAllJobs();
+            	
+                     PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(jobPosts);
+                     pagedListHolder.setPageSize(2);
+                     model.addAttribute("maxPages", pagedListHolder.getPageCount());
+
+                     if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+
+                     model.addAttribute("page", page);
+                     if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
+                         pagedListHolder.setPage(0);
+                         model.addAttribute("jobslist", pagedListHolder.getPageList());
+                     }
+                     else if(page <= pagedListHolder.getPageCount()) {
+                         pagedListHolder.setPage(page-1);
+                         model.addAttribute("jobslist", pagedListHolder.getPageList());
+                     }
+                                	
                 return "welcome";
             }
             else{
@@ -124,7 +160,23 @@ public class UserController {
                         jobTitles.add(jobPost.getTitle());
                     }
                     model.addAttribute("companylogo",company.getLogo());
-                    model.addAttribute("jobslist", company.getJobPosts());
+                    
+                    PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(company.getJobPosts());
+                    pagedListHolder.setPageSize(2);
+                    model.addAttribute("maxPages", pagedListHolder.getPageCount());
+
+                    if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+
+                    model.addAttribute("page", page);
+                    if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
+                        pagedListHolder.setPage(0);
+                        model.addAttribute("jobslist", pagedListHolder.getPageList());
+                    }
+                    else if(page <= pagedListHolder.getPageCount()) {
+                        pagedListHolder.setPage(page-1);
+                        model.addAttribute("jobslist", pagedListHolder.getPageList());
+                    }
+                            
                 }
 
                 return "companywelcome";
