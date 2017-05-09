@@ -1,6 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import edu.sjsu.cmpe275.validator.CompanyValidator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,6 +17,7 @@ import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.CompanyJobsService;
 import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.UserService;
+import edu.sjsu.cmpe275.validator.CompanyValidator;
 
 @Controller
 public class CompanyController {
@@ -28,6 +30,10 @@ public class CompanyController {
 	  
 	  @Autowired
 	  private CompanyJobsService companyJobsService;
+	  
+
+	  @Autowired
+	  private CompanyValidator companyValidator;
 	
 	 @RequestMapping(value = "/company", method = RequestMethod.GET)
 	    public String company(Model model) {
@@ -49,6 +55,11 @@ public class CompanyController {
 //	        if (bindingResult.hasErrors()) {
 //	            return "company";
 //	        }
+	    	  companyValidator.validate(company, bindingResult);
+
+	          if (bindingResult.hasErrors()) {
+	              return "company";
+	          }
 	        String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 	        User user = userService.findByUsername(currentUserName);
 	        company.setCid(user.getId());

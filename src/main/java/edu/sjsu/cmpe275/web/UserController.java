@@ -41,6 +41,7 @@ import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.validator.JobseekerValidator;
 import edu.sjsu.cmpe275.validator.UserValidator;
 
+
 @Controller
 public class UserController {
     @Autowired
@@ -63,6 +64,8 @@ public class UserController {
     
     @Autowired
     private CompanyJobsService companyJobsService;
+    
+    
     
     
     
