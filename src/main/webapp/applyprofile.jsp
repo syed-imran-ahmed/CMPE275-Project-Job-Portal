@@ -14,7 +14,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>View your profile</title>
+    <title>Submit Application</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
@@ -27,76 +27,68 @@
 </head>
 
 <body>
-
-<h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
-<div class="form-signin">
-<%
-if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("")) {
-%>
-<h3 class="form-signin-heading">Profile Picture</h3>
-<br>
-<img src="${contextPath}/images/<%=session.getAttribute("id")%>.JPG" width="250" height="250" alt="Upload Image" />
-<br>
-<%
-//session.removeAttribute("pictureuploaded");
-}
-%>
-	<a href="upload" class="form-signin">Upload/replace profile picture</a>
-</div>
-    <form:form method="POST" action="${contextPath}/job_seeker" modelAttribute="jobseeker" class="form-signin">
-        <h2 class="form-signin-heading">View/Edit Profile</h2>
+    <form:form method="POST" action="/applyprofile" modelAttribute="jobseeker" class="form-signin">
+        <h2 class="form-signin-heading">Review Profile</h2>
+        <img src="${contextPath}/images/${jobseeker.id}.JPG" width="250" height="250"/>
+         <br>
+         <br>
          <spring:bind path="Id">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="hidden" path="Id" class="form-control" value = "1010101010101010"
-                            autofocus="false"></form:input>
+                <form:input type="hidden" path="Id" />
                 <form:errors path="Id"></form:errors>
             </div>
         </spring:bind>
+        <br>
+        <h3 align= "left" class="form-signin-heading">First Name</h3>
         <spring:bind path="Firstname">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Firstname" class="form-control" placeholder="First Name"
-                            autofocus="true"></form:input>
+                <form:textarea  readonly="true" type="text" path="Firstname" class="form-control" />
                 <form:errors path="Firstname"></form:errors>
             </div>
         </spring:bind>
-
+		<br>
+        <h3 align= "left" class="form-signin-heading">Last Name</h3>
         <spring:bind path="Lastname">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Lastname" class="form-control" placeholder="Last Name"></form:input>
+                <form:textarea  readonly="true" type="text" path="Lastname" class="form-control"/>
                 <form:errors path="Lastname"></form:errors>
             </div>
         </spring:bind>
-
+		<br>
+        <h3 align= "left" class="form-signin-heading">Introduction</h3>
         <spring:bind path="Introduction">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Introduction" class="form-control" placeholder="Introduction" ></form:input>
+                <form:textarea  readonly="true" type="text" path="Introduction" class="form-control"/>
                 <form:errors path="Introduction"></form:errors>
             </div>
         </spring:bind>
-        
+        <br>
+        <h3 align= "left" class="form-signin-heading">Work Experience</h3>
         <spring:bind path="Wrk_exp">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Wrk_exp" class="form-control" placeholder="Work Experience"></form:input>
+                <form:textarea  readonly="true" type="text" path="Wrk_exp" class="form-control"/>
                 <form:errors path="Wrk_exp"></form:errors>
             </div>
         </spring:bind>
-        
+        <br>
+        <h3 align= "left" class="form-signin-heading">Education</h3>
         <spring:bind path="Education">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Education" class="form-control" placeholder="Education"></form:input>
+                <form:textarea  readonly="true" type="text" path="Education" class="form-control" />
                 <form:errors path="Education"></form:errors>
             </div>
         </spring:bind>       
-        
+        <br>
+        <h3 align= "left" class="form-signin-heading">Skills</h3>
          <spring:bind path="Skills">
             <div class="form-group ${status.error ? 'has-error' : ''}">
-                <form:input type="text" path="Skills" class="form-control" placeholder="Skills"></form:input>
+                <form:textarea  readonly="true" type="text" path="Skills" class="form-control"/>
                 <form:errors path="Skills"></form:errors>
             </div>
-        </spring:bind>          
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
-    </form:form>
-
+        </spring:bind> 
+        <button class="btn btn-lg btn-primary btn-block" type="submit">Submit Application</button>         
+     </form:form>
+    
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
