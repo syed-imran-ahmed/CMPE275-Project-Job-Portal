@@ -7,8 +7,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+import org.hibernate.search.annotations.Field;
+
 
 @Entity
+@Indexed
 public class CompanyJobPosts {
 
 	@Id
@@ -16,22 +21,24 @@ public class CompanyJobPosts {
 	private long jobid;
 	
 	@Column(name = "title",nullable = false, unique = false)
+	@Field(store = Store.NO)
 	private String title;
 	
 	@Column(name = "descrip",nullable = false, unique = false)
+	@Field
 	private String descrip;
 
 	@Column(name = "resp",nullable = false, unique = false)
+	@Field
 	private String resp;
 
 	@Column(name = "loc",nullable = false, unique = false)
+	@Field
 	private String loc;
 	
 	@Column(name = "sal",nullable = false, unique = false)
 	private String sal;
 	
-	
-
 	@Column(name = "jobposition",nullable = true, unique = false)
 	private String jobposition;
 	

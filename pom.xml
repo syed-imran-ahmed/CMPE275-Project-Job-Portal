@@ -66,7 +66,13 @@
 		    <artifactId>mail</artifactId>
 		    <version>1.4</version>
 		</dependency>
-        
+		
+		<!-- Maven artifact identifier for Hibernate Search -->
+		<dependency>
+			  <groupId>org.hibernate</groupId>
+			  <artifactId>hibernate-search-orm</artifactId>
+			   <version>5.5.6.Final</version>
+		</dependency>        
         
     </dependencies>
     <build>

@@ -112,80 +112,70 @@ public class UserController {
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(@RequestParam(required = false) Integer page,Model model) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-        User user = userService.findByUsername(currentUserName);
-        if(user.getIsVerified()==null || user.getIsVerified().equals("NO"))
-        {
-            return "emailverification";
-        }
-        else 
-        {
-            if(user.getUsertype().equals("JobSeeker")){  
-            	
-//            	 Company company = companyService.findByCid(user.getId());
-//                 
-//                     List<String> jobTitles = new ArrayList<String>();
-//
-//                     for(CompanyJobPosts jobPost:company.getJobPosts())
-//                     {
-//                         jobTitles.add(jobPost.getTitle());
-//                     }
-//                     model.addAttribute("companylogo",company.getLogo());
-                     
-            		List<CompanyJobPosts> jobPosts = companyJobsService.findAllJobs();
-            	
-                     PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(jobPosts);
-                     pagedListHolder.setPageSize(4);
-                     model.addAttribute("maxPages", pagedListHolder.getPageCount());
+    	User user = userService.findByUsername(currentUserName);
+    	if(user.getIsVerified()==null || user.getIsVerified().equals("NO"))
+    	{
+    		return "emailverification";
+    	}
+    	else 
+    	{
+    		if(user.getUsertype().equals("JobSeeker")){  
 
-                     if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+    			List<CompanyJobPosts> jobPosts = companyJobsService.findAllJobs();
 
-                     model.addAttribute("page", page);
-                     if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
-                         pagedListHolder.setPage(0);
-                         model.addAttribute("jobslist", pagedListHolder.getPageList());
-                     }
-                     else if(page <= pagedListHolder.getPageCount()) {
-                         pagedListHolder.setPage(page-1);
-                         model.addAttribute("jobslist", pagedListHolder.getPageList());
-                     }
-                                	
-                return "welcome";
-            }
-            else{
+    			PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(jobPosts);
+    			pagedListHolder.setPageSize(4);
+    			model.addAttribute("maxPages", pagedListHolder.getPageCount());
 
-                Company company = companyService.findByCid(user.getId());
-                if(company!=null)
-                {
-                    List<String> jobTitles = new ArrayList<String>();
+    			if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
 
-                    for(CompanyJobPosts jobPost:company.getJobPosts())
-                    {
-                        jobTitles.add(jobPost.getTitle());
-                    }
-                    model.addAttribute("companylogo",company.getLogo());
-                    
-                    PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(company.getJobPosts());
-                    pagedListHolder.setPageSize(4);
-                    model.addAttribute("maxPages", pagedListHolder.getPageCount());
+    			model.addAttribute("page", page);
+    			if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
+    				pagedListHolder.setPage(0);
+    				model.addAttribute("jobslist", pagedListHolder.getPageList());
+    			}
+    			else if(page <= pagedListHolder.getPageCount()) {
+    				pagedListHolder.setPage(page-1);
+    				model.addAttribute("jobslist", pagedListHolder.getPageList());
+    			}
 
-                    if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+    			return "welcome";
+    		}
+    		else{
 
-                    model.addAttribute("page", page);
-                    if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
-                        pagedListHolder.setPage(0);
-                        model.addAttribute("jobslist", pagedListHolder.getPageList());
-                    }
-                    else if(page <= pagedListHolder.getPageCount()) {
-                        pagedListHolder.setPage(page-1);
-                        model.addAttribute("jobslist", pagedListHolder.getPageList());
-                    }
-                            
-                }
+    			Company company = companyService.findByCid(user.getId());
+    			if(company!=null)
+    			{
+    				List<String> jobTitles = new ArrayList<String>();
 
-                return "companywelcome";
-            }
-        }
-   
+    				for(CompanyJobPosts jobPost:company.getJobPosts())
+    				{
+    					jobTitles.add(jobPost.getTitle());
+    				}
+    				model.addAttribute("companylogo",company.getLogo());
+
+    				PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(company.getJobPosts());
+    				pagedListHolder.setPageSize(4);
+    				model.addAttribute("maxPages", pagedListHolder.getPageCount());
+
+    				if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+
+    				model.addAttribute("page", page);
+    				if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
+    					pagedListHolder.setPage(0);
+    					model.addAttribute("jobslist", pagedListHolder.getPageList());
+    				}
+    				else if(page <= pagedListHolder.getPageCount()) {
+    					pagedListHolder.setPage(page-1);
+    					model.addAttribute("jobslist", pagedListHolder.getPageList());
+    				}
+
+    			}
+
+    			return "companywelcome";
+    		}
+    	}
+
     }
     
     @RequestMapping(value = "/verification", method = RequestMethod.POST)
@@ -307,15 +297,15 @@ public class UserController {
         return "upload";
     }
    
-    @Autowired
-    SearchRepository sr;
-    @RequestMapping(value = "/search", method = RequestMethod.GET)
-    public String search(ModelMap model) {
-    	List<CompanyJobPosts> c=sr.findAll();
-        System.out.println(" jobs "+c.get(0).getDescrip());
-    	String heading = "Search";
-		model.addAttribute("heading", heading);
-		model.addAttribute("result1", c);
-        return "search";
-    }
+//    @Autowired
+//    SearchRepository sr;
+//    @RequestMapping(value = "/search", method = RequestMethod.GET)
+//    public String search(ModelMap model) {
+//    	List<CompanyJobPosts> c=sr.findAll();
+//        System.out.println(" jobs "+c.get(0).getDescrip());
+//    	String heading = "Search";
+//		model.addAttribute("heading", heading);
+//		model.addAttribute("result1", c);
+//        return "search";
+//    }
 }
