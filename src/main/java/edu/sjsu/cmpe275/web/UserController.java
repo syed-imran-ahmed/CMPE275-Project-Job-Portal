@@ -15,7 +15,6 @@ import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -32,7 +31,6 @@ import edu.sjsu.cmpe275.model.CompanyJobPosts;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
-import edu.sjsu.cmpe275.repository.SearchRepository;
 import edu.sjsu.cmpe275.service.CompanyJobsService;
 import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.JobseekerService;
@@ -65,12 +63,7 @@ public class UserController {
     @Autowired
     private CompanyJobsService companyJobsService;
     
-    
-    
-    
-    
-   
-
+  
     private static String IMAGE_FOLDER = "src/main/webapp/images/";
     
     @RequestMapping(value = "/registration", method = RequestMethod.GET)

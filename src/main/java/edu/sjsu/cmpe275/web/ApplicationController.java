@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.model.Application;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
 import edu.sjsu.cmpe275.model.JobSeeker;
@@ -65,6 +66,7 @@ public class ApplicationController {
         return "applyprofile";
     }
     
+    
     @PostMapping("/applyprofile")
     public String profilepost(Model model, HttpSession session) {
     	String resume = null;
@@ -76,10 +78,13 @@ public class ApplicationController {
         long jobid=  (long) session.getAttribute("jobid");
         Application application = new Application(id,user.getId(),jobid,name,user.getEmailid(),resume,"Pending" );
         applicationService.save(application);
-
-        //IMRAN DO YOU NOTIFICATION WALA PART HERE
+        
+        CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
+        ActivationEmail.emailAppliedJob(user.getEmailid(), jobid,jobPost.getCompany().getName(),jobPost.getTitle(),jobPost.getDescrip(),jobPost.getLoc());
+     
         return "redirect:welcome";
     }
+    
     
     @PostMapping("/applyresume")
     public String resumeUpload(@RequestParam("file") MultipartFile file,HttpSession session) {
@@ -112,8 +117,13 @@ public class ApplicationController {
         long jobid=  (long) session.getAttribute("jobid");
         Application application = new Application(id,user.getId(),jobid,name,user.getEmailid(),fileLoc,"Pending" );
         applicationService.save(application);
+        
+        CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
+        ActivationEmail.emailAppliedJob(user.getEmailid(), jobid,jobPost.getCompany().getName(),jobPost.getTitle(),jobPost.getDescrip(),jobPost.getLoc());
+        
         return "redirect:welcome";
     }
+    
     
     @GetMapping("/applyresume")
     public String resumeget() {
