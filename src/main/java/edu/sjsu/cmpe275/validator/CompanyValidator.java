@@ -25,19 +25,19 @@ public class CompanyValidator implements Validator {
     public void validate(Object c, Errors errors) {
         Company company = (Company) c;
 
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "name", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "Name", "NotEmpty");
        
      
         
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "website", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "Website", "NotEmpty");
         
         if(!urlValidation(company.getWebsite())) {
-        	errors.rejectValue("website", "Validation.company.website");
+        	errors.rejectValue("Website", "Validation.company.website");
         }
         
         
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "address", "NotEmpty");
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "description", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "Address", "NotEmpty");
+        ValidationUtils.rejectIfEmptyOrWhitespace(errors, "Description", "NotEmpty");
         
      
     }

@@ -1,7 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import edu.sjsu.cmpe275.validator.CompanyValidator;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
