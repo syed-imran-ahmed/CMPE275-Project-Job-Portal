@@ -56,16 +56,18 @@ public class ApplicationController {
 		CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
         model.addAttribute("companyjobposts", jobPost);
         Application a = applicationService.findByJobIDAndJobseekerID(jobid,user.getId());
-
-        if(a.getStatus().equals("Pending") || a.getStatus().equals("Offered"))
-        {
-        	model.addAttribute("reapply", false);
+        if(a != null){
+        
+	        if(a.getStatus().equals("Pending") || a.getStatus().equals("Offered"))
+	        {
+	        	model.addAttribute("reapply", false);
+	        }
+	        else
+	        {
+	        	model.addAttribute("reapply", true);
+	        }
+	        model.addAttribute("pendingCount",applicationService.findByStatusAndJobseekerID("Pending", user.getId()).size() );
         }
-        else
-        {
-        	model.addAttribute("reapply", true);
-        }
-        model.addAttribute("pendingCount",applicationService.findByStatusAndJobseekerID("Pending", user.getId()).size() );
         session.setAttribute("jobid", jobid);
         return "applyjob";
     }
