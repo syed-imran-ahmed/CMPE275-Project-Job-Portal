@@ -30,7 +30,7 @@
 <h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
 <br>
 <div class="form-signin" style= "float:left;width:width/4">
-	<h3 align ="center" class="form-signin-heading"><a href = "https://www.${companyjobposts.company.website}">${companyjobposts.company.name}</a></h3>
+	<h3 align ="center" class="form-signin-heading"><a href = "${companyjobposts.company.website}">${companyjobposts.company.name}</a></h3>
 	<br>
 	<img src="${companyjobposts.company.logo}" width="250" height="250" onerror="this.src='${contextPath}/images/teamwork.png'" />
 </div>	
