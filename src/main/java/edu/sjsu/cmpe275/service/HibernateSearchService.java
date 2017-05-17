@@ -38,8 +38,6 @@ public class HibernateSearchService  {
 		this.entityManager = entityManager;
 	}
 	
-
-
 	public void initializeHibernateSearch() {
 
 		try {
