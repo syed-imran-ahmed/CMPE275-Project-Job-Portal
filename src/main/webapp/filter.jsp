@@ -107,7 +107,7 @@
 		 	<c:forEach var="job_sal" items="${salar}">
 			<div>
 				
-				<input type="checkbox" name="checkboxSal" value="${job_sal.value}"><c:out value="${job_sal.value}" />(<c:out value="${job_sal.count}" />)
+				<input type="checkbox" name="checkboxSal" value="${job_sal.value}"><c:out value= "$'${job_sal.value}'" />(<c:out value="${job_sal.count}" />)
 			</div>
 			<hr>
 			</c:forEach>
