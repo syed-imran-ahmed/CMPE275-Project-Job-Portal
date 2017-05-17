@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -10,9 +12,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import edu.sjsu.cmpe275.email.ActivationEmail;
+import edu.sjsu.cmpe275.model.Application;
 import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
 import edu.sjsu.cmpe275.model.User;
+import edu.sjsu.cmpe275.service.ApplicationService;
 import edu.sjsu.cmpe275.service.CompanyJobsService;
 import edu.sjsu.cmpe275.service.CompanyService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -30,6 +35,8 @@ public class CompanyController {
 	  @Autowired
 	  private CompanyJobsService companyJobsService;
 	  
+	  @Autowired
+	  private ApplicationService appService;
 
 	  @Autowired
 	  private CompanyValidator companyValidator;
@@ -86,10 +93,15 @@ public class CompanyController {
 	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 	        User user = userService.findByUsername(currentUserName);
 	        Company company = companyService.findByCid(user.getId());
-	        
 	        cmpJobPost.setCompany(company);
 	        companyJobsService.save(cmpJobPost);
-
+	        List<Application> app =  appService.findByjobID(cmpJobPost.getJobid());
+	        if( app != null){
+	        	for ( Application a: app)
+	        	{
+	        		ActivationEmail.emailModifiedJobTrigger(a.getJobseekerEmail(),a.getJobID());
+	        	}
+	        }
 	        return "redirect:/";
 	    }
 	    
