@@ -10,9 +10,9 @@ version="1.0">
       <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
       <property name="hibernate.show_sql" value="true"/>
       <property name="hibernate.max_fetch_depth" value="3"/>
-      <property name="hibernate.connection.username" value="root"/>
-      <property name="hibernate.connection.password" value="root"/>
-      <property name="hibernate.connection.url" value="jdbc:mysql://localhost:3306/cmpe275"/>
+      <property name="hibernate.connection.username" value="cmpe275"/>
+      <property name="hibernate.connection.password" value="qwerty123"/>
+      <property name="hibernate.connection.url" value="jdbc:mysql://cmpe275.ct6qy55fec9c.us-west-2.rds.amazonaws.com:3306/cmpe275"/>
       <property name="hibernate.c3p0.min_size" value="5" />
       <property name="hibernate.c3p0.max_size" value="50" />
       <property name="hibernate.c3p0.timeout" value="8" />

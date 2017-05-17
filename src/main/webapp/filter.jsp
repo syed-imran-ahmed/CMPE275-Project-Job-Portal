@@ -53,7 +53,7 @@
 			</div>
 			<div>
 				
-				<h4 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
+				<h4 class="text-left"><a href="${contextPath}/applyjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
 				<p style="color:grey"><c:out value="${job.loc}" /></p>
 				<c:out value="${job.descrip}" />
 			</div>
