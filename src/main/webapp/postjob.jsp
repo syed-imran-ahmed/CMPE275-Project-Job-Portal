@@ -27,7 +27,7 @@
 </head>
 <body>
 <div class="container">
-
+	<h4 class="text-right"><a href="${contextPath}/jobApplications/${jobid}">Check Applications</a></h4>
     <form:form method="POST" action="${contextPath}/postjob" modelAttribute="companyjobposts" class="form-signin">
         <h2 class="form-signin-heading">Post A Job</h2>
         <spring:bind path="jobid">
