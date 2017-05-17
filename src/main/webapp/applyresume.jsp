@@ -18,6 +18,8 @@
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
 
 <body>
+<h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
+<br>
 	<div class="form-signin">
 		<h1 class="form-signin-heading"> Upload a Resume</h1>
 		
@@ -27,5 +29,8 @@
 		    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
 		</form>
 	</div>
+<br>
+<h2 align = left><a href="${contextPath}/applyjob/<%=session.getAttribute("jobid")%>" class="form-signin">Back</a></h2>
+
 </body>
 </html>

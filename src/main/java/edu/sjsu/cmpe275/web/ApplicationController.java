@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -48,11 +51,22 @@ public class ApplicationController {
 
     @RequestMapping(value = "/applyjob/{jobid}", method = RequestMethod.GET)
     public String applyJob(@PathVariable("jobid") Long jobid, Model model,HttpSession session) {
-       
-    	
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
 		CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
         model.addAttribute("companyjobposts", jobPost);
-       	session.setAttribute("jobid", jobid);
+        Application a = applicationService.findByJobIDAndJobseekerID(jobid,user.getId());
+
+        if(a.getStatus().equals("Pending") || a.getStatus().equals("Offered"))
+        {
+        	model.addAttribute("reapply", false);
+        }
+        else
+        {
+        	model.addAttribute("reapply", true);
+        }
+        model.addAttribute("pendingCount",applicationService.findByStatusAndJobseekerID("Pending", user.getId()).size() );
+        session.setAttribute("jobid", jobid);
         return "applyjob";
     }
 
@@ -129,5 +143,46 @@ public class ApplicationController {
     public String resumeget() {
   
         return "applyresume";
+    }
+    
+    @RequestMapping(value = "/applicationView", method = RequestMethod.GET)
+    public String cancelOrRejectApp(Model model,HttpSession session) {
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        List<Application> applicationList=applicationService.findByjobseekerID(user.getId());
+        HashMap<Long,String> hm=new HashMap<>(); 
+        for(Application a: applicationList)
+        {
+        	hm.put(a.getJobID(), companyJobsService.findByJobId(a.getJobID()).getCompany().getName()+" - "+companyJobsService.findByJobId(a.getJobID()).getTitle());
+        }
+        model.addAttribute("appList", applicationList);
+        model.addAttribute("cmpHM", hm);
+        
+        return "applicationView";
+    }
+    
+    @Transactional
+    @PostMapping("/applicationView")
+    public String updateApp(@RequestParam List<String> id) {
+    	if( id.isEmpty())
+    	{
+    		 return "applicationView";
+    	}
+    	for (String x : id){
+    		 Application application = applicationService.findById(x);
+    		 if(application.getStatus().equals("Pending"))
+    		 {
+    			 application.setStatus("Cancelled");
+    		 }
+    		 else if(application.getStatus().equals("Offered"))
+    		 {
+    			 application.setStatus("OfferRejected");
+    		 }
+    		 applicationService.save(application);
+    	}
+    	
+       // ActivationEmail.emailAppliedJob(user.getEmailid(), jobid,jobPost.getCompany().getName(),jobPost.getTitle(),jobPost.getDescrip(),jobPost.getLoc());
+     
+    	return "redirect:applicationView";
     }
 }

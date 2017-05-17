@@ -29,11 +29,11 @@
 <body>
 
 <h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
-<div class="form-signin">
+<div class="form-signin" style= "float:left;width:width/4">
 <%
 if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("")) {
 %>
-<h3 class="form-signin-heading">Profile Picture</h3>
+<h3 align ="center" class="form-signin-heading">Profile Picture</h3>
 <br>
 <img src="${contextPath}/images/<%=session.getAttribute("id")%>.JPG" width="250" height="250" alt="Upload Image" />
 <br>
@@ -41,10 +41,10 @@ if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("
 //session.removeAttribute("pictureuploaded");
 }
 %>
-	<a href="upload" class="form-signin">Upload/replace profile picture</a>
 </div>
+<div style= "float:center">
     <form:form method="POST" action="${contextPath}/job_seeker" modelAttribute="jobseeker" class="form-signin">
-        <h2 class="form-signin-heading">View/Edit Profile</h2>
+        <h2 align ="center" class="form-signin-heading">View/Edit Profile</h2>
          <spring:bind path="Id">
             <div class="form-group ${status.error ? 'has-error' : ''}">
                 <form:input type="hidden" path="Id" class="form-control" value = "1010101010101010"
@@ -93,10 +93,14 @@ if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("
                 <form:input type="text" path="Skills" class="form-control" placeholder="Skills"></form:input>
                 <form:errors path="Skills"></form:errors>
             </div>
-        </spring:bind>          
+        </spring:bind>    
+              	
+        <p align = "center"><a  href="upload" class="form-group">Upload/Replace profile picture</a></p>      
+        <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
-    </form:form>
 
+      </form:form>
+</div>
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

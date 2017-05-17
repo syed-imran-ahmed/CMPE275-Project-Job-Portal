@@ -27,9 +27,14 @@
 </head>
 
 <body>
+<h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
+<br>
+<div style="float:left">
+    <img src="${contextPath}/images/${jobseeker.id}.JPG" width="250" height="250"/>
+</div>  
+<div style="float:center">  
     <form:form method="POST" action="/applyprofile" modelAttribute="jobseeker" class="form-signin">
         <h2 class="form-signin-heading">Review Profile</h2>
-        <img src="${contextPath}/images/${jobseeker.id}.JPG" width="250" height="250"/>
          <br>
          <br>
          <spring:bind path="Id">
@@ -88,7 +93,10 @@
         </spring:bind> 
         <button class="btn btn-lg btn-primary btn-block" type="submit">Submit Application</button>         
      </form:form>
-    
+ </div>   
+ 
+ <br>
+ <h2 align = left><a href="${contextPath}/applyjob/<%=session.getAttribute("jobid")%>" class="form-signin">Back</a></h2>
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

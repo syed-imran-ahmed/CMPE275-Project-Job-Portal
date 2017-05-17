@@ -42,4 +42,14 @@ public class ApplicationServiceImpl implements ApplicationService{
 				);
 		apprepo.save(app);
 	}
+	
+	@Override
+	public List<Application> findByStatusAndJobseekerID(String status, long Id){
+		return apprepo.findByStatusAndJobseekerID( status, Id);
+	}
+	
+	@Override
+	public Application findByJobIDAndJobseekerID(long jobId, long jobseekerId){
+		return apprepo.findByJobIDAndJobseekerID(jobId,jobseekerId);
+	}
 }

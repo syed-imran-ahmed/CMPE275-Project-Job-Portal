@@ -27,15 +27,14 @@
 </head>
 
 <body>
-<div align ="center">
-	<div class="thumbnail-container" style="align-content:center">
-					<img src="${companyjobposts.company.logo}" width="100" height="100" onerror="this.src='${contextPath}/images/teamwork.png'" />
-	</div>
-	<div class="container">
-		<h1><a href = "${companyjobposts.company.website}">${companyjobposts.company.name}</a></h1>
-	</div>
+<h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
+<br>
+<div class="form-signin" style= "float:left;width:width/4">
+	<h3 align ="center" class="form-signin-heading"><a href = "https://www.${companyjobposts.company.website}">${companyjobposts.company.name}</a></h3>
+	<br>
+	<img src="${companyjobposts.company.logo}" width="250" height="250" onerror="this.src='${contextPath}/images/teamwork.png'" />
 </div>	
-<div class="form-signin">
+<div style= "float:center">
 
     <form:form modelAttribute="companyjobposts" class="form-signin">
         <h2 align = "left" class="form-signin-heading">Job Description</h2>
@@ -97,6 +96,12 @@
 		</c:when>	
 		<c:when test= "${companyjobposts.jobposition eq 'Filled'}">
 			<h2  align= "center">Sorry this Job either got Cancelled!</h2>
+		</c:when>
+		<c:when test= "${reapply eq false}">
+			<h2  align= "center">Sorry you can not Re-apply for this Job at the moment!</h2>
+		</c:when>
+		<c:when test= "${pendingCount >= 5 }">
+			<h2  align= "center">Sorry you already have 5 Pending applications!</h2>
 		</c:when>
 		<c:otherwise>
 		<tr>

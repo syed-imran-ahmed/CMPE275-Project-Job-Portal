@@ -13,7 +13,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Welcome</title>
+    <title>View Applications</title>
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
 
@@ -24,42 +24,41 @@
     <![endif]-->
 </head>
 <body>
-<div class="container">
-
-    <c:if test="${pageContext.request.userPrincipal.name != null}">
-        <form id="logoutForm" method="POST" action="${contextPath}/logout">
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </form>
-
-        <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
-		<h4 class="text-right"><a href="${contextPath}/job_seeker">View my profile</a></h4>
-	</c:if>
-    
-	<c:if test="${profileComplete eq true}">	
-	<h4 class="text-center"><a href="${contextPath}/search">Search</a></h4>
-	<h4 class="text-right"><a href="${contextPath}/applicationView">Check Applications</a></h4>
-	   <h3>List of posted jobs</h3>
-		<c:if test="${not empty jobslist}">
-			<ul>
-			 	<c:forEach var="job" items="${jobslist}">
-			 	<div class="thumbnail-container" style="float:left;height:60px;width:60px">
-					<img src="${job.company.logo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
-				</div>
-				<div>
-					
-					<h4 class="text-left"><a href="${contextPath}/applyjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
-					<p style="color:grey"><c:out value="${job.loc}" /></p>
-					<c:out value="${job.descrip}" />
-				</div>
-				<hr>
-				</c:forEach>
-			</ul>
+<div align = center>
+	   <h3 class = "form-signin-heading">List of Applications </h3>
+	   <br>
+		<c:if test="${not empty appList}">
+		<form method="POST" action="${contextPath}/applicationView" class = "form-signin">
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+		<table border="1">
+			<tr>
+				<th><div style='width: 250px;'><h3>Cancel or Reject</h3></div></th>
+				<th><div style='width: 250px;'><h3>Job Title</h3></div></th>
+				<th><div style='width: 250px;'><h3>Status</h3></div></th>
+			</tr>
+			<c:forEach var="app" items="${appList}">
+				<tr>
+					<c:choose>
+						<c:when test="${app.status eq 'Pending' ||app.status eq 'Offered'}">
+							<td><div style='width: 250px;'><input type="checkbox" name="id" value="${app.id}"></div></td>
+						</c:when>
+						<c:otherwise>
+							<td><div style='width: 250px;'><h4>NA</h4></div></td>
+						</c:otherwise>
+					</c:choose>
+					<td><div style='width: 250px;'><h4><a href="${contextPath}/applyjob/${app.jobID}"><c:out value="${cmpHM.get(app.jobID)}" /></a></h4></div></td>
+					<td><div style='width: 250px;'><h4><c:out value="${app.status}" /></h4></div></td>
+				</tr>			
+			</c:forEach>
+		</table>
+		<input type="submit" value="Submit">
+		</form>
 		</c:if>
 		
 		
 		<div id="pagination">
 		
-		    <c:url value="${contextPath}/welcome" var="prev">
+		    <c:url value="${contextPath}/applicationView" var="prev">
 		        <c:param name="page" value="${page-1}"/>
 		    </c:url>
 		    <c:if test="${page > 1}">
@@ -72,24 +71,20 @@
 		                <span>${i.index}</span>
 		            </c:when>
 		            <c:otherwise>
-		                <c:url value="${contextPath}/welcome" var="url">
+		                <c:url value="${contextPath}/applicationView" var="url">
 		                    <c:param name="page" value="${i.index}"/>
 		                </c:url>
 		                <a href='<c:out value="${url}" />'>${i.index}</a>
 		            </c:otherwise>
 		        </c:choose>                
 		    </c:forEach>
-		    <c:url value="${contextPath}/welcome" var="next">
+		    <c:url value="${contextPath}/applicationView" var="next">
 		        <c:param name="page" value="${page + 1}"/>
 		    </c:url>
 		    <c:if test="${page + 1 <= maxPages}">
 		        <a href='<c:out value="${next}" />' class="pn next">Next</a>
 		    </c:if>
 		</div>
-	</c:if>
 </div>
-<!-- /container -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-<script src="${contextPath}/resources/js/bootstrap.min.js"></script>
 </body>
 </html>

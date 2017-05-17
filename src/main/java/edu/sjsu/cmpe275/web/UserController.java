@@ -115,6 +115,13 @@ public class UserController {
     		if(user.getUsertype().equals("JobSeeker")){  
 
     			List<CompanyJobPosts> jobPosts = companyJobsService.findAllJobs();
+    			JobSeeker js= null;
+    			js = jobseekerService.findById(user.getId());
+    			if (js != null)
+    			{
+    				System.out.println(js);
+    				model.addAttribute("profileComplete", true);
+    			}
 
     			PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(jobPosts);
     			pagedListHolder.setPageSize(4);
@@ -265,7 +272,7 @@ public class UserController {
 
         if (file.isEmpty()) {
             System.out.println("its empty");
-            return "job_seeker";
+            return "redirect:job_seeker";
         }
 
         try {

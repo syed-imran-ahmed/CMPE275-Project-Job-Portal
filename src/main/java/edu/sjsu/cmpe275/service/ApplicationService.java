@@ -13,5 +13,9 @@ public interface ApplicationService {
 	List<Application> findByjobID(long Id);
 	
 	List<Application> findByjobseekerID(long Id);
+	
+	List<Application> findByStatusAndJobseekerID(String status, long Id);
+	
+	Application findByJobIDAndJobseekerID(long jobId, long jobseekerId);
 
 }
