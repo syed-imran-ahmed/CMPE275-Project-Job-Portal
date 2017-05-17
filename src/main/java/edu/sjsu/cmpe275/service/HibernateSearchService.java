@@ -134,8 +134,8 @@ public class HibernateSearchService  {
 				.buildQueryBuilder().forEntity(CompanyJobPosts.class).get();
  
 		FacetingRequest priceFacetingRequest = builder.facet()
-				.name("SalaryRange").onField("sal").range().from(0).to(10)
-				.from(11).to(20).from(21).to(30).from(31).to(310)
+				.name("SalaryRange").onField("sal").range().from(0).to(30000)
+				.from(30001).to(60000).from(60001).to(90000).from(90001).to(150000).from(150001).to(1500000)
 				.orderedBy(FacetSortOrder.RANGE_DEFINITION_ORDER)
 				.createFacetingRequest();
 		Query luceneQuery = builder.all().createQuery();
