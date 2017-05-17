@@ -44,7 +44,7 @@
         </form> 
     
 
-   <h3>Searcher Job Results</h3>
+   <h3>List of posted jobs [Open]</h3>
 	<c:if test="${not empty jobslist}">
 		<ul>
 		 	<c:forEach var="job" items="${jobslist}">
@@ -56,6 +56,23 @@
 				<h4 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
 				<p style="color:grey"><c:out value="${job.loc}" /></p>
 				<c:out value="${job.descrip}" />
+			</div>
+			<hr>
+			</c:forEach>
+		</ul>
+	</c:if>
+	<h3>List of posted jobs [Expired]</h3>
+	<c:if test="${not empty Filledlist}">
+		<ul>
+		 	<c:forEach var="filled" items="${Filledlist}">
+		 	<div class="thumbnail-container" style="float:left;height:60px;width:60px">
+				<img src="${job.company.logo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
+			</div>
+			<div>
+				
+				<h4 class="text-left"><a href="${contextPath}/postjob/${filled.jobid}"> <b><c:out value="${filled.title}" /></b> </a></h4>
+				<p style="color:grey"><c:out value="${filled.loc}" /></p>
+				<c:out value="${filled.descrip}" />
 			</div>
 			<hr>
 			</c:forEach>

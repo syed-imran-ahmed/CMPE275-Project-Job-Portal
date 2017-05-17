@@ -1,4 +1,6 @@
 package edu.sjsu.cmpe275.model;
+import java.lang.annotation.Repeatable;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -6,22 +8,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Facet;
+import org.hibernate.search.annotations.Facets;
 import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Fields;
+import org.hibernate.search.annotations.Index;
+
 
 
 @Entity
 @Indexed
+@Table(name="company_job_posts")
 public class CompanyJobPosts {
+	
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long jobid;
 	
 	@Column(name = "title",nullable = false, unique = false)
-	@Field(store = Store.NO)
+	@Fields( {
+        @Field(name="job_title"),
+       @Field(analyze = Analyze.NO, store = Store.YES)
+      
+        } )
+	  @Facet
 	private String title;
 	
 	@Column(name = "descrip",nullable = false, unique = false)
@@ -31,13 +47,22 @@ public class CompanyJobPosts {
 	@Column(name = "resp",nullable = false, unique = false)
 	@Field
 	private String resp;
-
+	
+	
 	@Column(name = "loc",nullable = false, unique = false)
-	@Field
+	@Fields( {
+        @Field(name="location"),
+       @Field(analyze = Analyze.NO, store = Store.YES)
+      
+        } )
+	  @Facet
 	private String loc;
 	
 	@Column(name = "sal",nullable = false, unique = false)
-	private String sal;
+
+      @Field(analyze = Analyze.NO, store = Store.NO)
+	  @Facet
+	private long sal;
 	
 	@Column(name = "jobposition",nullable = true, unique = false)
 	private String jobposition;
@@ -86,11 +111,11 @@ public class CompanyJobPosts {
 		this.loc = loc;
 	}
 
-	public String getSal() {
+	public long getSal() {
 		return sal;
 	}
 
-	public void setSal(String sal) {
+	public void setSal(long sal) {
 		this.sal = sal;
 	}
 
@@ -113,7 +138,7 @@ public class CompanyJobPosts {
 		this.descrip = descrip;
 	}
 
-	public CompanyJobPosts(long jobid, String title, String jobposition, String desc, String resp, String loc, String sal,
+	public CompanyJobPosts(long jobid, String title, String jobposition, String desc, String resp, String loc, long sal,
 			Company company) {
 		super();
 		this.jobid = jobid;
