@@ -32,10 +32,12 @@ public class SearchController {
 		List<?> x= service.locationFacet();
 		List<?> y= service.titleFacet();
 		List<Facet> z= service.salaryFacet();
+		List<Facet> f= service.companyFacet();
 		if(q==null){
 			    model.addAttribute("filter", x);
 			    model.addAttribute("title", y);
 			    model.addAttribute("salar", z);
+			    model.addAttribute("company", f);
 			return "search";}
 	    List<CompanyJobPosts> searchResults = null;
 	   
@@ -49,13 +51,15 @@ public class SearchController {
 	    model.addAttribute("filter", x);
 	    model.addAttribute("title", y);
 	    model.addAttribute("salar", z);
+	    model.addAttribute("company", f);
 	    return "search";
 	  }
 	@RequestMapping(value="/filter",method=RequestMethod.GET)
-	  public String filterJob(@RequestParam(name="checkboxName", defaultValue="")String[] q, @RequestParam(name="checkboxTitle", defaultValue="")String[] r,@RequestParam(name="checkboxSal", defaultValue="")String[] s,Model model) {
+	  public String filterJob(@RequestParam(name="checkboxName", defaultValue="")String[] q, @RequestParam(name="checkboxTitle", defaultValue="")String[] r,@RequestParam(name="checkboxSal", defaultValue="")String[] s,@RequestParam(name="checkboxComp", defaultValue="")String[] comp,Model model) {
 		List<?> x= service.locationFacet();
 		List<?> y= service.titleFacet();
 		List<Facet> z= service.salaryFacet();
+		List<Facet> f= service.companyFacet();
 		List<Long> Final =new ArrayList<Long>();
 		SearchService ss=new SearchService();
 		String temp[] = new String[2];
@@ -86,11 +90,29 @@ public class SearchController {
 			flag= true;
 			Final=ss.findFrom(q);
 				Final.add(def);			
-	  	}		
+	  	}	
+		if(comp.length!=0 && flag==false){ // working for comany
+			flag=true;
+			List<Long> companyId=ss.findCompanyId(comp);
+			Final= ss.findJobId(companyId);
+			Final.add(def);
+			//for(int k =0;k<jobid.size();k++) System.out.println("here we are"+jobid.get(k));
+			//=
+			//Final.retainAll(titleObj);
+			}
+		if(comp.length!=0 && flag==true){
+			List<Long> companyId=ss.findCompanyId(comp);
+			List<Long> CompanyObj=ss.findJobId(companyId);
+			Final.retainAll(CompanyObj);
+			Final.add(def);
+			}
+		// till here
 		if(r.length!=0 && flag==true){
 		List<Long> titleObj=ss.findTitle(r);
 		Final.retainAll(titleObj);
+		Final.add(def);
 		}
+		
 		if(r.length!=0 && flag==false){
 		flag=true;
 		Final=ss.findTitle(r);
@@ -103,8 +125,6 @@ public class SearchController {
 		List<Long> check1=ss.findSal(arr);
 		Final.retainAll(check1);
 		}
-	
-	
 	if(s.length!=0 && flag==true && temp_flag==0){
 	//	System.out.println("wahaaan pr hai");
 		List<Long> s111=ss.findSal(s);
@@ -120,12 +140,13 @@ public class SearchController {
 		flag=true;
 		Final=ss.findSal(s);
 	}
-	else if(r.length==0 && q.length==0 &&s.length==0){
+	else if(r.length==0 && q.length==0 &&s.length==0 && comp.length==0){
 		flag=true;
 		System.out.println("Both values are null");
 		model.addAttribute("filter", x);
 	    model.addAttribute("title", y);
 	    model.addAttribute("salar", z);
+	    model.addAttribute("company", f);
 		return "filter";
 	}	
 	//for(int i =0;i<Final.size();i++) System.out.println(Final.get(i));
@@ -144,6 +165,7 @@ public class SearchController {
 	    model.addAttribute("filter", x);
 	    model.addAttribute("title", y);
 	    model.addAttribute("salar", z);
+	    model.addAttribute("company", f);
 	    return "filter";
 	  }
 	

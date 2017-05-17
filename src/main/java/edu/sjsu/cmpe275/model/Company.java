@@ -7,12 +7,24 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
+
+import org.hibernate.search.annotations.Analyze;
+import org.hibernate.search.annotations.Facet;
+import org.hibernate.search.annotations.Field;
+import org.hibernate.search.annotations.Indexed;
+import org.hibernate.search.annotations.Store;
+
 @Entity
+@Indexed
+@Table(name="company")
 public class Company {
 	@Id
 	private long cid;
 	
 	@Column(name = "name",nullable = false, unique = false)
+	@Field(analyze = Analyze.NO, store = Store.NO)
+	@Facet
 	private String name;
 	
 	@Column(name = "website",nullable = false, unique = false)

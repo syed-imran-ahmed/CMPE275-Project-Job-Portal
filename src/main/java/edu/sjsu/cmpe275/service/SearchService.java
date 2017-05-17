@@ -29,6 +29,7 @@ public class SearchService {
 			id.addAll(query.getResultList());
 			}
 			//for(int i =0;i<id.size();i++) System.out.println(id.get(i));
+			manager.close();
 			return id;
 		}
 		public List<Long> findTitle(String[] title){
@@ -39,8 +40,34 @@ public class SearchService {
 			id.addAll(query.getResultList());
 			}
 			//for(int i =0;i<id.size();i++) System.out.println(id.get(i));
+			manager.close();
 			return id;
 		}
+		// From here for company
+		public List<Long> findCompanyId(String[] company){
+			List<Long> cid=new ArrayList<Long>();
+			EntityManager manager = entityManagerFactory.createEntityManager();
+			for(String t:company){
+			Query query = manager.createQuery("SELECT cid FROM Company c where name='"+t+"'");
+			cid.addAll(query.getResultList());
+			}
+			for(int i =0;i<cid.size();i++) System.out.println(cid.get(i));
+			manager.close();
+			return cid;
+		}
+		public List<Long> findJobId(List<Long> companyId){
+			List<Long> cid=new ArrayList<Long>();
+			EntityManager manager = entityManagerFactory.createEntityManager();
+			for(Long t:companyId){
+		//	Query query = manager.createQuery("Select c.jobid from Company c inner join c.CompanyJobPosts cjp where cjp.cid='"+t+"'");
+			Query query = manager.createQuery("Select cjp.jobid from CompanyJobPosts cjp where company_cid="+t+"");
+				cid.addAll(query.getResultList());
+			}
+			//for(int i =0;i<cid.size();i++) System.out.println(cid.get(i));
+			manager.close();
+			return cid;
+		}
+		//till here for company
 		public List<CompanyJobPosts> findOpenJob(long jobid){
 			List<CompanyJobPosts> id=new ArrayList<CompanyJobPosts>();
 			EntityManager manager = entityManagerFactory.createEntityManager();
@@ -49,6 +76,7 @@ public class SearchService {
 			id.addAll(query.getResultList());
 			
 			//for(int i =0;i<id.size();i++) System.out.println(id.get(i));
+			manager.close();
 			return id;
 		}
 		public List<CompanyJobPosts> findFilledJob(long jobid){
@@ -59,6 +87,7 @@ public class SearchService {
 			id.addAll(query.getResultList());
 			
 			//for(int i =0;i<id.size();i++) System.out.println(id.get(i));
+			manager.close();
 			return id;
 		}
 		public List<Long> findSal(String[] s){
@@ -81,6 +110,7 @@ public class SearchService {
 			id.addAll(query.getResultList());
 			}
 			//for(int k =0;k<id.size();k++) System.out.println(id.get(k));
+			manager.close();
 			return id;
 		}	
 }

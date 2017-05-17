@@ -95,6 +95,16 @@
 			<hr>
 			</c:forEach>
 		</ul>
+		<h3>Company</h3>
+		<ul>
+		 	<c:forEach var="comp" items="${company}">
+			<div>
+				
+				<input type="checkbox" name="checkboxComp" value="${comp.value}"><c:out value="${comp.value}" />
+			</div>
+			<hr>
+			</c:forEach>
+		</ul>
 		<button class="btn btn-lg btn-primary btn-block" type="submit">Filter</button> 
 	</form>
 <div id="pagination">

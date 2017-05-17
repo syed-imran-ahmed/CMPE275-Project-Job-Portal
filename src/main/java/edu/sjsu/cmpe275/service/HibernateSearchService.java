@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import ch.qos.logback.classic.Logger;
+import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
 
 @Service
@@ -150,28 +151,27 @@ public class HibernateSearchService  {
 	//	}
 		return facets;
 	}
-//	@Transactional
-//	public List<CompanyJobPosts> filterSearch(String searchTerm){
-//
-//		FullTextEntityManager fullTextEntityManager = Search.getFullTextEntityManager(entityManager);
-//		QueryBuilder qb = fullTextEntityManager.getSearchFactory().buildQueryBuilder().forEntity(CompanyJobPosts.class).get();
-//		Query luceneQuery = qb.keyword().fuzzy().withEditDistanceUpTo(1).withPrefixLength(1).onFields("location")
-//				.matching(searchTerm).createQuery();
-//
-//		javax.persistence.Query jpaQuery = fullTextEntityManager.createFullTextQuery(luceneQuery, CompanyJobPosts.class);
-//
-//		// execute search
-//
-//		List<CompanyJobPosts> employeeList = null;
-//		try {
-//			employeeList  = jpaQuery.getResultList();
-//		} catch (NoResultException nre) {
-//			logger.warn("No result found");
-//
-//		}
-//
-//		return employeeList;
-//
-//	
-//	}	
+	
+	public List<Facet> companyFacet(){
+		 
+		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
+				.getFullTextEntityManager(entityManager);
+		QueryBuilder builder = fullTextEntityManager.getSearchFactory()
+				.buildQueryBuilder().forEntity(Company.class).get();
+ 
+		FacetingRequest categoryFacetingRequest = builder.facet()
+				.name("companyFaceting").onField("name").discrete()
+				.orderedBy(FacetSortOrder.COUNT_DESC).includeZeroCounts(false)
+				.createFacetingRequest();
+ 
+		Query luceneQuery = builder.all().createQuery();
+		org.hibernate.search.jpa.FullTextQuery fullTextQuery = fullTextEntityManager
+				.createFullTextQuery(luceneQuery);
+		FacetManager facetManager = fullTextQuery.getFacetManager();
+		facetManager.enableFaceting(categoryFacetingRequest);
+ 
+		List<Facet> facets = facetManager.getFacets("companyFaceting");
+		return facets;
+	}
+	
 }
