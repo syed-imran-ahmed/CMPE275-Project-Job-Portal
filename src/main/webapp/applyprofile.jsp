@@ -33,7 +33,7 @@
     <img src="${contextPath}/images/${jobseeker.id}.JPG" width="250" height="250"/>
 </div>  
 <div style="float:center">  
-    <form:form method="POST" action="/applyprofile" modelAttribute="jobseeker" class="form-signin">
+    <form:form method="POST" action="${contextPath}/applyprofile" modelAttribute="jobseeker" class="form-signin">
         <h2 class="form-signin-heading">Review Profile</h2>
          <br>
          <br>
