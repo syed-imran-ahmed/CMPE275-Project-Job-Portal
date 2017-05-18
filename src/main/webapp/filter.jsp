@@ -66,7 +66,7 @@
 		<ul>
 		 	<c:forEach var="filled" items="${Filledlist}">
 		 	<div class="thumbnail-container" style="float:left;height:60px;width:60px">
-				<img src="${job.company.logo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
+				<img src="${filled.company.logo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
 			</div>
 			<div>
 				
