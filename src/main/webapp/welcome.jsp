@@ -59,7 +59,7 @@
 		
 		<div id="pagination">
 		
-		    <c:url value="${contextPath}/welcome" var="prev">
+		    <c:url value="/welcome" var="prev">
 		        <c:param name="page" value="${page-1}"/>
 		    </c:url>
 		    <c:if test="${page > 1}">
@@ -72,14 +72,14 @@
 		                <span>${i.index}</span>
 		            </c:when>
 		            <c:otherwise>
-		                <c:url value="${contextPath}/welcome" var="url">
+		                <c:url value="/welcome" var="url">
 		                    <c:param name="page" value="${i.index}"/>
 		                </c:url>
 		                <a href='<c:out value="${url}" />'>${i.index}</a>
 		            </c:otherwise>
 		        </c:choose>                
 		    </c:forEach>
-		    <c:url value="${contextPath}/welcome" var="next">
+		    <c:url value="/welcome" var="next">
 		        <c:param name="page" value="${page + 1}"/>
 		    </c:url>
 		    <c:if test="${page + 1 <= maxPages}">
