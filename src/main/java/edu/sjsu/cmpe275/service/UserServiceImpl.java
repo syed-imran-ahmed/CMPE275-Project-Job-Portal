@@ -59,6 +59,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public User findById(long id) {
+		return userRepository.findById(id);
+	}
+	
+	@Override
 	public boolean emailValidation(String emailid){
 
 		String reg = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9-]+(\\.[A-Za-z0-9-]+)*(\\.[A-Za-z]{2,})$";

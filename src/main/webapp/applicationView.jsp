@@ -86,5 +86,7 @@
 		    </c:if>
 		</div>
 </div>
+ <br>
+ <h2 align = left><a href="${contextPath}/welcome" class="form-signin">Back</a></h2>
 </body>
 </html>

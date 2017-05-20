@@ -38,7 +38,7 @@
 			</tr>
 			<c:forEach var="app" items="${appList}">
 				<tr>
-					<td><div style='width: 250px;'><h4><a href="${contextPath}/jobseekerOffer/${app.jobseekerID}"><c:out value="${app.jobseekerID}" /></a></h4></div></td>
+					<td><div style='width: 250px;'><h4><a href="${contextPath}/jobseekerOffer/${jobid}/${app.jobseekerID}"><c:out value="${app.jobseekerID}" /></a></h4></div></td>
 					<td><div style='width: 250px;'><h4><c:out value="${app.jobseekerName}" /></h4></div></td>
 					<td><div style='width: 250px;'><h4><c:out value="${app.status}" /></h4></div></td>
 				</tr>			
@@ -78,5 +78,6 @@
 		    </c:if>
 		</div>
 </div>
+  <h2 align = left><a href="${contextPath}/postjob/${jobid}" class="form-signin">Back</a></h2>
 </body>
 </html>

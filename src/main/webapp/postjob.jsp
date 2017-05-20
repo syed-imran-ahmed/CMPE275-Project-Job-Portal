@@ -26,6 +26,7 @@
     <![endif]-->
 </head>
 <body>
+<h2 align = "left"><a href="${contextPath}/">Home Page</a></h2>
 <div class="container">
 	<h4 class="text-right"><a href="${contextPath}/jobApplications/${jobid}">Check Applications</a></h4>
     <form:form method="POST" action="${contextPath}/postjob" modelAttribute="companyjobposts" class="form-signin">

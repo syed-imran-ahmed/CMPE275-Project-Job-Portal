@@ -51,6 +51,7 @@ public class CompanyController {
 
 	  @Autowired
 	  private CompanyValidator companyValidator;
+
 	
 	 @RequestMapping(value = "/company", method = RequestMethod.GET)
 	    public String company(Model model) {
@@ -128,16 +129,71 @@ public class CompanyController {
 	    
 	    @RequestMapping(value = "/jobApplications/{jobid}", method = RequestMethod.GET)
 	    public String viewApplicantList(@PathVariable("jobid") Long jobid, Model model) {
-	        List<Application> applicantionList=appService.findByjobID(jobid);
-	        model.addAttribute("appList", applicantionList);
-	        return "jobApplications";
+	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+	        User user = userService.findByUsername(currentUserName);
+	        Company company = companyService.findByCid(user.getId());
+	        //To make sure one company doesn't modify jobId in URL to check other company's jobs
+	        if(company.getCid()== companyJobsService.findByJobId(jobid).getCompany().getCid()){
+	        	List<Application> applicantionList=appService.findByjobID(jobid);
+	        	model.addAttribute("appList", applicantionList);
+	        	model.addAttribute("jobid", jobid);
+	        	return "jobApplications";
+	        }
+	        else {
+	        	return "redirect:/";
+	        }
 	    }
 	    
-	    @RequestMapping(value = "/jobseekerOffer/{jobSeekerId}", method = RequestMethod.GET)
-	    public String viewApplicant(@PathVariable("jobSeekerId") Long jobSeekerId, Model model) {
-	        JobSeeker js=jsService.findById(jobSeekerId);
-	        model.addAttribute("js", js);
-	        return "jobseekerOffer";
+	    @RequestMapping(value = "/jobseekerOffer/{jobId}/{jobSeekerId}", method = RequestMethod.GET)
+	    public String viewApplicant(@PathVariable("jobId") Long jobId,@PathVariable("jobSeekerId") Long jobSeekerId, Model model) {
+	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+	        User user = userService.findByUsername(currentUserName);
+	        Company company = companyService.findByCid(user.getId());
+	        //To make sure one company doesn't modify jobId in URL to check other company's jobs
+	        if(company.getCid()== companyJobsService.findByJobId(jobId).getCompany().getCid()){
+		    	JobSeeker js=jsService.findById(jobSeekerId);
+		        Application jsApplication=appService.findByJobIDAndJobseekerID(jobId, jobSeekerId);
+		        if (jsApplication.getJobseekerResumeLoc() == null){
+		        	model.addAttribute("jobseeker", js);
+		        	model.addAttribute("profile", true);
+		        }
+		        else{
+		        	String resumeLoc  = jsApplication.getJobseekerResumeLoc();
+		        	String[] subtr =resumeLoc.split("\\.");
+		        	System.out.println(subtr);
+		        	model.addAttribute("type", subtr[1]);
+		        }
+		        model.addAttribute("jsApplication", jsApplication);
+			    return "jobseekerOffer";
+		        
+	        }
+	        else{
+	        	return "redirect:/";
+	        }
+	    }
+	    
+	    @RequestMapping(value = "/jobseekerOffer", method = RequestMethod.POST)
+	    public String saveDecision(@ModelAttribute("jsApplication") Application jsApplication, BindingResult bindingResult, Model model) {
+	    	if (jsApplication.getStatus()!= null && jsApplication.getStatus()!= "Pending"){
+	    		Application app = appService.findById(jsApplication.getId());
+	    		String status = null;
+	    		if(jsApplication.getStatus().contains("Offer"))
+	    			
+	    		{	
+	    			app.setStatus("Offered");
+	    			status = "Offered";
+	    		}
+	    		else if(jsApplication.getStatus().contains("Reject"))
+	    		{
+	    			app.setStatus("Rejected");
+	    			status = "Rejected";
+	    		}
+	    		appService.save(app);
+	    		String url = "redirect:jobApplications/"+app.getJobID();
+	    		ActivationEmail.emailOffer(app.getJobseekerEmail(),app.getJobID(), status);
+	    		return url;
+	    	}
+	    	return "redirect:/";
 	    }
 	    
 	    

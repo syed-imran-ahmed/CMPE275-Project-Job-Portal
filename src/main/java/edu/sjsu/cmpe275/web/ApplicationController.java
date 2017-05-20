@@ -56,18 +56,27 @@ public class ApplicationController {
 		CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
         model.addAttribute("companyjobposts", jobPost);
         Application a = applicationService.findByJobIDAndJobseekerID(jobid,user.getId());
+    	model.addAttribute("offered", false);
         if(a != null){
-        
+
 	        if(a.getStatus().equals("Pending") || a.getStatus().equals("Offered"))
 	        {
 	        	model.addAttribute("reapply", false);
+	        	if (a.getStatus().equals("Offered"))
+	        	{
+	        		model.addAttribute("offered", a.getId());
+	        	}
 	        }
 	        else
 	        {
+	        	System.out.println("Im here");
 	        	model.addAttribute("reapply", true);
 	        }
-	        model.addAttribute("pendingCount",applicationService.findByStatusAndJobseekerID("Pending", user.getId()).size() );
+
         }
+        System.out.println("no of pending:");
+        System.out.println(applicationService.findByStatusAndJobseekerID("Pending", user.getId()).size());
+        model.addAttribute("pendingCount",applicationService.findByStatusAndJobseekerID("Pending", user.getId()).size() );
         session.setAttribute("jobid", jobid);
         return "applyjob";
     }
@@ -112,6 +121,7 @@ public class ApplicationController {
         String id=null;
         Path path=null;
         String fileLoc =null;
+        String filename =null;
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(currentUserName);
         JobSeeker js=jobseekerService.findById(user.getId());
@@ -122,7 +132,8 @@ public class ApplicationController {
             String fileName = file.getOriginalFilename();
             int lastIndex = fileName.lastIndexOf('.');
             String substring = fileName.substring(lastIndex, fileName.length());
-            fileLoc= RESUME_FOLDER + id+substring;
+            filename = id+substring;
+            fileLoc= RESUME_FOLDER + filename;
             path = Paths.get(fileLoc);
             Files.write(path, bytes);
 
@@ -131,7 +142,7 @@ public class ApplicationController {
         }
         String name = js.getFirstname()+ " "+ js.getLastname();
         long jobid=  (long) session.getAttribute("jobid");
-        Application application = new Application(id,user.getId(),jobid,name,user.getEmailid(),fileLoc,"Pending" );
+        Application application = new Application(id,user.getId(),jobid,name,user.getEmailid(),filename,"Pending" );
         applicationService.save(application);
         
         CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
@@ -170,21 +181,46 @@ public class ApplicationController {
     	{
     		 return "applicationView";
     	}
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        HashMap<Long,String> hm = new HashMap<>();
     	for (String x : id){
     		 Application application = applicationService.findById(x);
     		 if(application.getStatus().equals("Pending"))
     		 {
     			 application.setStatus("Cancelled");
+    			 hm.put(application.getJobID(), "Cancelled");
     		 }
     		 else if(application.getStatus().equals("Offered"))
     		 {
     			 application.setStatus("OfferRejected");
+    			 hm.put(application.getJobID(), "OfferRejected");
     		 }
     		 applicationService.save(application);
     	}
     	
-       // ActivationEmail.emailAppliedJob(user.getEmailid(), jobid,jobPost.getCompany().getName(),jobPost.getTitle(),jobPost.getDescrip(),jobPost.getLoc());
+       ActivationEmail.emailModifiedApplicationStatus(user.getEmailid(),hm);
      
     	return "redirect:applicationView";
+    }
+    
+    @RequestMapping(value = "/acceptOffer/{offered}", method = RequestMethod.GET)
+    public String acceptOffer(@PathVariable("offered") String offered,Model model) {
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        String[] splitted = offered.split("+");
+        long jobseekerid = Long.parseLong(splitted[0]);
+        long jobid = Long.parseLong(splitted[1]);
+        CompanyJobPosts ajp = companyJobsService.findByJobId(jobid);
+        //Verifying details before processing
+        if ((ajp.getJobposition().contains("Open")) && (user.getId() == jobseekerid) && (applicationService.findById(offered).getStatus().contains("Offered")))
+        {
+        	Application app = applicationService.findById(offered);
+        	app.setStatus("OfferAccepted");
+        	applicationService.save(app);
+        	User u= userService.findById(ajp.getCompany().getCid());
+        	ActivationEmail.emailOfferAcceptance(u.getEmailid(),user.getEmailid(), jobid);        	
+        }
+        return "applicationView";
     }
 }

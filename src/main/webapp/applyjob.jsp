@@ -92,10 +92,13 @@
  <div  align = "center">
 	<c:choose>
 		<c:when test= "${companyjobposts.jobposition eq 'Cancelled'}"> 
-			<h2  align= "center">Sorry this Job either got Cancelled!</h2>
+			<h2  align= "center">Sorry this Job got Cancelled!</h2>
 		</c:when>	
 		<c:when test= "${companyjobposts.jobposition eq 'Filled'}">
-			<h2  align= "center">Sorry this Job either got Cancelled!</h2>
+			<h2  align= "center">Sorry this Job  got Filled!</h2>
+		</c:when>
+		<c:when test= "${offered ne false}">
+			<h2  align= "center">You have been Offered this position! Accept by clicking <a href ="${contextPath}/acceptOffer/${offered}" class="form-signin">here</a></h2>
 		</c:when>
 		<c:when test= "${reapply eq false}">
 			<h2  align= "center">Sorry you can not Re-apply for this Job at the moment!</h2>

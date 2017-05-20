@@ -12,7 +12,10 @@ public interface UserService {
     
     User findByEmailid(String emailid);
     
+    User findById(long id);
+    
     void saveUserVerification(String isVerified);
     
     boolean emailValidation(String emailid);
+    
 }

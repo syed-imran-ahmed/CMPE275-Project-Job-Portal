@@ -7,4 +7,5 @@ import edu.sjsu.cmpe275.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
     User findByUsername(String username);
     User findByEmailid(String emailid);
+    User findById(long id);
 }
