@@ -22,7 +22,13 @@ public class CompanyJobsServiceImpl implements CompanyJobsService{
 		@Override
 		public void save(CompanyJobPosts jobPost) {
 	       
-			CompanyJobPosts companyJobPost = companyJobsRepository.findByJobid(jobPost.getJobid());
+			CompanyJobPosts companyJobPost=null;
+			if(jobPost.getJobid()!=null)
+			{
+				 companyJobPost = companyJobsRepository.findByJobid(jobPost.getJobid());
+			}
+			
+			
 			if(companyJobPost==null)
 			{
 				companyJobPost = new CompanyJobPosts();

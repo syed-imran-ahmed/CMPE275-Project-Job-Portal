@@ -41,72 +41,34 @@
 	        	<input name="q" class="form-control" tabindex="1" onfocus="if (this.value=='search') this.value = ''" type="text" maxlength="80" size="28" value="search">
 	        	<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button> 
 	        </div> 
-        </form> 
-    
-
-   <h3>Searcher Job Results</h3>
-	<c:if test="${not empty jobslist}">
-		<ul>
-		 	<c:forEach var="job" items="${jobslist}">
-		 	<div class="thumbnail-container" style="float:left;height:60px;width:60px">
-				<img src="${job.company.logo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
-			</div>
-			<div>
-				
-				<h4 class="text-left"><a href="${contextPath}/applyjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
-				<p style="color:grey"><c:out value="${job.loc}" /></p>
-				<c:out value="${job.descrip}" />
-			</div>
-			<hr>
-			</c:forEach>
-		</ul>
-	</c:if>
-	</div>  
-	</div> 
-	<div class="left">
-		<form action="${contextPath}/filter" method="GET">
+	    <div class="left">
+		
 		<h3>Locations</h3>
 		<ul>
 		 	<c:forEach var="facet" items="${filter}">
-			<div>
-				
-				<input type="checkbox" name="checkboxName" value="${facet.value}"><c:out value="${facet.value}" />(<c:out value="${facet.count}" />)
-			</div>
-			<hr>
+				<input type="checkbox" name="checkboxName" value="${facet.value}"><c:out value="${facet.value}" />(<c:out value="${facet.count}" />)<br>
 			</c:forEach>
 		</ul>
 		<h3>Title</h3>
 		<ul>
 		 	<c:forEach var="jobtitle" items="${title}">
-			<div>
-				
-				<input type="checkbox" name="checkboxTitle" value="${jobtitle.value}"><c:out value="${jobtitle.value}" />
-			</div>
-			<hr>
+				<input type="checkbox" name="checkboxTitle" value="${jobtitle.value}"><c:out value="${jobtitle.value}" /><br>
 			</c:forEach>
 		</ul>
 		<h3>Salary Range</h3>
 		<ul>
 		 	<c:forEach var="job_sal" items="${salar}">
-			<div>
-				
-				<input type="checkbox" name="checkboxSal" value="${job_sal.value}"><c:out value="$'${job_sal.value}'" />(<c:out value="${job_sal.count}" />)
-			</div>
-			<hr>
+				<input type="checkbox" name="checkboxSal" value="${job_sal.value}"><c:out value="$'${job_sal.value}'" />(<c:out value="${job_sal.count}" />)<br>
 			</c:forEach>
 		</ul>
 		<h3>Company</h3>
 		<ul>
 		 	<c:forEach var="comp" items="${company}">
-			<div>
-				
-				<input type="checkbox" name="checkboxComp" value="${comp.value}"><c:out value="${comp.value}" />
-			</div>
-			<hr>
+				<input type="checkbox" name="checkboxComp" value="${comp.value}"><c:out value="${comp.value}" /><br>
 			</c:forEach>
 		</ul>
-		<button class="btn btn-lg btn-primary btn-block" type="submit">Filter</button> 
-	</form>
+		 
+
 <div id="pagination">
 
     <c:url value="${contextPath}/welcome" var="prev">
@@ -138,6 +100,30 @@
 </div>
 
 </div>
+	        
+</form> 
+    
+
+   <h3>Search Job Results</h3>
+	<c:if test="${not empty jobslist}">
+		<ul>
+		 	<c:forEach var="job" items="${jobslist}">
+		 	<div class="thumbnail-container" style="float:left;height:60px;width:60px">
+				<img src="${job.company.logo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
+			</div>
+			<div>
+				
+				<h4 class="text-left"><a href="${contextPath}/applyjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
+				<p style="color:grey"><c:out value="${job.loc}" /></p>
+				<c:out value="${job.descrip}" />
+			</div>
+			<hr>
+			</c:forEach>
+		</ul>
+	</c:if>
+	</div>  
+	</div> 
+	
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

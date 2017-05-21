@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -42,7 +43,7 @@ public class Company {
 
 
 	
-	@OneToMany(orphanRemoval=true, mappedBy = "company", cascade = CascadeType.ALL)
+	@OneToMany(orphanRemoval=true, mappedBy = "company", cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	private List<CompanyJobPosts> jobPosts;
 
 	public List<CompanyJobPosts> getJobPosts() {

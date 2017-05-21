@@ -10,6 +10,8 @@ import javax.persistence.Persistence;
 import javax.persistence.Query;
 import javax.transaction.Transactional;
 
+import org.springframework.util.StringUtils;
+
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
 
 
@@ -93,21 +95,38 @@ public class SearchService {
 		public List<Long> findSal(String[] s){
 			List<Long> id=new ArrayList<Long>();
 			EntityManager manager = entityManagerFactory.createEntityManager();
-			for(int i=0; i<s.length;i++){
-				String str=s[i].toString();
-				//System.out.println("In Search service class"+s[i+1]);
-				//str=str.replaceAll("\\p{P}","");
-				str=str.replace("[", "").replace("]", "").replace("(", "");
+			System.out.println(s.toString());
+			int occurance = StringUtils.countOccurrencesOf(s[0], ",");
+			if(occurance==0)
+			{
+				String str;
+				String str1;
+				str=s[0].replace("[", "").replace("]", "");
+				str1=s[1].replace("[", "").replace("]", "");
 				str=str.replaceAll("\\s","");
-			//	System.out.println(str);
-				List<String> numbers = Arrays.asList(str.split(","));
-				List<Integer> numbersInt = new ArrayList<>();
-				for (String number : numbers) {
-				    numbersInt.add(Integer.valueOf(number));
+				str1=str1.replaceAll("\\s","");
+				Query query = manager.createQuery("SELECT jobid FROM CompanyJobPosts c where c.sal between "+Integer.parseInt(str)+" and "+Integer.parseInt(str1)+"");
+				id.addAll(query.getResultList());
+			}
+			else
+			{
+			
+				for(int i=0; i<s.length;i++){
+					String str=s[i].toString();
+					//System.out.println("In Search service class"+s[i+1]);
+					//str=str.replaceAll("\\p{P}","");
+					str=str.replace("[", "").replace("]", "").replace("(", "");
+					str=str.replaceAll("\\s","");
+				//	System.out.println(str);
+					List<String> numbers = Arrays.asList(str.split(","));
+					List<Integer> numbersInt = new ArrayList<>();
+					for (String number : numbers) {
+					    numbersInt.add(Integer.valueOf(number));
+					}
+					//for( i =0;i<numbersInt.size();i++) System.out.println(numbersInt.get(i));
+				Query query = manager.createQuery("SELECT jobid FROM CompanyJobPosts c where c.sal between "+numbersInt.get(0)+" and "+numbersInt.get(1)+"");
+				id.addAll(query.getResultList());
 				}
-				//for( i =0;i<numbersInt.size();i++) System.out.println(numbersInt.get(i));
-			Query query = manager.createQuery("SELECT jobid FROM CompanyJobPosts c where c.sal between "+numbersInt.get(0)+" and "+numbersInt.get(1)+"");
-			id.addAll(query.getResultList());
 			}
 			//for(int k =0;k<id.size();k++) System.out.println(id.get(k));
 			manager.close();

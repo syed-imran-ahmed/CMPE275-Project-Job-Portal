@@ -3,6 +3,7 @@ import java.lang.annotation.Repeatable;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -29,7 +30,7 @@ public class CompanyJobPosts {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private long jobid;
+	private Long jobid;
 	
 	@Column(name = "title",nullable = false, unique = false)
 	@Fields( {
@@ -59,23 +60,26 @@ public class CompanyJobPosts {
 	private String loc;
 	
 	@Column(name = "sal",nullable = false, unique = false)
-
-      @Field(analyze = Analyze.NO, store = Store.NO)
+	@Fields( {
+        @Field(name="salary"),
+       @Field(analyze = Analyze.NO, store = Store.YES)
+      
+        } )
 	  @Facet
-	private long sal;
+	private int sal;
 	
 	@Column(name = "jobposition",nullable = true, unique = false)
 	private String jobposition;
 	
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "company_cid")
     private Company company;
 	
-	public long getJobid() {
+	public Long getJobid() {
 		return jobid;
 	}
 
-	public void setJobid(long jobid) {
+	public void setJobid(Long jobid) {
 		this.jobid = jobid;
 	}
 
@@ -111,11 +115,11 @@ public class CompanyJobPosts {
 		this.loc = loc;
 	}
 
-	public long getSal() {
+	public int getSal() {
 		return sal;
 	}
 
-	public void setSal(long sal) {
+	public void setSal(int sal) {
 		this.sal = sal;
 	}
 
@@ -138,7 +142,7 @@ public class CompanyJobPosts {
 		this.descrip = descrip;
 	}
 
-	public CompanyJobPosts(long jobid, String title, String jobposition, String desc, String resp, String loc, long sal,
+	public CompanyJobPosts(long jobid, String title, String jobposition, String desc, String resp, String loc, int sal,
 			Company company) {
 		super();
 		this.jobid = jobid;
@@ -152,6 +156,21 @@ public class CompanyJobPosts {
 	}
 
 	public CompanyJobPosts(){}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (jobid == null || obj == null || getClass() != obj.getClass())
+			return false;
+		CompanyJobPosts toCompare = (CompanyJobPosts) obj;
+		return jobid.equals(toCompare.jobid);
+	}
+
+	@Override
+	public int hashCode() {
+		return jobid == null ? 0 : jobid.hashCode();
+	}
 	
 	
 }

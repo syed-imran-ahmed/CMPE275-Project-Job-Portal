@@ -111,6 +111,27 @@
         
         <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
     </form:form>
+    
+    
+    <c:if test="${not empty cannotcancel}">
+    <script>
+    $(function() {
+
+		console.log("Inside script");
+    	$("#appDetail").dialog({
+			width: 650,
+			modal: true
+		});
+
+	})();
+    </script>
+    
+    	<div style="font-size:30px;">
+				<div id="appDetail" title="App Details">
+					<b>The job cannot be cancelled as the job has an application in Offer Accepted state</b>
+				</div>
+		</div>
+    </c:if>
 
 </div>
 <!-- /container -->

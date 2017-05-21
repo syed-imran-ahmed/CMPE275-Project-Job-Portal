@@ -2,7 +2,10 @@ package edu.sjsu.cmpe275.web;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.search.query.facet.Facet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.service.CompanyJobsServiceImpl;
 import edu.sjsu.cmpe275.service.HibernateSearchService;
 import edu.sjsu.cmpe275.service.SearchService;
@@ -24,37 +29,142 @@ public class SearchController {
 
 	@Autowired
 	HibernateSearchService service;
-
-	
 	
 	@RequestMapping(value="/search",method=RequestMethod.GET)
-	  public String searchWithString(String q, Model model) {
-		List<?> x= service.locationFacet();
-		List<?> y= service.titleFacet();
-		List<Facet> z= service.salaryFacet();
-		List<Facet> f= service.companyFacet();
-		if(q==null){
+	  public String filterJob(String q,@RequestParam(name="checkboxName",defaultValue="")String[] locations,
+			  @RequestParam(name="checkboxTitle", defaultValue="")String[] title,
+			  @RequestParam(name="checkboxSal", defaultValue="")String[] salary,
+			  @RequestParam(name="checkboxComp", defaultValue="")String[] company,
+			  Model model) {
+		
+		
+		List<?> x= service.locationFacet(new String[0]);
+		List<?> y= service.titleFacet(new String[0]);
+		List<?> z= service.salaryFacet(new String[0]);
+		List<?> f= service.companyFacet(new String[0]);
+		if(q==null&&locations.length==0&&title.length==0&&salary.length==0&&company.length==0){
 			    model.addAttribute("filter", x);
 			    model.addAttribute("title", y);
 			    model.addAttribute("salar", z);
 			    model.addAttribute("company", f);
-			return "search";}
-	    List<CompanyJobPosts> searchResults = null;
-	   
-	    try {
-	      searchResults = service.fuzzySearch(q);
-	    }
-	    catch (Exception ex) {
-	      
-	    }
-	    model.addAttribute("jobslist", searchResults);
-	    model.addAttribute("filter", x);
-	    model.addAttribute("title", y);
-	    model.addAttribute("salar", z);
-	    model.addAttribute("company", f);
-	    return "search";
-	  }
-	@RequestMapping(value="/filter",method=RequestMethod.GET)
+			return "search";
+		}
+		List<CompanyJobPosts> searchResults = null;
+		 try {
+		      searchResults = service.fuzzySearch(q);
+		    }
+		    catch (Exception ex) {
+		      
+		    }
+		
+		
+		
+		List<CompanyJobPosts> resList = new ArrayList<CompanyJobPosts>();
+		Set<CompanyJobPosts> resSet = new HashSet<CompanyJobPosts>();
+		Set<Long> resSetOfId = new HashSet<Long>();
+		if(locations.length!=0)
+		{
+			List<List<CompanyJobPosts>> jobLocations = (List<List<CompanyJobPosts>>) service.locationFacet(locations);
+			
+			for(List<CompanyJobPosts> jobPosts: jobLocations)
+			{
+				resList.addAll(jobPosts);
+			}
+			
+			
+			//TODO: show only job posts which are open
+		}
+	
+		if(title.length!=0)
+		{
+			List<List<CompanyJobPosts>> jobTitles = (List<List<CompanyJobPosts>>) service.titleFacet(title);
+			List<CompanyJobPosts> resListTitle = new ArrayList<CompanyJobPosts>();
+			for(List<CompanyJobPosts> jobPosts: jobTitles)
+			{
+				resListTitle.addAll(jobPosts);
+			}
+			if(resList.size()!=0)
+			{
+				resList.retainAll(resListTitle);
+			}
+			else
+				resList.addAll(resListTitle);
+			//TODO: show only job posts which are open
+		}
+		
+		if(salary.length!=0)
+		{
+			List<CompanyJobPosts> jobSalary = (List<CompanyJobPosts>) service.salaryFacet(salary);
+			List<CompanyJobPosts> resListSalary = new ArrayList<CompanyJobPosts>();
+			resListSalary.addAll(jobSalary);
+			if(resList.size()!=0)
+			{
+				resList.retainAll(resListSalary);
+			}
+			else
+				resList.addAll(resListSalary);
+			
+			//TODO: show only job posts which are open
+		}
+		
+		if(company.length!=0)
+		{
+			List<List<Company>> jobCompany = (List<List<Company>>) service.companyFacet(company);
+			List<Company> resListCompany = new ArrayList<Company>();
+			List<CompanyJobPosts> allJobPosts = new ArrayList<CompanyJobPosts>();
+			for(List<Company> jobcmp: jobCompany)
+			{
+				resListCompany.addAll(jobcmp);
+			}
+			
+			for(Company c:resListCompany)
+			{
+				allJobPosts.addAll(c.getJobPosts());
+			}
+			
+			if(resList.size()!=0)
+			{
+				resList.retainAll(allJobPosts);
+			}
+			else
+				resList.addAll(allJobPosts);
+			
+			//TODO: show only job posts which are open
+		}
+			
+		if(resList.size()!=0 && searchResults.size()!=0)
+		{
+			resList.retainAll(searchResults);
+		}
+		else if(resList.size()==0 && searchResults.size()!=0 && (locations.length==0 || title.length==0 || salary.length==0 || company.length==0))
+		{
+			resList.addAll(searchResults);
+		}
+		
+			
+			
+		resSet.addAll(resList);
+		
+		List<CompanyJobPosts> returnList = new ArrayList<CompanyJobPosts>();
+		
+		for(CompanyJobPosts jobPost: resSet)
+		{
+			returnList.add(jobPost);
+		}
+		
+		model.addAttribute("jobslist", returnList);
+		model.addAttribute("filter", x);
+		model.addAttribute("title", y);
+		model.addAttribute("salar", z);
+		model.addAttribute("company", f);
+		return "search";
+	}
+	
+	
+
+	
+
+	/*@RequestMapping(value="/filter",method=RequestMethod.GET)
 	  public String filterJob(@RequestParam(name="checkboxName", defaultValue="")String[] q, @RequestParam(name="checkboxTitle", defaultValue="")String[] r,@RequestParam(name="checkboxSal", defaultValue="")String[] s,@RequestParam(name="checkboxComp", defaultValue="")String[] comp,Model model) {
 		List<?> x= service.locationFacet();
 		List<?> y= service.titleFacet();
@@ -167,6 +277,6 @@ public class SearchController {
 	    model.addAttribute("salar", z);
 	    model.addAttribute("company", f);
 	    return "filter";
-	  }
+	  } */
 	
 }

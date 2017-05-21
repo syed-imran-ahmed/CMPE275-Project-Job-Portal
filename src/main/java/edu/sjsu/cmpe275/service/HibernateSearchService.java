@@ -1,16 +1,19 @@
 package edu.sjsu.cmpe275.service;
 
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import javax.persistence.NoResultException;
-import javax.persistence.Persistence;
 
 import org.apache.lucene.search.Query;
+import org.hibernate.search.FullTextQuery;
 import org.hibernate.search.jpa.FullTextEntityManager;
 import org.hibernate.search.jpa.Search;
+import org.hibernate.search.query.DatabaseRetrievalMethod;
+import org.hibernate.search.query.ObjectLookupMethod;
 import org.hibernate.search.query.dsl.QueryBuilder;
 import org.hibernate.search.query.engine.spi.FacetManager;
 import org.hibernate.search.query.facet.Facet;
@@ -74,7 +77,7 @@ public class HibernateSearchService  {
 
 	
 	}
-	public List<Facet> locationFacet(){
+	public List<?> locationFacet(String[] location){
  
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
 				.getFullTextEntityManager(entityManager);
@@ -93,14 +96,29 @@ public class HibernateSearchService  {
 		facetManager.enableFaceting(categoryFacetingRequest);
  
 		List<Facet> facets = facetManager.getFacets("categoryFaceting");
-//		for (Facet f : facets) {
-//			System.out.println(f.getValue() + " (" + f.getCount() + ")");
-//			List<CompanyJobPosts> books = fullTextEntityManager.createFullTextQuery(
-//					f.getFacetQuery()).getResultList();
-//		}
+		List<List<CompanyJobPosts>> jobPosts= new ArrayList<List<CompanyJobPosts>>();
+		for (Facet f : facets) {
+			System.out.println(f.getValue() + " (" + f.getCount() + ")");
+			
+			
+			List<CompanyJobPosts> posts = fullTextEntityManager.createFullTextQuery(
+					f.getFacetQuery()).getResultList();
+			
+			if(location.length!=0)
+			{
+				if(Arrays.asList(location).contains(f.getValue()))
+				{
+					jobPosts.add(posts);
+				}
+			}
+		}
+		if(jobPosts.size()!=0)
+			return jobPosts;
+		
+		
 		return facets;
 	}
-	public List<Facet> titleFacet(){
+	public List<?> titleFacet(String[] title){
 		 
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
 				.getFullTextEntityManager(entityManager);
@@ -119,20 +137,34 @@ public class HibernateSearchService  {
 		facetManager.enableFaceting(categoryFacetingRequest);
  
 		List<Facet> facets = facetManager.getFacets("categoryFaceting");
+		List<List<CompanyJobPosts>> jobPosts= new ArrayList<List<CompanyJobPosts>>();
 		for (Facet f : facets) {
 			System.out.println(f.getValue() + " (" + f.getCount() + ")");
-			List<CompanyJobPosts> books = fullTextEntityManager.createFullTextQuery(
+			
+			System.out.println(f.getFacetQuery());
+			List<CompanyJobPosts> posts = fullTextEntityManager.createFullTextQuery(
 					f.getFacetQuery()).getResultList();
+			
+			if(title.length!=0)
+			{
+				if(Arrays.asList(title).contains(f.getValue()))
+				{
+					jobPosts.add(posts);
+				}
+			}
 		}
+		if(jobPosts.size()!=0)
+			return jobPosts;
+		
 		return facets;
 	}
-	public List<Facet> salaryFacet() {
-	
+	public List<?> salaryFacet(String[] salary) {
+
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
 				.getFullTextEntityManager(entityManager);
 		QueryBuilder builder = fullTextEntityManager.getSearchFactory()
 				.buildQueryBuilder().forEntity(CompanyJobPosts.class).get();
- 
+
 		FacetingRequest priceFacetingRequest = builder.facet()
 				.name("SalaryRange").onField("sal").range().from(0).to(30000)
 				.from(30001).to(60000).from(60001).to(90000).from(90001).to(150000).from(150001).to(1500000)
@@ -143,16 +175,27 @@ public class HibernateSearchService  {
 				.createFullTextQuery(luceneQuery);
 		FacetManager facetManager = fullTextQuery.getFacetManager();
 		facetManager.enableFaceting(priceFacetingRequest);
- 
+
 		List<Facet> facets = facetManager.getFacets("SalaryRange");
-	//	for (Facet f : facets) {
-//			System.out.println("Price range: " + f.getValue() + " ("
-//					+ f.getCount() + ")");
-	//	}
+
+		if(salary.length!=0){
+			SearchService ss = new SearchService();
+			List<Long> ids=null;
+			if(salary.length!=0)
+			{
+				ids = ss.findSal(salary);
+			}
+			List<CompanyJobPosts> posts = new ArrayList<CompanyJobPosts>();
+			for(Long l: ids ){
+				posts.addAll(ss.findOpenJob(l));
+			}
+			if(posts.size()!=0)
+				return posts;
+		}
 		return facets;
 	}
 	
-	public List<Facet> companyFacet(){
+	public List<?> companyFacet(String[] company){
 		 
 		FullTextEntityManager fullTextEntityManager = org.hibernate.search.jpa.Search
 				.getFullTextEntityManager(entityManager);
@@ -171,6 +214,25 @@ public class HibernateSearchService  {
 		facetManager.enableFaceting(categoryFacetingRequest);
  
 		List<Facet> facets = facetManager.getFacets("companyFaceting");
+		List<List<Company>> jobPosts= new ArrayList<List<Company>>();
+		for (Facet f : facets) {
+			System.out.println(f.getValue() + " (" + f.getCount() + ")");
+			
+			
+			List<Company> posts = fullTextEntityManager.createFullTextQuery(
+					f.getFacetQuery()).getResultList();
+			
+			if(company.length!=0)
+			{
+				if(Arrays.asList(company).contains(f.getValue()))
+				{
+					jobPosts.add(posts);
+				}
+			}
+		}
+		if(jobPosts.size()!=0)
+			return jobPosts;
+		
 		return facets;
 	}
 	
