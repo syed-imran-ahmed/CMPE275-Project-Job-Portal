@@ -107,8 +107,8 @@
 					<br>
 					<h3 align= "left" class="form-signin-heading">Resume</h3>
 					<div class="form-group ${status.error ? 'has-error' : ''}">	
-					    <object data="${contextPath}/resumes/${jsApplication.jobseekerResumeLoc}" type="application/${type}" width="500" height="650" title= "Resume">
-					 		<a href="${contextPath}/resumes/${jsApplication.jobseekerResumeLoc}">Download file</a>
+					    <object data="https://s3-us-west-1.amazonaws.com/cmpe275/resumes/${jsApplication.jobseekerResumeLoc}" type="application/${type}" width="500" height="650" title= "Resume">
+					 		<a href="	https://s3-us-west-1.amazonaws.com/cmpe275/resumes/${jsApplication.jobseekerResumeLoc}">Download file</a>
 						</object>
 					</div>
 				</form:form>
