@@ -2,6 +2,7 @@ package edu.sjsu.cmpe275.web;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -23,6 +24,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import com.amazonaws.auth.AWSCredentials;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.cloudsearchdomain.model.Bucket;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.email.TokenGenerator;
@@ -64,7 +74,7 @@ public class UserController {
     private CompanyJobsService companyJobsService;
     
   
-    private static String IMAGE_FOLDER = "src/main/webapp/images/";
+    private static String IMAGE_FOLDER = "gs://test-e1811.appspot.com/images/";
     
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -246,8 +256,8 @@ public class UserController {
          }else{
         	model.addAttribute("jobseeker", new JobSeeker());
         }
-        File f = new File(IMAGE_FOLDER + user.getId()+".JPG");
-        if(f.exists() && !f.isDirectory() && session.getAttribute("id")==null) { 
+       // File f = new File(IMAGE_FOLDER + user.getId()+".JPG");
+        if(session.getAttribute("id")==null) { 
         	session.setAttribute("id", user.getId());
         }
         return "job_seeker";
@@ -270,8 +280,19 @@ public class UserController {
     }
     
     @PostMapping("/upload")
-    public String imageUpload(@RequestParam("file") MultipartFile file,HttpSession session) {
-
+    public String imageUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+    	AWSCredentials credentials = new BasicAWSCredentials(
+				"", 
+				"");
+		
+		// create a client connection based on credentials
+		AmazonS3 s3client = new AmazonS3Client(credentials);
+		
+		// create bucket - name must be unique for all S3 users
+		String bucketName = "cmpe275";
+		InputStream is=file.getInputStream();
+	
+		
         if (file.isEmpty()) {
             System.out.println("its empty");
             return "redirect:job_seeker";
@@ -282,8 +303,9 @@ public class UserController {
             byte[] bytes = file.getBytes();
             String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(currentUserName);
-            Path path = Paths.get(IMAGE_FOLDER + user.getId()+".JPG");
-            Files.write(path, bytes);
+            String fileName = "images/"+user.getId()+".JPG";
+    		s3client.putObject(new PutObjectRequest(bucketName, fileName,is, new ObjectMetadata())
+    				.withCannedAcl(CannedAccessControlList.PublicRead));
             session.setAttribute("id", user.getId());
 
         } catch (IOException e) {
@@ -298,16 +320,4 @@ public class UserController {
   
         return "upload";
     }
-   
-//    @Autowired
-//    SearchRepository sr;
-//    @RequestMapping(value = "/search", method = RequestMethod.GET)
-//    public String search(ModelMap model) {
-//    	List<CompanyJobPosts> c=sr.findAll();
-//        System.out.println(" jobs "+c.get(0).getDescrip());
-//    	String heading = "Search";
-//		model.addAttribute("heading", heading);
-//		model.addAttribute("result1", c);
-//        return "search";
-//    }
 }
