@@ -3,26 +3,36 @@ package edu.sjsu.cmpe275.web;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.hibernate.search.query.facet.Facet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.Interested;
 import edu.sjsu.cmpe275.model.JobSeeker;
+import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.CompanyJobsServiceImpl;
 import edu.sjsu.cmpe275.service.HibernateSearchService;
+import edu.sjsu.cmpe275.service.InterestedService;
 import edu.sjsu.cmpe275.service.SearchService;
+import edu.sjsu.cmpe275.service.UserService;
 
 @Controller
 public class SearchController {
@@ -30,11 +40,19 @@ public class SearchController {
 	@Autowired
 	HibernateSearchService service;
 	
+	@Autowired
+	InterestedService intr;
+    
+	@Autowired
+    private UserService userService;
+    
+    
 	@RequestMapping(value="/search",method=RequestMethod.GET)
 	  public String filterJob(String q,@RequestParam(name="checkboxName",defaultValue="")String[] locations,
 			  @RequestParam(name="checkboxTitle", defaultValue="")String[] title,
 			  @RequestParam(name="checkboxSal", defaultValue="")String[] salary,
 			  @RequestParam(name="checkboxComp", defaultValue="")String[] company,
+			  HttpServletRequest request,
 			  Model model) {
 		
 		
@@ -151,16 +169,86 @@ public class SearchController {
 		{
 			returnList.add(jobPost);
 		}
+		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+    	User user = userService.findByUsername(currentUserName);
+        HashMap<String,Boolean> hm =new HashMap<>(); 
+		for(Interested i: intr.findByJobseekerid(user.getId()) ){
+			if (i != null){
+				String[] sub = i.getId().split("\\+");
+				System.out.println(sub[1]);
+				hm.put(sub[1], i.isStatus());
+			}
+		}
 		
 		model.addAttribute("jobslist", returnList);
 		model.addAttribute("filter", x);
 		model.addAttribute("title", y);
 		model.addAttribute("salar", z);
 		model.addAttribute("company", f);
+		model.addAttribute("interested", hm);
+
 		return "search";
 	}
 	
+	@RequestMapping(value="interestedapply/{jobid}",method=RequestMethod.POST)
+	public String updateStatus(@PathVariable("jobid") long jobid,
+			RedirectAttributes redirectAttributes, HttpServletRequest request,Model model)
+	{	
+
+		String url=request.getHeader("Referer");
+		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+    	User user = userService.findByUsername(currentUserName);
+    	String id = user.getId()+"+"+jobid;
+		Interested interstd = intr.findById(id);
+		if(interstd == null){
+			interstd = new Interested(true,id,user.getId(),jobid);
+		}
+		else if(interstd.isStatus()){
+			intr.removeById(id);
+		}
+
+		redirectAttributes.addAttribute("q", "search");
+		if(url.contains("&"))
+		{
+
+			String[] t= url.split("q=search\\&");
+			String[] splt= t[1].split("\\&");
+			for(String x: splt){
+				
+				String[] attrib = x.split("\\=");
+				if(attrib[1].contains("&")){
+					if (attrib[1].split("\\&")[0].contains("+")){
+						String enc = attrib[1].split("\\&")[0].replaceAll("\\+", " ");
+
+						redirectAttributes.addAttribute(attrib[0], enc);
+					}
+					else{
+						redirectAttributes.addAttribute(attrib[0], attrib[1].split("\\&")[0]);
+					}
 	
+				}
+				else{
+					if(attrib[1].contains("+")){
+						attrib[1] = attrib[1].replaceAll("\\+", " ");
+	
+					}
+					if(attrib[1].contains("%5B")){
+						attrib[1] = attrib[1].replaceAll("\\%5B", "[");
+					}
+					if(attrib[1].contains("%5D")){
+						attrib[1] = attrib[1].replaceAll("\\%5D", "]");
+					}
+					if(attrib[1].contains("%2C")){
+						attrib[1] = attrib[1].replaceAll("\\%2C", ",");
+					}
+					redirectAttributes.addAttribute(attrib[0], attrib[1]);
+					
+				}
+			}
+		}
+		intr.save(interstd);
+		return "redirect:/search";
+	}
 
 	
 

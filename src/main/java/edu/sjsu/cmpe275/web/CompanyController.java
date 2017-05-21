@@ -16,12 +16,14 @@ import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.model.Application;
 import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.Interested;
 import edu.sjsu.cmpe275.model.Interview;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.ApplicationService;
 import edu.sjsu.cmpe275.service.CompanyJobsService;
 import edu.sjsu.cmpe275.service.CompanyService;
+import edu.sjsu.cmpe275.service.InterestedService;
 import edu.sjsu.cmpe275.service.InterviewService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -47,6 +49,9 @@ public class CompanyController {
 
 	  @Autowired
 	  private CompanyValidator companyValidator;
+	  
+	  @Autowired
+	  private InterestedService intrstd;
 	  
 	  @Autowired
 	  private InterviewService intrw;
@@ -111,6 +116,12 @@ public class CompanyController {
 	        	for ( Application a: app)
 	        	{
 	        		ActivationEmail.emailModifiedJobTrigger(a.getJobseekerEmail(),a.getJobID());
+	        	}
+	        }
+	        if(cmpJobPost.getJobposition().contains("Filled") || cmpJobPost.getJobposition().contains("Cancelled")){
+	        	List<Interested> intr=intrstd.findByJobid(cmpJobPost.getJobid());
+	        	for(Interested i: intr){
+	        		intrstd.removeByJobid(i.getJobid());
 	        	}
 	        }
 	        return "redirect:/";

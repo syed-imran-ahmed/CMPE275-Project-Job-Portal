@@ -29,8 +29,9 @@
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
         <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>        
+    	<h3 align = "right"><a href="${contextPath}/welcome">Homepage</a></h3>
     </c:if>
-    
+   
 <div style="margin-left:25%">
 <div class="w3-container">
 
@@ -116,6 +117,18 @@
 				<h4 class="text-left"><a href="${contextPath}/applyjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
 				<p style="color:grey"><c:out value="${job.loc}" /></p>
 				<c:out value="${job.descrip}" />
+				<form method="POST" action="${contextPath}/interestedapply/${job.jobid}">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+					<c:set var="jid">${job.jobid}</c:set>
+					<c:choose>
+						<c:when test = "${interested.get(jid)}">
+							<h4 align="left"><button class="btn btn-primary" type="submit">Interested</button></h4>
+						</c:when>
+						<c:otherwise>
+							<h4 align="left"><button class="btn btn-primary" type="submit">Not Interested</button></h4>
+						</c:otherwise>
+					</c:choose>
+				</form>
 			</div>
 			<hr>
 			</c:forEach>
@@ -123,7 +136,7 @@
 	</c:if>
 	</div>  
 	</div> 
-	
+
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>
