@@ -151,6 +151,11 @@
 			            <form:errors path="Status"></form:errors>
 		       		</c:otherwise>
 		       </c:choose>
+		       <c:choose>
+		       		<c:when test="${jsApplication.status eq 'OfferAccepted'}">
+		       			<h2 align = center><a href="${contextPath}/interviewSchedule/${jsApplication.id}" class="form-signin">Schedule Interview</a></h2>
+		       		</c:when>
+		       </c:choose>
 		     </h3>
 	      </div>
 		</spring:bind>

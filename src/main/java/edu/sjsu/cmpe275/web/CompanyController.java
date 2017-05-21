@@ -1,10 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
-import java.util.HashMap;
 import java.util.List;
-
-import javax.servlet.http.HttpSession;
-import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,20 +9,20 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.model.Application;
 import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.Interview;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.ApplicationService;
 import edu.sjsu.cmpe275.service.CompanyJobsService;
 import edu.sjsu.cmpe275.service.CompanyService;
+import edu.sjsu.cmpe275.service.InterviewService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.validator.CompanyValidator;
@@ -51,6 +47,9 @@ public class CompanyController {
 
 	  @Autowired
 	  private CompanyValidator companyValidator;
+	  
+	  @Autowired
+	  private InterviewService intrw;
 
 	
 	 @RequestMapping(value = "/company", method = RequestMethod.GET)
@@ -196,5 +195,39 @@ public class CompanyController {
 	    	return "redirect:/";
 	    }
 	    
+	    @RequestMapping(value = "/interviewSchedule/{jobAppId}", method = RequestMethod.GET)
+	    public String scheduleInterview(@PathVariable("jobAppId") String jobAppId, Model model) {
+	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+	        User user = userService.findByUsername(currentUserName);
+	        Company company = companyService.findByCid(user.getId());
+	        Application appl= appService.findById(jobAppId);
+	        long jobId= appl.getJobID();
+	        //To make sure one company doesn't modify jobId in URL to check other company's jobs
+	        if(company.getCid()== companyJobsService.findByJobId(jobId).getCompany().getCid()){
+	        	Interview intv = intrw.findById(jobAppId);
+	        	if(intv == null){
+	        		intv = new Interview();
+	        		intv.setId(jobAppId);
+	        		intv.setCandidateName(appl.getJobseekerName());
+	        		intv.setStatus("invitation sent");
+	        	}
+	        	model.addAttribute("interview", intv);
+	        	return "interviewSchedule";
+	        }
+	        return "redirect:/";
+	    }
 	    
+	    @RequestMapping(value = "/interviewSchedule", method = RequestMethod.POST)
+	    public String saveInterview(@ModelAttribute("interview") Interview interview, BindingResult bindingResult, Model model) {
+	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+	        User user = userService.findByUsername(currentUserName);	
+	        intrw.save(interview);
+	        System.out.println(interview.getInterviewDate());
+	    	String[] subtr =interview.getId().split("\\a");
+	    	long jobId = Long.parseLong(subtr[1]);
+	    	long jobseekerId = Long.parseLong(subtr[0]);
+	    	//ActivationEmail.emailInterview(user.getEmailid(),userService.findById(jobseekerId).getEmailid(),jobId, interview);
+	    	String url= "redirect:jobApplications/"+jobId;
+	    	return url;
+	    }
 }

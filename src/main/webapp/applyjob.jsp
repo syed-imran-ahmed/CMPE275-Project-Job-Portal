@@ -36,7 +36,7 @@
 </div>	
 <div style= "float:center">
 
-    <form:form modelAttribute="companyjobposts" class="form-signin">
+    <form:form action="${contextPath}/acceptOffer/${appid}" modelAttribute="companyjobposts" class="form-signin">
         <h2 align = "left" class="form-signin-heading">Job Description</h2>
         <spring:bind path="jobid">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -87,9 +87,6 @@
             </div>
         </spring:bind>
 
-    </form:form>
- </div>
- <div  align = "center">
 	<c:choose>
 		<c:when test= "${companyjobposts.jobposition eq 'Cancelled'}"> 
 			<h2  align= "center">Sorry this Job got Cancelled!</h2>
@@ -97,8 +94,9 @@
 		<c:when test= "${companyjobposts.jobposition eq 'Filled'}">
 			<h2  align= "center">Sorry this Job  got Filled!</h2>
 		</c:when>
-		<c:when test= "${offered ne false}">
-			<h2  align= "center">You have been Offered this position! Accept by clicking <a href ="${contextPath}/acceptOffer/${offered}" class="form-signin">here</a></h2>
+		<c:when test= "${offered eq true}">
+			<h2  align= "center">You have been Offered this position!</h2>
+			<h3 align= "center"><input style="float:center" type="submit" value="Accept"></h3>
 		</c:when>
 		<c:when test= "${reapply eq false}">
 			<h2  align= "center">Sorry you can not Re-apply for this Job at the moment!</h2>
@@ -113,6 +111,7 @@
 		</tr>
 		</c:otherwise>	
 	</c:choose>
+	</form:form>
 </div>
 
 

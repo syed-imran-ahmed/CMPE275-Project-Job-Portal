@@ -2,7 +2,6 @@ package edu.sjsu.cmpe275.email;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Properties;
 
 import javax.mail.Message;
@@ -12,7 +11,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
-import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.Interview;
 
 /**
  * @author imran
@@ -166,7 +165,7 @@ public class ActivationEmail {
 	public static void emailOfferAcceptance(String companyMail,String jobseekerMail, long jobId){
 	       final String username = "sjsuprojects@gmail.com";
 	      final String password = "Aios@123";
-	        String[] to = { companyMail,jobseekerMail };
+	        String[] to = { jobseekerMail };
 	        Properties props = new Properties();
 	        props.put("mail.smtp.auth", "true");
 	        props.put("mail.smtp.starttls.enable", "true");
@@ -186,6 +185,7 @@ public class ActivationEmail {
 	            for (int i = 0; i < to.length; i++) {
 	                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to[i]));
 	            }
+	            message.addRecipient(Message.RecipientType.BCC,new InternetAddress(companyMail));
 	            message.setSubject("Job Post "+ jobId+" Offer Accepted");
 	            message.setText("\n The job post "+jobId+" has been \"Accepted\". Please check.\n\nRegards,\n" + "275 Project Team");
 	            System.out.println("message"+to);
@@ -217,6 +217,7 @@ public class ActivationEmail {
 	            for (int i = 0; i < to.length; i++) {
 	                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to[i]));
 	            }
+
 	            message.setSubject("Application(s) status change");
 	            String text ="\nBelow is the status change in your application(s):\n\n ";
 	            for (HashMap.Entry<Long, String> entry : hm.entrySet())
@@ -265,4 +266,8 @@ public class ActivationEmail {
 	            throw new RuntimeException(e);
 	        }
 	    }
+	
+		public static void emailInterview(String companyMail,String jobseekerMail,long jobId, Interview interview){
+			//Event createdEvent = calendario.events().insert("some-mail-from-google0@group.calendar.google.com", event).setSendNotifications(true).execute();
+		}
 }
