@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -34,10 +35,12 @@ import com.amazonaws.services.s3.model.PutObjectRequest;
 import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.model.Application;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.Interested;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.ApplicationService;
 import edu.sjsu.cmpe275.service.CompanyJobsService;
+import edu.sjsu.cmpe275.service.InterestedService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.UserService;
 
@@ -55,6 +58,9 @@ public class ApplicationController {
     
     @Autowired
     private ApplicationService applicationService;
+    
+    @Autowired
+    private InterestedService interestedService;
     
     private static String RESUME_FOLDER = "src/main/webapp/resumes/";
 
@@ -247,5 +253,30 @@ public class ApplicationController {
         	ActivationEmail.emailOfferAcceptance(u.getEmailid(),user.getEmailid(), jobid);        	
         }
         return "redirect:/applicationView";
+    }
+    
+	@RequestMapping(value = "/listInterested", method = RequestMethod.GET)
+    public String listInterestedJobs(Model model,HttpSession session) {
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findByUsername(currentUserName);
+        
+        List<Interested> interestedList=interestedService.findByJobseekerid(user.getId());
+        List<CompanyJobPosts>jobslist = new ArrayList<CompanyJobPosts>();
+        for(Interested i: interestedList) 
+        {
+        	CompanyJobPosts a=companyJobsService.findByJobId(i.getJobid());
+        	jobslist.add(a);
+        }
+        HashMap<String,Boolean> hm =new HashMap<>(); 
+		for(Interested i: interestedList ){
+			if (i != null){
+				String[] sub = i.getId().split("\\+");
+				System.out.println(sub[1]);
+				hm.put(sub[1], i.isStatus());
+			}
+		}
+        model.addAttribute("jobslist", jobslist);
+        model.addAttribute("interested", hm);
+        return "listInterested";
     }
 }
