@@ -22,6 +22,14 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    
+    <script >
+	function changeFunc() {
+		$("#selectForm").submit();
+	}
+
+</script>
+    
 </head>
 <body>
 <div class="container">
@@ -41,12 +49,21 @@
 		<h4 class="text-right"><a href="${contextPath}/postjob">Post a New Job</a></h4>
 		
     </c:if>
-    <h3>List of posted jobs</h3>
+    <h3>List of posted jobs</h3> 
+     <form id="selectForm" method="POST" action="${contextPath}/selection">
+     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+    <select id="selectBox" name="selectbox" onchange="changeFunc();">
+    <option value="default" >--Please select--</option>
+			<c:forEach var="name" items="${jobposition}">
+				<option value="${name}" <c:if test="${param.path == name}">selected="selected"</c:if>>${name}</option>
+			</c:forEach>
+	</select> 
+	</form> 
+    
 	<c:if test="${not empty jobslist}">
 		<ul>
 		 	<c:forEach var="job" items="${jobslist}">
 			<div>
-				
 				<h4 class="text-left"><a href="${contextPath}/postjob/${job.jobid}"> <b><c:out value="${job.title}" /></b> </a></h4>
 				<p style="color:grey"><c:out value="${job.loc}" /></p>
 				<c:out value="${job.descrip}" />

@@ -118,6 +118,12 @@ public class UserController {
     public String welcome(@RequestParam(required = false) Integer page,Model model) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
     	User user = userService.findByUsername(currentUserName);
+    	
+    	List<String> jobPositions = new ArrayList<String>();
+    	jobPositions.add("Open");
+    	jobPositions.add("Filled");
+    	jobPositions.add("Cancelled");
+    	
     	if(user.getIsVerified()==null || user.getIsVerified().equals("NO"))
     	{
     		return "emailverification";
@@ -176,10 +182,12 @@ public class UserController {
     				if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
     					pagedListHolder.setPage(0);
     					model.addAttribute("jobslist", pagedListHolder.getPageList());
+    					model.addAttribute("jobposition", jobPositions);
     				}
     				else if(page <= pagedListHolder.getPageCount()) {
     					pagedListHolder.setPage(page-1);
     					model.addAttribute("jobslist", pagedListHolder.getPageList());
+    					model.addAttribute("jobposition", jobPositions);
     				}
 
     			}
@@ -189,6 +197,57 @@ public class UserController {
     	}
 
     }
+    
+    
+    @RequestMapping(value = "/selection", method = RequestMethod.POST)
+	public String selection(@RequestParam(name="selectbox") String status,@RequestParam(required = false) Integer page, Model model) {
+    	
+    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+    	User user = userService.findByUsername(currentUserName);
+    	Company company = companyService.findByCid(user.getId());
+    	
+    	List<String> jobPositions = new ArrayList<String>();
+    	jobPositions.add("Open");
+    	jobPositions.add("Filled");
+    	jobPositions.add("Cancelled");
+    	
+		if(company!=null)
+		{
+			List<String> jobTitles = new ArrayList<String>();
+			List<CompanyJobPosts> jobPosting = new ArrayList<CompanyJobPosts>();
+			
+			for(CompanyJobPosts jobPost:company.getJobPosts())
+			{
+				if(jobPost.getJobposition().equals(status)){
+					jobPosting.add(jobPost);
+				jobTitles.add(jobPost.getTitle());
+				}
+			}
+			model.addAttribute("companylogo",company.getLogo());
+
+			PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(jobPosting);
+			pagedListHolder.setPageSize(4);
+			model.addAttribute("maxPages", pagedListHolder.getPageCount());
+
+			if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+
+			model.addAttribute("page", page);
+			if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
+				pagedListHolder.setPage(0);
+				model.addAttribute("jobslist", pagedListHolder.getPageList());
+				model.addAttribute("jobposition", jobPositions);
+			}
+			else if(page <= pagedListHolder.getPageCount()) {
+				pagedListHolder.setPage(page-1);
+				model.addAttribute("jobslist", pagedListHolder.getPageList());
+				model.addAttribute("jobposition", jobPositions);
+			}
+
+		}
+
+		return "companywelcome";
+    }
+    
     
     @RequestMapping(value = "/verification", method = RequestMethod.POST)
 	public String verification( @RequestParam("token") String token, Model model) {
