@@ -240,7 +240,7 @@ public class CompanyController {
 	        User user = userService.findByUsername(currentUserName);	
 	        intrw.save(interview);
 	        System.out.println(interview.getInterviewDate());
-	    	String[] subtr =interview.getId().split("\\a");
+	    	String[] subtr =interview.getId().split("a");
 	    	long jobId = Long.parseLong(subtr[1]);
 	    	long jobseekerId = Long.parseLong(subtr[0]);
 	    	//ActivationEmail.emailInterview(user.getEmailid(),userService.findById(jobseekerId).getEmailid(),jobId, interview);

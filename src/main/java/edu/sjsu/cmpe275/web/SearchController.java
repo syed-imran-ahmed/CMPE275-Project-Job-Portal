@@ -1,5 +1,7 @@
 package edu.sjsu.cmpe275.web;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,8 +47,7 @@ public class SearchController {
     
 	@Autowired
     private UserService userService;
-    
-    
+
 	@RequestMapping(value="/search",method=RequestMethod.GET)
 	  public String filterJob(String q,@RequestParam(name="checkboxName",defaultValue="")String[] locations,
 			  @RequestParam(name="checkboxTitle", defaultValue="")String[] title,
@@ -207,50 +208,22 @@ public class SearchController {
 			intr.removeById(id);
 		}
 
-		redirectAttributes.addAttribute("q", "search");
-		if(url.contains("&"))
-		{
-
-			String[] t= url.split("q=search\\&");
-			String[] splt= t[1].split("\\&");
-			for(String x: splt){
-				
-				String[] attrib = x.split("\\=");
-				if(attrib[1].contains("&")){
-					if (attrib[1].split("\\&")[0].contains("+")){
-						String enc = attrib[1].split("\\&")[0].replaceAll("\\+", " ");
-
-						redirectAttributes.addAttribute(attrib[0], enc);
-					}
-					else{
-						redirectAttributes.addAttribute(attrib[0], attrib[1].split("\\&")[0]);
-					}
-	
-				}
-				else{
-					if(attrib[1].contains("+")){
-						attrib[1] = attrib[1].replaceAll("\\+", " ");
-	
-					}
-					if(attrib[1].contains("%5B")){
-						attrib[1] = attrib[1].replaceAll("\\%5B", "[");
-					}
-					if(attrib[1].contains("%5D")){
-						attrib[1] = attrib[1].replaceAll("\\%5D", "]");
-					}
-					if(attrib[1].contains("%2C")){
-						attrib[1] = attrib[1].replaceAll("\\%2C", ",");
-					}
-					redirectAttributes.addAttribute(attrib[0], attrib[1]);
-					
-				}
-			}
-		}
 		intr.save(interstd);
-		return "redirect:/search";
+		return "redirect:"+ url;
 	}
 
-	
+	@RequestMapping(value="interestedremove/{jobid}",method=RequestMethod.POST)
+	public String updateStatus(@PathVariable("jobid") long jobid,Model model)
+	{	
+
+		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+    	User user = userService.findByUsername(currentUserName);
+    	String id = user.getId()+"+"+jobid;
+		intr.removeById(id);
+		return "redirect:/listInterested";
+
+	}
+
 
 	/*@RequestMapping(value="/filter",method=RequestMethod.GET)
 	  public String filterJob(@RequestParam(name="checkboxName", defaultValue="")String[] q, @RequestParam(name="checkboxTitle", defaultValue="")String[] r,@RequestParam(name="checkboxSal", defaultValue="")String[] s,@RequestParam(name="checkboxComp", defaultValue="")String[] comp,Model model) {

@@ -38,6 +38,7 @@
 	<c:if test="${profileComplete eq true}">	
 	<h4 class="text-center"><a href="${contextPath}/search">Search</a></h4>
 	<h4 class="text-right"><a href="${contextPath}/applicationView">Check Applications</a></h4>
+	<h4 class="text-right"><a href="${contextPath}/listInterested">Check Interested Jobs</a></h4>
 	   <h3>List of posted jobs</h3>
 		<c:if test="${not empty jobslist}">
 			<ul>

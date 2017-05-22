@@ -152,7 +152,7 @@
 		       		</c:otherwise>
 		       </c:choose>
 		       <c:choose>
-		       		<c:when test="${jsApplication.status eq 'OfferAccepted'}">
+		       		<c:when test="${jsApplication.status eq 'Pending'}">
 		       			<h2 align = center><a href="${contextPath}/interviewSchedule/${jsApplication.id}" class="form-signin">Schedule Interview</a></h2>
 		       		</c:when>
 		       </c:choose>
