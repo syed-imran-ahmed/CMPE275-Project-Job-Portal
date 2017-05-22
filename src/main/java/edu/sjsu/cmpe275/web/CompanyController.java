@@ -119,6 +119,14 @@ public class CompanyController {
 	        if( app != null){
 	        	for ( Application a: app)
 	        	{
+	        		if(cmpJobPost.getJobposition().contains("Filled") || cmpJobPost.getJobposition().contains("Cancelled"))
+	        		{
+	        			if(a.getStatus().equals("Pending") || a.getStatus().equals("Offered"))
+		        		{
+		        			a.setStatus("Cancelled");
+		        		}
+	        		}
+	        		
 	        		ActivationEmail.emailModifiedJobTrigger(a.getJobseekerEmail(),a.getJobID());
 	        	}
 	        }
