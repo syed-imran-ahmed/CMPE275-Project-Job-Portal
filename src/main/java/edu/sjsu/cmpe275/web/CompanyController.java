@@ -110,7 +110,11 @@ public class CompanyController {
 	        User user = userService.findByUsername(currentUserName);
 	        Company company = companyService.findByCid(user.getId());
 	        cmpJobPost.setCompany(company);
-	        companyJobsService.save(cmpJobPost);
+	       if(cmpJobPost.getJobid()==null)
+	       {
+	    	   companyJobsService.save(cmpJobPost);
+	    	   return "redirect:/";
+	       }
 	        List<Application> app =  appService.findByjobID(cmpJobPost.getJobid());
 	        if( app != null){
 	        	for ( Application a: app)
@@ -124,6 +128,8 @@ public class CompanyController {
 	        		intrstd.removeByJobid(i.getJobid());
 	        	}
 	        }
+	        
+	        companyJobsService.save(cmpJobPost);
 	        return "redirect:/";
 	    }
 	    

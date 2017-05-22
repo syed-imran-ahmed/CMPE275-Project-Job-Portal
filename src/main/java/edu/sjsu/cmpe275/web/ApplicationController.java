@@ -233,7 +233,7 @@ public class ApplicationController {
     public String acceptOffer(@PathVariable("offered") String offered,Model model) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(currentUserName);
-        String[] splitted = offered.split("\\a");
+        String[] splitted = offered.split("a");
         long jobseekerid = Long.parseLong(splitted[0]);
         long jobid = Long.parseLong(splitted[1]);
         CompanyJobPosts ajp = companyJobsService.findByJobId(jobid);
