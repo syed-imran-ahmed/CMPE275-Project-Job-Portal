@@ -92,7 +92,7 @@ public class CompanyController {
 	    
 	    
 	    @RequestMapping(value = "/companywelcome", method = RequestMethod.GET)
-	    public String welcome(Model model) {
+	    public String welcomecmpny(Model model) {
 	    	return "welcome";
 	    }
 	    
@@ -142,7 +142,7 @@ public class CompanyController {
 	    }
 	    
 	    @RequestMapping(value = "/postjob/{jobid}", method = RequestMethod.GET)
-	    public String companyJob(@PathVariable("jobid") Long jobid, Model model) {
+	    public String companyShowJob(@PathVariable("jobid") Long jobid, Model model) {
 	       
 	    	CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
 	    	model.addAttribute("jobid", jobPost.getJobid());

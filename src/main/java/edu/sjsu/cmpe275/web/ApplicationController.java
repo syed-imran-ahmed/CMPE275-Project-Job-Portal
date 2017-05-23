@@ -2,10 +2,9 @@ package edu.sjsu.cmpe275.web;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -161,6 +160,10 @@ public class ApplicationController {
             String fileName = file.getOriginalFilename();
             int lastIndex = fileName.lastIndexOf('.');
             String substring = fileName.substring(lastIndex, fileName.length());
+            List<String> validExtensions =  Arrays.asList("docx","doc","pdf","txt");
+            if(!validExtensions.contains(substring)){
+            	return "applyresume";
+            }
             filename = id+substring;
             fileLoc= "resumes/" + filename;
             s3client.putObject(new PutObjectRequest(bucketName, fileLoc,is, new ObjectMetadata())
