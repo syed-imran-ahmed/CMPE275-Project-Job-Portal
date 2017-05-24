@@ -18,18 +18,42 @@
 
     <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet">
     <link href="${contextPath}/resources/css/common.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+ 	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+
 </head>
 
-<body>
+<body background="https://static.licdn.com/sc/h/64xk850n3a8uzse6fi11l3vmz">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        <img alt="Brand" src="https://cdn.dribbble.com/users/443465/screenshots/2203206/3.png" width="35" height="35">
+      </a>
+    </div>
+      <form method="POST" action="${contextPath}/login" class="navbar-form navbar-right">s
+        <div class="form-group ${error != null ? 'has-error' : ''}">
+            <span>${message}</span>
+            <input name="username" type="text" class="form-control" placeholder="Username"
+                   autofocus="true"/>
+            <input name="password" type="password" class="form-control" placeholder="Password"/>
+            <span>${error}</span>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-<div class="container">
-
+            <button class="btn btn-primary" type="submit">Log In</button>
+           
+        </div>
+    </form>
+  </div>
+</nav>
+<div class="container" style="float:right;">
+	
     <form method="POST" action="${contextPath}/login" class="form-signin">
         <h2 class="form-heading">Log in</h2>
 
