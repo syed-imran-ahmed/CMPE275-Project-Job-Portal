@@ -46,6 +46,7 @@ public class Myaspects extends HandlerInterceptorAdapter{
 		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 		if(!currentUserName.contains("anonymousUser") ){
 	        User user = userService.findByUsername(currentUserName);
+	        System.out.println(method);
 	        List<String> jobseekerDeniedAccess = Arrays.asList("company","companyProfile","companyJob","companyPostJob","companyShowJob",
 	        		"viewApplicantList","viewApplicant","saveDecision","scheduleInterview","saveInterview","welcomecmpny","selection");
 	        

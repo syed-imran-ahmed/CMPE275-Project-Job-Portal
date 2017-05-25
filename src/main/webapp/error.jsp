@@ -27,6 +27,6 @@
 
 </head>
 <body>
-	<h2>Unauthorized access. Click <a href = "${contextPath}/${link}">here</a> to go back</h2>
+	<h2>Unauthorized access or Invalid action. Click <a href = "${contextPath}/${link}">here</a> to go back</h2>
 </body>
 </html>

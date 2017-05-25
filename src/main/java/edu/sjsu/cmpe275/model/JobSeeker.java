@@ -33,6 +33,7 @@ public class JobSeeker {
 	
 	@Column(name = "wrk_exp",nullable = false, unique = false)
 	private String wrk_exp;
+
 	
 	@Column(name = "edu",nullable = false, unique = false)
 	private String education;
@@ -125,4 +126,6 @@ public class JobSeeker {
 	public void setJobs(List<CompanyJobPosts> jobs) {
 		this.jobs = jobs;
 	}
+
+
 }

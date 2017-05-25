@@ -24,23 +24,63 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+     <style>
+		div.contain {
+		    width: 100%;
+		    border: 1px solid gray;
+		    min-height:520px;
+		}
+
+header{
+    margin:0;
+    padding:1em;
+    background-color: DARKSLATEGRAY;
+    clear: left;  
+    color:gold;
+    font-size:20;
+    text-align: center;
+    box-shadow: inset 0 0 20px 0px black;
+}
+
+	footer {
+	    margin:0;
+    	padding:1em;
+	    background-color: DARKSLATEGRAY;
+	    clear: left;  
+	    color:white;
+	    font-size:20;
+	    text-align: center;
+	    box-shadow: inset 0 0 20px 0px black;
+		bottom: 0px;
+		width : 100%;
+	}
+
+</style>
 </head>
 
 <body>
-
-<h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
+<a href="${contextPath}/welcome">
+	<header>
+	    <img src="${contextPath}/images/logo.png" alt="hirePeople"/>
+	</header>
+</a>
+<div class="contain">
 <div class="form-signin" style= "float:left;width:width/4">
 <%
 if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("")) {
 %>
 <h3 align ="center" class="form-signin-heading">Profile Picture</h3>
 <br>
-<img src="https://s3-us-west-1.amazonaws.com/cmpe275/image/<%=session.getAttribute("id")%>.JPG" width="250" height="250" alt="Upload Image" />
+
+<img class='img-circle' src="https://s3-us-west-1.amazonaws.com/cmpe275/images/${image}.JPG"
+ width="250" height="250" onerror="this.src='${contextPath}/images/candidate.jpg'" alt="Upload Image" />
 <br>
 <%
 //session.removeAttribute("pictureuploaded");
 }
 %>
+
+<h4><a  href="${contextPath}/upload" class="form-group">Upload/Replace profile picture</a><h4>    
 </div>
 <div style= "float:center">
     <form:form method="POST" action="${contextPath}/job_seeker" modelAttribute="jobseeker" class="form-signin">
@@ -95,12 +135,14 @@ if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("
             </div>
         </spring:bind>    
               	
-        <p align = "center"><a  href="upload" class="form-group">Upload/Replace profile picture</a></p>      
         <br>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Save changes</button>
 
       </form:form>
+
 </div>
+</div>
+   <footer>CMPE275 Project Team-3</footer>
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

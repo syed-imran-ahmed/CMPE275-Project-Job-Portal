@@ -134,8 +134,8 @@ public class ApplicationController {
     public String resumeUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
     	System.out.println("apply Resume");
     	AWSCredentials credentials = new BasicAWSCredentials(
-				"AKIAI2JYAGGHNIMM4NFQ", 
-				"w664XoLaZZAFoPI585jg3FqaIPwsY59xvkSmi5oz");
+				"AKIAJTRP2TGOOYXWLTHQ", 
+				"FZnUn2F9/PuW6oRNHnvw36yNYLhlibmsDYxbLDz1");
 		
 		// create a client connection based on credentials
 		AmazonS3 s3client = new AmazonS3Client(credentials);
@@ -162,6 +162,8 @@ public class ApplicationController {
             int lastIndex = fileName.lastIndexOf('.');
             String substring = fileName.substring(lastIndex, fileName.length());
             System.out.println("Success 1"+ substring);
+            System.out.println("format:" + substring);
+
             List<String> validExtensions =  Arrays.asList(".docx",".doc",".pdf",".txt");
             if(!validExtensions.contains(substring)){
             	return "applyresume";

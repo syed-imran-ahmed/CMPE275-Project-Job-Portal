@@ -4,8 +4,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +41,13 @@ import edu.sjsu.cmpe275.email.ActivationEmail;
 import edu.sjsu.cmpe275.email.TokenGenerator;
 import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
+import edu.sjsu.cmpe275.model.Image;
 import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.Profile;
 import edu.sjsu.cmpe275.model.User;
 import edu.sjsu.cmpe275.service.CompanyJobsService;
 import edu.sjsu.cmpe275.service.CompanyService;
+import edu.sjsu.cmpe275.service.ImageService;
 import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.SecurityService;
 import edu.sjsu.cmpe275.service.UserService;
@@ -73,7 +78,9 @@ public class UserController {
     @Autowired
     private CompanyJobsService companyJobsService;
     
-  
+    @Autowired
+    private ImageService imageService;
+    
     private static String IMAGE_FOLDER = "gs://test-e1811.appspot.com/images/";
     
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -306,7 +313,7 @@ public class UserController {
     
     
     @RequestMapping(value = "/job_seeker", method = RequestMethod.GET)
-    public String jobseekerget(Model model,HttpSession session) {
+    public String jobseekerget(Model model,HttpSession session,HttpServletResponse response ) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findByUsername(currentUserName);
         JobSeeker js=jobseekerService.findById(user.getId());
@@ -317,7 +324,7 @@ public class UserController {
         }
        // File f = new File(IMAGE_FOLDER + user.getId()+".JPG");
         System.out.println("Inside Upload "+ user.getId());
-        model.addAttribute("image", user.getId());
+        model.addAttribute("image", imageService.findByJsid(user.getId()));
         if(session.getAttribute("id")==null) { 
         	session.setAttribute("id", user.getId());
         }
@@ -343,8 +350,8 @@ public class UserController {
     @PostMapping("/upload")
     public String imageUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
     	AWSCredentials credentials = new BasicAWSCredentials(
-				"AKIAI2JYAGGHNIMM4NFQ", 
-				"w664XoLaZZAFoPI585jg3FqaIPwsY59xvkSmi5oz");
+				"AKIAJTRP2TGOOYXWLTHQ", 
+				"FZnUn2F9/PuW6oRNHnvw36yNYLhlibmsDYxbLDz1");
 		
 		// create a client connection based on credentials
 		AmazonS3 s3client = new AmazonS3Client(credentials);
@@ -364,9 +371,14 @@ public class UserController {
             byte[] bytes = file.getBytes();
             String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(currentUserName);
-            String fileName = "image/"+user.getId()+".JPG";
+            String uniqueID = UUID.randomUUID().toString();
+
+            String fileName = "images/"+uniqueID+".JPG";
+            System.out.println(fileName);
     		s3client.putObject(new PutObjectRequest(bucketName, fileName,is, new ObjectMetadata())
     				.withCannedAcl(CannedAccessControlList.PublicRead));
+            Image img = new Image(user.getId(),uniqueID);
+            imageService.save(img);
             session.setAttribute("id", user.getId());
             
 
