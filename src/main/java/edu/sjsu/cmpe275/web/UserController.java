@@ -341,8 +341,8 @@ public class UserController {
     @PostMapping("/upload")
     public String imageUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
     	AWSCredentials credentials = new BasicAWSCredentials(
-				"", 
-				"");
+				"AKIAIPASWOJPW4S6NFPA", 
+				"07RGZvrSkGsC7QQxC9ruhi+QdoPFDMvDxwTN+htW");
 		
 		// create a client connection based on credentials
 		AmazonS3 s3client = new AmazonS3Client(credentials);
