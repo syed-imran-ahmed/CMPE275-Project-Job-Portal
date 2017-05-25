@@ -35,7 +35,7 @@ if (session.getAttribute("id") != null && !(session.getAttribute("id")).equals("
 %>
 <h3 align ="center" class="form-signin-heading">Profile Picture</h3>
 <br>
-<img src="https://s3-us-west-1.amazonaws.com/cmpe275/images/<%=session.getAttribute("id")%>.JPG" width="250" height="250" alt="Upload Image" />
+<img src="https://s3-us-west-1.amazonaws.com/cmpe275/image/<%=session.getAttribute("id")%>.JPG" width="250" height="250" alt="Upload Image" />
 <br>
 <%
 //session.removeAttribute("pictureuploaded");

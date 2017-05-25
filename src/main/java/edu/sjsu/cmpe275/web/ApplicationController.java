@@ -132,9 +132,10 @@ public class ApplicationController {
     
     @PostMapping("/applyresume")
     public String resumeUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
+    	System.out.println("apply Resume");
     	AWSCredentials credentials = new BasicAWSCredentials(
-				"AKIAIPASWOJPW4S6NFPA", 
-				"07RGZvrSkGsC7QQxC9ruhi+QdoPFDMvDxwTN+htW");
+				"AKIAI2JYAGGHNIMM4NFQ", 
+				"w664XoLaZZAFoPI585jg3FqaIPwsY59xvkSmi5oz");
 		
 		// create a client connection based on credentials
 		AmazonS3 s3client = new AmazonS3Client(credentials);
@@ -160,7 +161,8 @@ public class ApplicationController {
             String fileName = file.getOriginalFilename();
             int lastIndex = fileName.lastIndexOf('.');
             String substring = fileName.substring(lastIndex, fileName.length());
-            List<String> validExtensions =  Arrays.asList("docx","doc","pdf","txt");
+            System.out.println("Success 1"+ substring);
+            List<String> validExtensions =  Arrays.asList(".docx",".doc",".pdf",".txt");
             if(!validExtensions.contains(substring)){
             	return "applyresume";
             }
@@ -168,17 +170,19 @@ public class ApplicationController {
             fileLoc= "resumes/" + filename;
             s3client.putObject(new PutObjectRequest(bucketName, fileLoc,is, new ObjectMetadata())
     				.withCannedAcl(CannedAccessControlList.PublicRead));
+            System.out.println("Success 1");
            // path = Paths.get(fileLoc);
             //Files.write(path, bytes);
 
         } catch (IOException e) {
             e.printStackTrace();
         }
+        System.out.println("Success 2");
         String name = js.getFirstname()+ " "+ js.getLastname();
         long jobid=  (long) session.getAttribute("jobid");
         Application application = new Application(id,user.getId(),jobid,name,user.getEmailid(),filename,"Pending" );
         applicationService.save(application);
-        
+        System.out.println(" Success 3");
         CompanyJobPosts jobPost = companyJobsService.findByJobId(jobid);
         ActivationEmail.emailAppliedJob(user.getEmailid(), jobid,jobPost.getCompany().getName(),jobPost.getTitle(),jobPost.getDescrip(),jobPost.getLoc());
         

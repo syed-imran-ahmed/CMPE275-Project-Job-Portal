@@ -316,6 +316,8 @@ public class UserController {
         	model.addAttribute("jobseeker", new JobSeeker());
         }
        // File f = new File(IMAGE_FOLDER + user.getId()+".JPG");
+        System.out.println("Inside Upload "+ user.getId());
+        model.addAttribute("image", user.getId());
         if(session.getAttribute("id")==null) { 
         	session.setAttribute("id", user.getId());
         }
@@ -341,8 +343,8 @@ public class UserController {
     @PostMapping("/upload")
     public String imageUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
     	AWSCredentials credentials = new BasicAWSCredentials(
-				"AKIAIPASWOJPW4S6NFPA", 
-				"07RGZvrSkGsC7QQxC9ruhi+QdoPFDMvDxwTN+htW");
+				"AKIAI2JYAGGHNIMM4NFQ", 
+				"w664XoLaZZAFoPI585jg3FqaIPwsY59xvkSmi5oz");
 		
 		// create a client connection based on credentials
 		AmazonS3 s3client = new AmazonS3Client(credentials);
@@ -362,10 +364,11 @@ public class UserController {
             byte[] bytes = file.getBytes();
             String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
             User user = userService.findByUsername(currentUserName);
-            String fileName = "images/"+user.getId()+".JPG";
+            String fileName = "image/"+user.getId()+".JPG";
     		s3client.putObject(new PutObjectRequest(bucketName, fileName,is, new ObjectMetadata())
     				.withCannedAcl(CannedAccessControlList.PublicRead));
             session.setAttribute("id", user.getId());
+            
 
         } catch (IOException e) {
             e.printStackTrace();

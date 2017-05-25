@@ -21,7 +21,7 @@
 	<div class="form-signin">
 		<h1 class="form-signin-heading">  Upload a Picture</h1>
 		
-		<form method="POST" action="/upload" enctype="multipart/form-data" class="form-signin">
+		<form method="POST" action="${contextPath}/upload" enctype="multipart/form-data" class="form-signin">
 		    <input type="file" name="file" /><br/><br/>
 		    <input type="submit" value="Submit" />
 		    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>

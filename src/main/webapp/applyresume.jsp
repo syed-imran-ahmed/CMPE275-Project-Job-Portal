@@ -23,7 +23,7 @@
 	<div class="form-signin">
 		<h1 class="form-signin-heading"> Upload a Resume</h1>
 		
-		<form method="POST" action="/applyresume" enctype="multipart/form-data" class="form-signin">
+		<form method="POST" action="${contextPath}/applyresume" enctype="multipart/form-data" class="form-signin">
 		    <input type="file" name="file" /><br/><br/>
 		    <input type="submit" value="Submit Application" />
 		    <input type="hidden"  name="${_csrf.parameterName}"   value="${_csrf.token}"/>
