@@ -1,10 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,10 +8,8 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.hibernate.search.query.facet.Facet;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,13 +22,23 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import edu.sjsu.cmpe275.model.Company;
 import edu.sjsu.cmpe275.model.CompanyJobPosts;
 import edu.sjsu.cmpe275.model.Interested;
-import edu.sjsu.cmpe275.model.JobSeeker;
 import edu.sjsu.cmpe275.model.User;
-import edu.sjsu.cmpe275.service.CompanyJobsServiceImpl;
 import edu.sjsu.cmpe275.service.HibernateSearchService;
 import edu.sjsu.cmpe275.service.InterestedService;
-import edu.sjsu.cmpe275.service.SearchService;
 import edu.sjsu.cmpe275.service.UserService;
+
+/**
+* <h1>Search Controller Endpoints</h1>
+* The search controller class provides the REST endpoints
+* to map the basic GET,POST,PUT and DELETE request for
+* its corresponding operations. It serves as the endpoints
+* for all the operations for search which is based on 
+* Lucene Hibernate searching 
+*
+* @author  Syed Imran Ahmed
+* @version 1.0
+* @since   2017-05-05
+*/ 
 
 @Controller
 public class SearchController {
@@ -48,14 +52,26 @@ public class SearchController {
 	@Autowired
     private UserService userService;
 
+	/**
+	 * @param q
+	 * @param locations
+	 * @param title
+	 * @param salary
+	 * @param company
+	 * @param request
+	 * @param model
+	 * @return Show the search results for the search performed using the search box and in combination of 
+	 * the filters.
+	 */
 	@RequestMapping(value="/search",method=RequestMethod.GET)
-	  public String filterJob(String q,@RequestParam(name="checkboxName",defaultValue="")String[] locations,
+	  public String filterJob(@RequestParam(required = false) Integer page,
+			  String q,
+			  @RequestParam(name="checkboxName",defaultValue="")String[] locations,
 			  @RequestParam(name="checkboxTitle", defaultValue="")String[] title,
 			  @RequestParam(name="checkboxSal", defaultValue="")String[] salary,
 			  @RequestParam(name="checkboxComp", defaultValue="")String[] company,
 			  HttpServletRequest request,
 			  Model model) {
-		
 		
 		List<?> x= service.locationFacet(new String[0]);
 		List<?> y= service.titleFacet(new String[0]);
@@ -69,14 +85,12 @@ public class SearchController {
 			return "search";
 		}
 		List<CompanyJobPosts> searchResults = null;
-		 try {
+		try {
 		      searchResults = service.fuzzySearch(q);
 		    }
 		    catch (Exception ex) {
 		      
 		    }
-		
-		
 		
 		List<CompanyJobPosts> resList = new ArrayList<CompanyJobPosts>();
 		Set<CompanyJobPosts> resSet = new HashSet<CompanyJobPosts>();
@@ -159,8 +173,6 @@ public class SearchController {
 		{
 			resList.addAll(searchResults);
 		}
-		
-			
 			
 		resSet.addAll(resList);
 		
@@ -181,16 +193,41 @@ public class SearchController {
 			}
 		}
 		
-		model.addAttribute("jobslist", returnList);
+		//model.addAttribute("jobslist", returnList);
 		model.addAttribute("filter", x);
 		model.addAttribute("title", y);
 		model.addAttribute("salar", z);
 		model.addAttribute("company", f);
 		model.addAttribute("interested", hm);
+		
+		
+		PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(returnList);
+		pagedListHolder.setPageSize(4);
+		model.addAttribute("maxPages", pagedListHolder.getPageCount());
+
+		if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+
+		model.addAttribute("page", page);
+		if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
+			pagedListHolder.setPage(0);
+			model.addAttribute("jobslist", pagedListHolder.getPageList());
+		}
+		else if(page <= pagedListHolder.getPageCount()) {
+			pagedListHolder.setPage(page-1);
+			model.addAttribute("jobslist", pagedListHolder.getPageList());
+		}
+		
 
 		return "search";
 	}
 	
+	/**
+	 * @param jobid
+	 * @param redirectAttributes
+	 * @param request
+	 * @param model
+	 * @return If the job the user finds interesting he/she can mark it interested. 
+	 */
 	@RequestMapping(value="interestedapply/{jobid}",method=RequestMethod.POST)
 	public String updateStatus(@PathVariable("jobid") long jobid,
 			RedirectAttributes redirectAttributes, HttpServletRequest request,Model model)
@@ -212,6 +249,12 @@ public class SearchController {
 		return "redirect:"+ url;
 	}
 
+	
+	/**
+	 * @param jobid
+	 * @param model
+	 * @return Removes the uninterested jobs from the list
+	 */
 	@RequestMapping(value="interestedremove/{jobid}",method=RequestMethod.POST)
 	public String updateStatus(@PathVariable("jobid") long jobid,Model model)
 	{	
@@ -222,122 +265,5 @@ public class SearchController {
 		intr.removeById(id);
 		return "redirect:/listInterested";
 
-	}
-
-
-	/*@RequestMapping(value="/filter",method=RequestMethod.GET)
-	  public String filterJob(@RequestParam(name="checkboxName", defaultValue="")String[] q, @RequestParam(name="checkboxTitle", defaultValue="")String[] r,@RequestParam(name="checkboxSal", defaultValue="")String[] s,@RequestParam(name="checkboxComp", defaultValue="")String[] comp,Model model) {
-		List<?> x= service.locationFacet();
-		List<?> y= service.titleFacet();
-		List<Facet> z= service.salaryFacet();
-		List<Facet> f= service.companyFacet();
-		List<Long> Final =new ArrayList<Long>();
-		SearchService ss=new SearchService();
-		String temp[] = new String[2];
-		int temp_flag = 0;
-		String arr[] = new String[1];
-		for(int i =0;i<s.length;i++) {
-			//System.out.println(s[i]+" Size"+s.length);
-			if(!s[i].contains(",") && s[i].startsWith("[")){
-				int temp_0 = Integer.parseInt(s[i].toString().replace("[", ""));
-				temp[0] = String.valueOf(temp_0);
-				temp_flag++;
-				System.out.println("temp 0 : "+ temp[0]);
-			}
-			if(!s[i].contains(",") && s[i].endsWith("]")){
-				int temp_1 = Integer.parseInt(s[i].toString().replace("]", ""));
-				temp[1] = String.valueOf(temp_1);
-				temp_flag++;
-	//			System.out.println("temp 1: "+ temp[1]);
-			}
-			
-		}
-//		for(int k = 0; k<arr.length; k++) System.out.println("(Arpit) k: "+arr[k]);
-		boolean flag=false;	
-//		System.out.println("Checking q" +q.toString());
-//		System.out.println("Checking r" +r.length);
-		long def=0;
-		if((q.length!=0)){
-			flag= true;
-			Final=ss.findFrom(q);
-				Final.add(def);			
-	  	}	
-		if(comp.length!=0 && flag==false){ // working for comany
-			flag=true;
-			List<Long> companyId=ss.findCompanyId(comp);
-			Final= ss.findJobId(companyId);
-			Final.add(def);
-			//for(int k =0;k<jobid.size();k++) System.out.println("here we are"+jobid.get(k));
-			//=
-			//Final.retainAll(titleObj);
-			}
-		if(comp.length!=0 && flag==true){
-			List<Long> companyId=ss.findCompanyId(comp);
-			List<Long> CompanyObj=ss.findJobId(companyId);
-			Final.retainAll(CompanyObj);
-			Final.add(def);
-			}
-		// till here
-		if(r.length!=0 && flag==true){
-		List<Long> titleObj=ss.findTitle(r);
-		Final.retainAll(titleObj);
-		Final.add(def);
-		}
-		
-		if(r.length!=0 && flag==false){
-		flag=true;
-		Final=ss.findTitle(r);
-		Final.add(def);
-		}
-		if(arr.length==1 && flag==true &&temp_flag>0)
-		{
-		arr[0] = "["+temp[0]+", "+temp[1]+"]"; // [10, 20]
-	//	System.out.println("Yahaan hai arr[0]:: "+arr[0]);
-		List<Long> check1=ss.findSal(arr);
-		Final.retainAll(check1);
-		}
-	if(s.length!=0 && flag==true && temp_flag==0){
-	//	System.out.println("wahaaan pr hai");
-		List<Long> s111=ss.findSal(s);
-		Final.retainAll(s111);
-	}
-	if(arr.length!=0 && flag==false &&temp_flag>0 ){
-		arr[0] = "["+temp[0]+", "+temp[1]+"]"; // [10, 20]
-	//	System.out.println("Yahaan hai arr[0]:: "+arr[0]);
-		flag=true;
-		Final=ss.findSal(arr);
-	}
-	if(s.length!=0 && flag==false && temp_flag==0 ){
-		flag=true;
-		Final=ss.findSal(s);
-	}
-	else if(r.length==0 && q.length==0 &&s.length==0 && comp.length==0){
-		flag=true;
-		System.out.println("Both values are null");
-		model.addAttribute("filter", x);
-	    model.addAttribute("title", y);
-	    model.addAttribute("salar", z);
-	    model.addAttribute("company", f);
-		return "filter";
 	}	
-	//for(int i =0;i<Final.size();i++) System.out.println(Final.get(i));
-		List<CompanyJobPosts> resList=new ArrayList<CompanyJobPosts>();
-		List<CompanyJobPosts> FilledList=new ArrayList<CompanyJobPosts>();
-		if(Final.contains(def)) Final.remove(def);
-		for(int i =0;i<Final.size();i++) System.out.println(Final.get(i));
-		for(Long l: Final ){
-		resList.addAll(ss.findOpenJob(l));
-		}
-		for(Long l: Final ){
-			FilledList.addAll(ss.findFilledJob(l));
-			}  
-	    model.addAttribute("jobslist", resList);
-	    model.addAttribute("Filledlist", FilledList);
-	    model.addAttribute("filter", x);
-	    model.addAttribute("title", y);
-	    model.addAttribute("salar", z);
-	    model.addAttribute("company", f);
-	    return "filter";
-	  } */
-	
 }

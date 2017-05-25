@@ -29,6 +29,17 @@ import edu.sjsu.cmpe275.service.JobseekerService;
 import edu.sjsu.cmpe275.service.UserService;
 import edu.sjsu.cmpe275.validator.CompanyValidator;
 
+/**
+* <h1>Company Controller Endpoints</h1>
+* The company controller class provides the REST endpoints
+* to map the basic GET,POST,PUT and DELETE request for
+* its corresponding operations. It serves as the endpoints
+* for all the operations for company role 
+*
+* @author  Syed Imran Ahmed
+* @version 1.0
+* @since   2017-05-03
+*/ 
 @Controller
 public class CompanyController {
 
@@ -57,7 +68,11 @@ public class CompanyController {
 	  private InterviewService intrw;
 
 	
-	 @RequestMapping(value = "/company", method = RequestMethod.GET)
+	 /**
+	 * @param model
+	 * @return company page if existing company or make a new company model
+	 */
+	@RequestMapping(value = "/company", method = RequestMethod.GET)
 	    public String company(Model model) {
 	        String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
 	        User user = userService.findByUsername(currentUserName);
@@ -70,13 +85,16 @@ public class CompanyController {
 	        return "company";
 	    }
 	    
+	
+	    /**
+	     * @param company
+	     * @param bindingResult
+	     * @param model
+	     * @return redirect to the home page upon saving the company attributes
+	     */
 	    @RequestMapping(value = "/company", method = RequestMethod.POST)
 	    public String companyProfile(@ModelAttribute("company") Company company, BindingResult bindingResult, Model model) {
-//	    	jobseekerValidator.validate(company, bindingResult);
-	//
-//	        if (bindingResult.hasErrors()) {
-//	            return "company";
-//	        }
+
 	    	  companyValidator.validate(company, bindingResult);
 
 	          if (bindingResult.hasErrors()) {
@@ -91,11 +109,19 @@ public class CompanyController {
 	    }
 	    
 	    
+	    /**
+	     * @param model
+	     * @return show the welcome page of the company
+	     */
 	    @RequestMapping(value = "/companywelcome", method = RequestMethod.GET)
 	    public String welcomecmpny(Model model) {
 	    	return "welcome";
 	    }
 	    
+	    /**
+	     * @param model
+	     * @return Show the post job page for the company
+	     */
 	    @RequestMapping(value = "/postjob", method = RequestMethod.GET)
 	    public String companyJob(Model model) {
 	       
@@ -104,6 +130,14 @@ public class CompanyController {
 	    }
 	    
 	    
+	    /**
+	     * @param cmpJobPost
+	     * @param bindingResult
+	     * @param model
+	     * @return Check if the model already has the job details, if so then show those for editing else post a new 
+	     * job. Also check if the position is filled or cancelled then trigger a mail to the applications and then save the 
+	     * job and return.
+	     */
 	    @RequestMapping(value = "/postjob", method = RequestMethod.POST)
 	    public String companyPostJob(@ModelAttribute("companyjobposts") CompanyJobPosts cmpJobPost, BindingResult bindingResult, Model model) {
 	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -141,6 +175,11 @@ public class CompanyController {
 	        return "redirect:/";
 	    }
 	    
+	    /**
+	     * @param jobid
+	     * @param model
+	     * @return Show the post job page for that particular job id
+	     */
 	    @RequestMapping(value = "/postjob/{jobid}", method = RequestMethod.GET)
 	    public String companyShowJob(@PathVariable("jobid") Long jobid, Model model) {
 	       
@@ -151,6 +190,11 @@ public class CompanyController {
 	        return "postjob";
 	    }
 	    
+	    /**
+	     * @param jobid
+	     * @param model
+	     * @return Show all the applications related to that job id for which the jobseekr has applied for
+	     */
 	    @RequestMapping(value = "/jobApplications/{jobid}", method = RequestMethod.GET)
 	    public String viewApplicantList(@PathVariable("jobid") Long jobid, Model model) {
 	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -168,6 +212,13 @@ public class CompanyController {
 	        }
 	    }
 	    
+	    /**
+	     * @param jobId
+	     * @param jobSeekerId
+	     * @param model
+	     * @return Show the resume and profile view to the company and the company can download the applicants resume and 
+	     * show the schedule interview link along with job offered or rejected button.
+	     */
 	    @RequestMapping(value = "/jobseekerOffer/{jobId}/{jobSeekerId}", method = RequestMethod.GET)
 	    public String viewApplicant(@PathVariable("jobId") Long jobId,@PathVariable("jobSeekerId") Long jobSeekerId, Model model) {
 	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -196,6 +247,12 @@ public class CompanyController {
 	        }
 	    }
 	    
+	    /**
+	     * @param jsApplication
+	     * @param bindingResult
+	     * @param model
+	     * @return Save the jobseeker attributes if or not he has been offered the job or rejected.
+	     */
 	    @RequestMapping(value = "/jobseekerOffer", method = RequestMethod.POST)
 	    public String saveDecision(@ModelAttribute("jsApplication") Application jsApplication, BindingResult bindingResult, Model model) {
 	    	if (jsApplication.getStatus()!= null && jsApplication.getStatus()!= "Pending"){
@@ -220,6 +277,12 @@ public class CompanyController {
 	    	return "redirect:/";
 	    }
 	    
+	    /**
+	     * @param jobAppId
+	     * @param model
+	     * @return show the view for scheduling the interview in case the company wants to interview the applicant
+	     * then redirect it to the home page of the company.
+	     */
 	    @RequestMapping(value = "/interviewSchedule/{jobAppId}", method = RequestMethod.GET)
 	    public String scheduleInterview(@PathVariable("jobAppId") String jobAppId, Model model) {
 	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -242,6 +305,12 @@ public class CompanyController {
 	        return "redirect:/";
 	    }
 	    
+	    /**
+	     * @param interview
+	     * @param bindingResult
+	     * @param model
+	     * @return schedule the interview for the user and send out the notifications
+	     */
 	    @RequestMapping(value = "/interviewSchedule", method = RequestMethod.POST)
 	    public String saveInterview(@ModelAttribute("interview") Interview interview, BindingResult bindingResult, Model model) {
 	    	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
