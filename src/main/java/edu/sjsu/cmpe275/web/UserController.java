@@ -111,7 +111,6 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
     	
-    	System.out.println("INSIDE LOGIN");
         if (error != null)
             model.addAttribute("error", "Your username and password is invalid.");
 
@@ -144,7 +143,7 @@ public class UserController {
     			js = jobseekerService.findById(user.getId());
     			if (js != null)
     			{
-    				System.out.println(js);
+
     				model.addAttribute("profileComplete", true);
     			}
 
@@ -322,8 +321,7 @@ public class UserController {
          }else{
         	model.addAttribute("jobseeker", new JobSeeker());
         }
-       // File f = new File(IMAGE_FOLDER + user.getId()+".JPG");
-        System.out.println("Inside Upload "+ user.getId());
+
         model.addAttribute("image", imageService.findByJsid(user.getId()));
         if(session.getAttribute("id")==null) { 
         	session.setAttribute("id", user.getId());
@@ -343,7 +341,7 @@ public class UserController {
         j.setId(user.getId());
         
         jobseekerService.save(j);
-
+        model.addAttribute("image", imageService.findByJsid(user.getId()));
         return "job_seeker";
     }
     
@@ -362,8 +360,7 @@ public class UserController {
 	
 		
         if (file.isEmpty()) {
-            System.out.println("its empty");
-            return "redirect:job_seeker";
+             return "redirect:job_seeker";
         }
 
         try {
@@ -374,7 +371,6 @@ public class UserController {
             String uniqueID = UUID.randomUUID().toString();
 
             String fileName = "images/"+uniqueID+".JPG";
-            System.out.println(fileName);
     		s3client.putObject(new PutObjectRequest(bucketName, fileName,is, new ObjectMetadata())
     				.withCannedAcl(CannedAccessControlList.PublicRead));
             Image img = new Image(user.getId(),uniqueID);
