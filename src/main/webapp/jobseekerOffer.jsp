@@ -107,9 +107,8 @@
 					<br>
 					<h3 align= "left" class="form-signin-heading">Resume</h3>
 					<div class="form-group ${status.error ? 'has-error' : ''}">	
-					    <object data="https://s3-us-west-1.amazonaws.com/cmpe275/resumes/${jsApplication.jobseekerResumeLoc}" type="application/${type}" width="500" height="650" title= "Resume">
-					 		<a href="	https://s3-us-west-1.amazonaws.com/cmpe275/resumes/${jsApplication.jobseekerResumeLoc}">Download file</a>
-						</object>
+					    <iframe src="http://docs.google.com/gview?url=https://s3-us-west-1.amazonaws.com/cmpe275/resumes/${jsApplication.jobseekerResumeLoc}&embedded=true" style="width:718px; height:700px;"></iframe>
+					    <a href="https://s3-us-west-1.amazonaws.com/cmpe275/resumes/${jsApplication.jobseekerResumeLoc}">Download file</a>
 					</div>
 				</form:form>
 			 </div>          
