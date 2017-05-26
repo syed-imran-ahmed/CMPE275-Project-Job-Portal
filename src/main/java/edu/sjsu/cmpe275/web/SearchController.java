@@ -107,7 +107,7 @@ public class SearchController {
 			
 			
 			PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(returnList);
-			pagedListHolder.setPageSize(4);
+			pagedListHolder.setPageSize(10);
 			model.addAttribute("maxPages", pagedListHolder.getPageCount());
 
 			if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
