@@ -24,8 +24,45 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+		div.contain {
+		    width: 100%;
+		    border: 1px solid gray;
+		    min-height:520px;
+		}
+
+header{
+    margin:0;
+    padding:1em;
+    background-color: DARKSLATEGRAY;
+    clear: left;  
+    color:white;
+    font-size:20;
+    text-align: center;
+    box-shadow: inset 0 0 20px 0px black;
+}
+
+	footer {
+	    margin:0;
+    	padding:1em;
+	    background-color: DARKSLATEGRAY;
+	    clear: left;  
+	    color:white;
+	    font-size:20;
+	    text-align: center;
+	    box-shadow: inset 0 0 20px 0px black;
+		bottom: 0px;
+		width : 100%;
+		height:100%;
+	}
+	</style>
 </head>
 <body>
+<a href="/">
+<header>
+	    <img src="https://s3-us-west-1.amazonaws.com/cmpe275/images/logo.jpeg" alt="hirePeople"/>
+</header>
+</a>
 <div class="container">
 
     <form:form method="POST" action="${contextPath}/company" modelAttribute="company" class="form-signin">
@@ -72,6 +109,7 @@
     </form:form>
 
 </div>
+<footer>CMPE275 Project Team-3</footer>
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

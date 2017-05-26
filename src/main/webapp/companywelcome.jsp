@@ -29,10 +29,52 @@
 	}
 
 </script>
+
+<style>
+		div.contain {
+		    width: 100%;
+		    border: 1px solid gray;
+		    min-height:520px;
+		}
+
+header{
+    margin:0;
+    padding:1em;
+    background-color: DARKSLATEGRAY;
+    clear: left;  
+    color:white;
+    font-size:20;
+    text-align: center;
+    box-shadow: inset 0 0 20px 0px black;
+}
+
+	footer {
+	    margin:0;
+    	padding:1em;
+	    background-color: DARKSLATEGRAY;
+	    clear: left;  
+	    color:white;
+	    font-size:20;
+	    text-align: center;
+	    box-shadow: inset 0 0 20px 0px black;
+		bottom: 0px;
+		width : 100%;
+		height:100%;
+	}
+	</style>
+    
     
 </head>
 <body>
+<a href="/">
+<header>
+	    <img src="https://s3-us-west-1.amazonaws.com/cmpe275/images/logo.jpeg" alt="hirePeople"/>
+</header>
+</a>
 <div class="container">
+
+	
+
 
     <c:if test="${pageContext.request.userPrincipal.name != null}">
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
@@ -106,6 +148,7 @@
 
 
 </div>
+<footer>CMPE275 Project Team-3</footer>
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

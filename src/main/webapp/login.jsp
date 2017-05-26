@@ -30,35 +30,15 @@
 </head>
 
 <body background="https://static.licdn.com/sc/h/64xk850n3a8uzse6fi11l3vmz">
-<nav class="navbar navbar-inverse navbar-fixed-top">
-  <div class="container-fluid">
-    <div class="navbar-header">
-      <a class="navbar-brand" href="#">
-        <img alt="Brand" src="https://cdn.dribbble.com/users/443465/screenshots/2203206/3.png" width="35" height="35">
-      </a>
-    </div>
-      <form method="POST" action="${contextPath}/login" class="navbar-form navbar-right">s
-        <div class="form-group ${error != null ? 'has-error' : ''}">
-            <span>${message}</span>
-            <input name="username" type="text" class="form-control" placeholder="Username"
-                   autofocus="true"/>
-            <input name="password" type="password" class="form-control" placeholder="Password"/>
-            <span>${error}</span>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 
-            <button class="btn btn-primary" type="submit">Log In</button>
-           
-        </div>
-    </form>
-  </div>
-</nav>
-<div class="container" style="float:right;">
+<br><br><br>
+<div class="container" style="float:center;">
 	
     <form method="POST" action="${contextPath}/login" class="form-signin">
-        <h2 class="form-heading">Log in</h2>
+        <h2 class="form-heading" style="color:white;">Log in</h2>
 
         <div class="form-group ${error != null ? 'has-error' : ''}">
-            <span>${message}</span>
+            <span style="color:white;">${message}</span>
             <input name="username" type="text" class="form-control" placeholder="Username"
                    autofocus="true"/>
             <input name="password" type="password" class="form-control" placeholder="Password"/>
@@ -70,8 +50,13 @@
         </div>
 
     </form>
-
+    
+<div align=center>
+<img src="https://s3-us-west-1.amazonaws.com/cmpe275/images/logo.jpeg" alt="hirePeople" style="box-shadow: 0 0 20px 20px black;"/>
 </div>
+</div>
+
+
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

@@ -51,7 +51,7 @@ public class SearchController {
     
 	@Autowired
     private UserService userService;
-
+	static List<CompanyJobPosts> returnList = new ArrayList<CompanyJobPosts>();
 	/**
 	 * @param q
 	 * @param locations
@@ -77,12 +77,55 @@ public class SearchController {
 		List<?> y= service.titleFacet(new String[0]);
 		List<?> z= service.salaryFacet(new String[0]);
 		List<?> f= service.companyFacet(new String[0]);
-		if(q==null&&locations.length==0&&title.length==0&&salary.length==0&&company.length==0){
+		
+		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
+    	User user = userService.findByUsername(currentUserName);
+        HashMap<String,Boolean> hm =new HashMap<>(); 
+		for(Interested i: intr.findByJobseekerid(user.getId()) ){
+			if (i != null){
+				String[] sub = i.getId().split("\\+");
+				System.out.println(sub[1]);
+				hm.put(sub[1], i.isStatus());
+			}
+		}
+		
+		if(q==null&&locations.length==0&&title.length==0&&salary.length==0&&company.length==0&page==null){
 			    model.addAttribute("filter", x);
 			    model.addAttribute("title", y);
 			    model.addAttribute("salar", z);
 			    model.addAttribute("company", f);
+			    returnList.clear();
 			return "search";
+		}
+		else if(page!=null && returnList.size()!=0)
+		{
+			model.addAttribute("filter", x);
+			model.addAttribute("title", y);
+			model.addAttribute("salar", z);
+			model.addAttribute("company", f);
+			model.addAttribute("interested", hm);
+			
+			
+			PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(returnList);
+			pagedListHolder.setPageSize(4);
+			model.addAttribute("maxPages", pagedListHolder.getPageCount());
+
+			if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
+
+			model.addAttribute("page", page);
+			if(page == null || page < 1 || page > pagedListHolder.getPageCount()){
+				pagedListHolder.setPage(0);
+				model.addAttribute("jobslist", pagedListHolder.getPageList());
+			}
+			else if(page <= pagedListHolder.getPageCount()) {
+				pagedListHolder.setPage(page-1);
+				model.addAttribute("jobslist", pagedListHolder.getPageList());
+			}
+			return "search";
+		}
+		else if(page==null)
+		{
+			returnList.clear();
 		}
 		List<CompanyJobPosts> searchResults = null;
 		try {
@@ -165,7 +208,7 @@ public class SearchController {
 			//TODO: show only job posts which are open
 		}
 			
-		if(resList.size()!=0 && searchResults.size()!=0)
+		if(resList.size()!=0 && (searchResults!=null && searchResults.size()!=0))
 		{
 			resList.retainAll(searchResults);
 		}
@@ -176,22 +219,13 @@ public class SearchController {
 			
 		resSet.addAll(resList);
 		
-		List<CompanyJobPosts> returnList = new ArrayList<CompanyJobPosts>();
+		
 		
 		for(CompanyJobPosts jobPost: resSet)
 		{
 			returnList.add(jobPost);
 		}
-		String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
-    	User user = userService.findByUsername(currentUserName);
-        HashMap<String,Boolean> hm =new HashMap<>(); 
-		for(Interested i: intr.findByJobseekerid(user.getId()) ){
-			if (i != null){
-				String[] sub = i.getId().split("\\+");
-				System.out.println(sub[1]);
-				hm.put(sub[1], i.isStatus());
-			}
-		}
+		
 		
 		//model.addAttribute("jobslist", returnList);
 		model.addAttribute("filter", x);
