@@ -169,14 +169,16 @@ nav ul a {
 				<form method="POST" action="${contextPath}/interestedapply/${job.jobid}">
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
 					<c:set var="jid">${job.jobid}</c:set>
-					<c:choose>
-						<c:when test = "${interested.get(jid)}">
-							<h4 align="left"><button class="btn btn-primary" type="submit">Interested</button></h4>
-						</c:when>
-						<c:otherwise>
-							<h4 align="left"><button class="btn btn-primary" type="submit">Not Interested</button></h4>
-						</c:otherwise>
-					</c:choose>
+					<c:if test = "${job.jobposition eq 'Open'}">
+						<c:choose>
+							<c:when test = "${interested.get(jid)}">
+								<h4 align="left"><button class="btn btn-primary" type="submit">Interested</button></h4>
+							</c:when>
+							<c:otherwise>
+								<h4 align="left"><button class="btn btn-primary" type="submit">Not Interested</button></h4>
+							</c:otherwise>
+						</c:choose>
+					</c:if>
 				</form>
 			</div>
 			<hr>
@@ -186,7 +188,7 @@ nav ul a {
 	
 	<div id="pagination">
 
-    <c:url value="${contextPath}/search" var="prev">
+    <c:url value="/search" var="prev">
         <c:param name="page" value="${page-1}"/>
     </c:url>
     <c:if test="${page > 1}">
@@ -199,14 +201,14 @@ nav ul a {
                 <span>${i.index}</span>
             </c:when>
             <c:otherwise>
-                <c:url value="${contextPath}/search" var="url">
+                <c:url value="/search" var="url">
                     <c:param name="page" value="${i.index}"/>
                 </c:url>
                 <a href='<c:out value="${url}" />'>${i.index}</a>
             </c:otherwise>
         </c:choose>                
     </c:forEach>
-    <c:url value="${contextPath}/search" var="next">
+    <c:url value="/search" var="next">
         <c:param name="page" value="${page + 1}"/>
     </c:url>
     <c:if test="${page + 1 <= maxPages}">
