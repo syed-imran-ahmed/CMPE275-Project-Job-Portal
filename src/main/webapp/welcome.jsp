@@ -79,12 +79,11 @@ nav ul li {display: inline-block;
 	height:100%;
 
 }
-nav ul li:hover {background: DARKSLATEGRAY; 
+nav ul li a:hover {background: DARKSLATEGRAY; 
 	width: 100%; 
 	height:100%;
 	text-align: center;
-	padding: 2em;     
-	margin: -2em; 
+	color: white;
 }
    
 nav ul a {
