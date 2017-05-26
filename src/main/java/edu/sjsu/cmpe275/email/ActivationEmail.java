@@ -270,4 +270,69 @@ public class ActivationEmail {
 		public static void emailInterview(String companyMail,String jobseekerMail,long jobId, Interview interview){
 			//Event createdEvent = calendario.events().insert("some-mail-from-google0@group.calendar.google.com", event).setSendNotifications(true).execute();
 		}
+		
+		
+		public static void emailInterestedJobCancelledTrigger(String receiverMail, long jobId){
+		       final String username = "sjsuprojects@gmail.com";
+		      final String password = "Aios@123";
+		        String[] to = { receiverMail };
+		        Properties props = new Properties();
+		        props.put("mail.smtp.auth", "true");
+		        props.put("mail.smtp.starttls.enable", "true");
+		        props.put("mail.smtp.host", "smtp.gmail.com");
+		        props.put("mail.smtp.port", "587");
+		        Session session = Session.getInstance(props, new GMailAuthenticator(username, password));
+		        
+		        try {
+		            Message message = new MimeMessage(session);
+		             InternetAddress me = new InternetAddress("sjsuprojects@gmail.com");
+		                try {
+		                    me.setPersonal("Job Portal 275");
+		                } catch (UnsupportedEncodingException e) {
+		                    e.printStackTrace();
+		                }
+		                message.setFrom(me);
+		            for (int i = 0; i < to.length; i++) {
+		                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to[i]));
+		            }
+		            message.setSubject("Job Post "+ jobId+" has been cancelled or filled");
+		            message.setText("\n The job post you are interested in have been cancelled or filled. It has also been removed from your interested list. Please check.\n\nRegards,\n" + "275 Project Team");
+		            System.out.println("message"+receiverMail);
+		            Transport.send(message);
+		        } catch (MessagingException e) {
+		            throw new RuntimeException(e);
+		        }
+		    }
+		
+		public static void emailForInterviewCancelledTrigger(String receiverMail, long jobId){
+		       final String username = "sjsuprojects@gmail.com";
+		      final String password = "Aios@123";
+		        String[] to = { receiverMail };
+		        Properties props = new Properties();
+		        props.put("mail.smtp.auth", "true");
+		        props.put("mail.smtp.starttls.enable", "true");
+		        props.put("mail.smtp.host", "smtp.gmail.com");
+		        props.put("mail.smtp.port", "587");
+		        Session session = Session.getInstance(props, new GMailAuthenticator(username, password));
+		        
+		        try {
+		            Message message = new MimeMessage(session);
+		             InternetAddress me = new InternetAddress("sjsuprojects@gmail.com");
+		                try {
+		                    me.setPersonal("Job Portal 275");
+		                } catch (UnsupportedEncodingException e) {
+		                    e.printStackTrace();
+		                }
+		                message.setFrom(me);
+		            for (int i = 0; i < to.length; i++) {
+		                message.addRecipient(Message.RecipientType.TO, new InternetAddress(to[i]));
+		            }
+		            message.setSubject("Job Post "+ jobId+" Interview has been cancelled");
+		            message.setText("\n The interview has been cancelled as the job has been filled or cancelled. Please check.\n\nRegards,\n" + "275 Project Team");
+		            System.out.println("message"+receiverMail);
+		            Transport.send(message);
+		        } catch (MessagingException e) {
+		            throw new RuntimeException(e);
+		        }
+		    }
 }

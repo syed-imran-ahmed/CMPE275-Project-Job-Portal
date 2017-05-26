@@ -174,6 +174,13 @@ public class CompanyController {
 		        			a.setStatus("Cancelled");
 		        		}
 	        		}
+	        		Interview intv = intrw.findById(a.getId());
+	        		if(intv.getStatus().contains("invitation sent"))
+	        		{
+	        			User js = userService.findById(Integer.parseInt((intv.getId().substring(0,1))));
+	        			ActivationEmail.emailForInterviewCancelledTrigger(js.getEmailid(),a.getJobID());
+	        		}
+	        		
 	        		
 	        		ActivationEmail.emailModifiedJobTrigger(a.getJobseekerEmail(),a.getJobID());
 	        	}
@@ -182,7 +189,12 @@ public class CompanyController {
 	        	List<Interested> intr=intrstd.findByJobid(cmpJobPost.getJobid());
 	        	for(Interested i: intr){
 	        		intrstd.removeByJobid(i.getJobid());
+	        		User js =  userService.findById(i.getJobseekerid());
+	        		ActivationEmail.emailInterestedJobCancelledTrigger(js.getEmailid(),i.getJobid());
 	        	}
+	        	
+	        	
+	        	
 	        }
 	        
 	        companyJobsService.save(cmpJobPost);
