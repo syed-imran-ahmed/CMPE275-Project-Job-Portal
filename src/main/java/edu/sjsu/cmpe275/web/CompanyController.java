@@ -1,5 +1,6 @@
 package edu.sjsu.cmpe275.web;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,9 +151,22 @@ public class CompanyController {
 	    	   return "redirect:/";
 	       }
 	        List<Application> app =  appService.findByjobID(cmpJobPost.getJobid());
+            List<String> test= new ArrayList<String>();
+            test.add("false");
+
 	        if( app != null){
 	        	for ( Application a: app)
 	        	{
+                    if(a.getStatus().equals("OfferAccepted") && cmpJobPost.getJobposition().equals("Cancelled"))
+                    {
+                        model.addAttribute("cannotcancel", test);
+                        model.addAttribute("jobid", cmpJobPost.getJobid());
+                        model.addAttribute("jobposition", cmpJobPost.getJobposition());
+                        model.addAttribute("companyjobposts", cmpJobPost);
+                        return "postjob";
+                    }
+
+	        		
 	        		if(cmpJobPost.getJobposition().contains("Filled") || cmpJobPost.getJobposition().contains("Cancelled"))
 	        		{
 	        			if(a.getStatus().equals("Pending") || a.getStatus().equals("Offered"))
