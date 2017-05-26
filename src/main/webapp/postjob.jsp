@@ -162,7 +162,7 @@ header{
 	})();
     </script>
     
-    	<div style="font-size:30px;">
+    	<div style="font-size:20px;">
 				<div id="appDetail" title="App Details">
 					<b>The job cannot be cancelled as the job has an application in Offer Accepted state</b>
 				</div>
