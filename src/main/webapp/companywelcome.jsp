@@ -112,7 +112,7 @@ header{
       
 </head>
 <body>
-<a href="/">
+<a href="${contextPath}/">
 <header>
 	    <img src="https://s3-us-west-1.amazonaws.com/cmpe275/images/logo.jpeg" alt="hirePeople"/>
 </header>
