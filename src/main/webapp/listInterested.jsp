@@ -5,7 +5,7 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
+<head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -23,12 +23,53 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+    <style>
+		div.contain {
+		    width: 100%;
+		    min-height:520px;
+		}
+		
+		header{
+		    margin:0;
+		    padding:1em;
+		    background-color: DARKSLATEGRAY;
+		    clear: left;  
+		    color:white;
+		    font-size:20;
+		    text-align: center;
+		    box-shadow: inset 0 0 20px 0px black;
+		}
+		
+			footer {
+			    margin:0;
+		    	padding:1em;
+			    background-color: DARKSLATEGRAY;
+			    clear: left;  
+			    color:white;
+			    font-size:20;
+			    text-align: center;
+			    box-shadow: inset 0 0 20px 0px black;
+				bottom: 0px;
+				width : 100%;
+			}
+		
+		article {
+		    margin-left: 170px;
+		    padding: 1em;
+		    overflow: hidden;
+		    height :100%;
+		}
+	</style>
+</head>
 <body>
-
-<h3 align = "right"><a href="${contextPath}/welcome">Homepage</a></h3>   
-<div style="margin-left:25%">
-<div class="w3-container">
-   <h3>View Interested Job Results</h3>
+<a href="${contextPath}/welcome">
+	<header>
+	    <img src="${contextPath}/images/logo.png" alt="hirePeople"/>
+	</header>
+</a>
+<article>
+<div class="contain">
+   <h3 align="center">View Interested Job Results</h3>
 	<c:if test="${not empty jobslist}">
 		<ul>
 		 	<c:forEach var="job" items="${jobslist}">
@@ -58,8 +99,8 @@
 		</ul>
 	</c:if>
 	</div>  
-	</div> 
-
+</article> 
+<footer>CMPE275 Project Team-3</footer>
 <!-- /container -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

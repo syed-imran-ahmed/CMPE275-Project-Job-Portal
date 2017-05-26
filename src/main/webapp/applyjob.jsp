@@ -24,16 +24,52 @@
     <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
+     <style>
+		div.contain {
+		    width: 100%;
+		    border: 1px solid gray;
+		    min-height:520px;
+		}
+
+header{
+    margin:0;
+    padding:1em;
+    background-color: DARKSLATEGRAY;
+    clear: left;  
+    color:gold;
+    font-size:20;
+    text-align: center;
+    box-shadow: inset 0 0 20px 0px black;
+}
+
+	footer {
+	    margin:0;
+    	padding:1em;
+	    background-color: DARKSLATEGRAY;
+	    clear: left;  
+	    color:white;
+	    font-size:20;
+	    text-align: center;
+	    box-shadow: inset 0 0 20px 0px black;
+		bottom: 0px;
+		width : 100%;
+	}
+
+	</style>
 </head>
 
 <body>
-<h2 align = "left"><a href="${contextPath}/welcome">Home Page</a></h2>
-<br>
-<div class="form-signin" style= "float:left;width:width/4">
-	<h3 align ="center" class="form-signin-heading"><a href = "${companyjobposts.company.website}">${companyjobposts.company.name}</a></h3>
-	<br>
-	<img src="${companyjobposts.company.logo}" width="250" height="250" onerror="this.src='${contextPath}/images/teamwork.png'" />
-</div>	
+<a href="${contextPath}/welcome">
+	<header>
+	    <img src="${contextPath}/images/logo.png" alt="hirePeople"/>
+	</header>
+</a>
+<div class="contain">
+	<div class="form-signin" style= "float:left;width:width/4">
+		<h3 align ="center" class="form-signin-heading"><a href = "${companyjobposts.company.website}">${companyjobposts.company.name}</a></h3>
+		<br>
+		<img src="${companyjobposts.company.logo}" width="250" height="250" onerror="this.src='${contextPath}/images/teamwork.png'" />
+	</div>	
 <div style= "float:center">
 
     <form:form action="${contextPath}/acceptOffer/${appid}" modelAttribute="companyjobposts" class="form-signin">
@@ -44,9 +80,6 @@
                 <form:errors path="jobid"></form:errors>
             </div>
         </spring:bind>
-        
-        <br>
-        <br>
         <h3  align= "left" class="form-signin-heading">Title</h3>
          <spring:bind path="Title">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -54,7 +87,6 @@
                 <form:errors path="Title"></form:errors>
             </div>
         </spring:bind>
-        <br>
         <h3 align= "left" class="form-signin-heading">Description</h3>
         <spring:bind path="Descrip">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -62,7 +94,6 @@
                 <form:errors path="Descrip"></form:errors>
             </div>
         </spring:bind>
-        <br>
         <h3 align= "left" class="form-signin-heading">Responsibilities</h3>
         <spring:bind path="Resp">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -70,7 +101,6 @@
                 <form:errors path="Resp"></form:errors>
             </div>
         </spring:bind>
-        <br>
         <h3 align= "left" class="form-signin-heading">Location</h3>
         <spring:bind path="Loc">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -78,7 +108,6 @@
                 <form:errors path="Loc"></form:errors>
             </div>
         </spring:bind>
-        <br>
         <h3 align= "left" class="form-signin-heading">Salary</h3>
         <spring:bind path="Sal">
             <div class="form-group ${status.error ? 'has-error' : ''}">
@@ -113,7 +142,8 @@
 	</c:choose>
 	</form:form>
 </div>
-
+</div>
+<footer>CMPE275 Project Team-3</footer>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
 <script src="${contextPath}/resources/js/bootstrap.min.js"></script>

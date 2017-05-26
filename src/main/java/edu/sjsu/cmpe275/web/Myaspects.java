@@ -55,6 +55,7 @@ public class Myaspects extends HandlerInterceptorAdapter{
 	        
 
 	        if(user.getUsertype().contains("JobSeeker") && jobseekerDeniedAccess.contains(method)){
+	        	System.out.println("Im here");
 	        	throw new RuntimeException("welcome");
 	        }
 	        else if(user.getUsertype().contains("Company") && companyDeniedAccess.contains(joinPoint.getSignature().getName())){
