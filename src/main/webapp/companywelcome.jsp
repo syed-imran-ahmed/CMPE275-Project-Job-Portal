@@ -61,9 +61,55 @@ header{
 		width : 100%;
 		height:100%;
 	}
+	nav {
+		background-color: SILVER;
+		font-weight:bold;
+	    float:left;
+	    max-width: 20%;
+	    height:600px;
+	    margin: 0;
+	    padding: 1em;
+	}
+	
+	nav ul {
+	    list-style-type: none;
+	    padding: 0;
+	    display: inline-block;
+		position: relative;    
+		z-index: 1; 
+	    text-align: center;
+	    padding: 2em;     
+		margin: -2em; 
+	}
+	
+	nav ul li {display: inline-block;
+		width: 100%; 
+		text-align: center;   
+		height:100%;
+	
+	}
+	nav ul li a:hover {background: DARKSLATEGRAY; 
+		width: 100%; 
+		height:100%;
+		text-align: center;
+		color:white;
+	
+	}
+	   
+	nav ul a {
+	    text-decoration: none;
+	    display: inline-block;
+
+	}
+	
+	article {
+	    margin-left: 170px;
+	    padding: 1em;
+	    overflow: hidden;
+	    height :100%;
+	}
 	</style>
-    
-    
+      
 </head>
 <body>
 <a href="/">
@@ -73,9 +119,6 @@ header{
 </a>
 <div class="container">
 
-	
-
-
     <c:if test="${pageContext.request.userPrincipal.name != null}">
         <form id="logoutForm" method="POST" action="${contextPath}/logout">
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -84,13 +127,16 @@ header{
 		<div class="thumbnail-container" style="float:left;height:60px;width:60px">
 			<img src="${companylogo}" width="50" height="50" onerror="this.src='${contextPath}/images/teamwork.png'" />
 		</div>
-		
-        <h2>Welcome ${pageContext.request.userPrincipal.name} | <a onclick="document.forms['logoutForm'].submit()">Logout</a></h2>
-	
-		<h4 class="text-right"><a href="${contextPath}/company">Create/Update Company Profile</a></h4>
-		<h4 class="text-right"><a href="${contextPath}/postjob">Post a New Job</a></h4>
-		
-    </c:if>
+        <h2>Welcome ${pageContext.request.userPrincipal.name}!</h2>
+	</c:if>	
+	<nav>
+    	<ul>
+    		<li><h4><a href="${contextPath}/company">Create/Update Company Profile</a></h4></li>
+    		<li><h4><a href="${contextPath}/postjob">Post a New Job</a></h4></li>
+			<li><h4><a onclick="document.forms['logoutForm'].submit()">Logout</a></h4></li>
+		</ul>
+	</nav>
+	<article>
     <h3>List of posted jobs</h3> 
      <form id="selectForm" method="POST" action="${contextPath}/selection">
      <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
@@ -116,37 +162,36 @@ header{
 	</c:if>
 	
 	
-<div id="pagination">
+	<div id="pagination">
 
-    <c:url value="/welcome" var="prev">
-        <c:param name="page" value="${page-1}"/>
-    </c:url>
-    <c:if test="${page > 1}">
-        <a href="<c:out value="${prev}" />" class="pn prev">Prev</a>
-    </c:if>
-
-    <c:forEach begin="1" end="${maxPages}" step="1" varStatus="i">
-        <c:choose>
-            <c:when test="${page == i.index}">
-                <span>${i.index}</span>
-            </c:when>
-            <c:otherwise>
-                <c:url value="/welcome" var="url">
-                    <c:param name="page" value="${i.index}"/>
-                </c:url>
-                <a href='<c:out value="${url}" />'>${i.index}</a>
-            </c:otherwise>
-        </c:choose>                
-    </c:forEach>
-    <c:url value="/welcome" var="next">
-        <c:param name="page" value="${page + 1}"/>
-    </c:url>
-    <c:if test="${page + 1 <= maxPages}">
-        <a href='<c:out value="${next}" />' class="pn next">Next</a>
-    </c:if>
-</div>
-
-
+	    <c:url value="/welcome" var="prev">
+	        <c:param name="page" value="${page-1}"/>
+	    </c:url>
+	    <c:if test="${page > 1}">
+	        <a href="<c:out value="${prev}" />" class="pn prev">Prev</a>
+	    </c:if>
+	
+	    <c:forEach begin="1" end="${maxPages}" step="1" varStatus="i">
+	        <c:choose>
+	            <c:when test="${page == i.index}">
+	                <span>${i.index}</span>
+	            </c:when>
+	            <c:otherwise>
+	                <c:url value="/welcome" var="url">
+	                    <c:param name="page" value="${i.index}"/>
+	                </c:url>
+	                <a href='<c:out value="${url}" />'>${i.index}</a>
+	            </c:otherwise>
+	        </c:choose>                
+	    </c:forEach>
+	    <c:url value="/welcome" var="next">
+	        <c:param name="page" value="${page + 1}"/>
+	    </c:url>
+	    <c:if test="${page + 1 <= maxPages}">
+	        <a href='<c:out value="${next}" />' class="pn next">Next</a>
+	    </c:if>
+	</div>
+	</article>
 </div>
 <footer>CMPE275 Project Team-3</footer>
 <!-- /container -->
