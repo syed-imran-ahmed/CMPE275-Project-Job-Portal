@@ -127,6 +127,11 @@ public class SearchController {
 		{
 			returnList.clear();
 		}
+		 if(q.trim().equals(""))
+		 {
+			 q="search";
+		 }
+		
 		List<CompanyJobPosts> searchResults = null;
 		try {
 		      searchResults = service.fuzzySearch(q);
@@ -208,6 +213,11 @@ public class SearchController {
 			//TODO: show only job posts which are open
 		}
 			
+		if(resList.size()!=0 && !q.trim().equals("")&& !q.equals("search")&&searchResults.size()==0)
+		{
+			resList.retainAll(searchResults);
+		}
+		
 		if(resList.size()!=0 && (searchResults!=null && searchResults.size()!=0))
 		{
 			resList.retainAll(searchResults);
@@ -236,7 +246,7 @@ public class SearchController {
 		
 		
 		PagedListHolder<CompanyJobPosts> pagedListHolder = new PagedListHolder<>(returnList);
-		pagedListHolder.setPageSize(4);
+		pagedListHolder.setPageSize(10);
 		model.addAttribute("maxPages", pagedListHolder.getPageCount());
 
 		if(page==null || page < 1 || page > pagedListHolder.getPageCount())page=1;
