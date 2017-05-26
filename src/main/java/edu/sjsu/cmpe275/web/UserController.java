@@ -82,6 +82,10 @@ public class UserController {
     
     private static String IMAGE_FOLDER = "gs://test-e1811.appspot.com/images/";
     
+    /**
+     * @param model
+     * @return show the registration page
+     */
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -89,6 +93,12 @@ public class UserController {
         return "registration";
     }
 
+    /**
+     * @param userForm
+     * @param bindingResult
+     * @param model
+     * @return Registration for the user
+     */
     @RequestMapping(value = "/registration", method = RequestMethod.POST)
     public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult, Model model) {
         userValidator.validate(userForm, bindingResult);
@@ -107,6 +117,12 @@ public class UserController {
         return "redirect:/welcome";
     }
 
+    /**
+     * @param model
+     * @param error
+     * @param logout
+     * @return login for the user
+     */
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model, String error, String logout) {
     	
@@ -119,6 +135,11 @@ public class UserController {
         return "login";
     }
 
+    /**
+     * @param page
+     * @param model
+     * @return choose from the company or user page
+     */
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome(@RequestParam(required = false) Integer page,Model model) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -204,6 +225,12 @@ public class UserController {
     }
     
     
+    /**
+     * @param status
+     * @param page
+     * @param model
+     * @return selection based on open filled or cancelled jobs
+     */
     @RequestMapping(value = "/selection", method = RequestMethod.POST)
 	public String selection(@RequestParam(name="selectbox") String status,@RequestParam(required = false) Integer page, Model model) {
     	
@@ -254,6 +281,11 @@ public class UserController {
     }
     
     
+    /**
+     * @param token
+     * @param model
+     * @return verify using the email
+     */
     @RequestMapping(value = "/verification", method = RequestMethod.POST)
 	public String verification( @RequestParam("token") String token, Model model) {
     	
@@ -281,6 +313,10 @@ public class UserController {
     	
     }
 
+    /**
+     * @param model
+     * @return show the profile page
+     */
     @RequestMapping(value = "/profile", method = RequestMethod.GET)
     public String profile(Model model) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -294,22 +330,14 @@ public class UserController {
         }
         return "profile";
     }
+       
     
-//    
-//    @RequestMapping(value = "/profile", method = RequestMethod.POST)
-//    public String profile(@ModelAttribute("profileForm") Profile profileForm, BindingResult bindingResult, Model model) {
-//        profileValidator.validate(profileForm, bindingResult);
-//
-//        if (bindingResult.hasErrors()) {
-//            return "profile";
-//        }
-//        
-//        userService.saveProfile(profileForm);
-//
-//        return "profile";
-//    }
-    
-    
+    /**
+     * @param model
+     * @param session
+     * @param response
+     * @return get the job seeker page
+     */
     @RequestMapping(value = "/job_seeker", method = RequestMethod.GET)
     public String jobseekerget(Model model,HttpSession session,HttpServletResponse response ) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -328,6 +356,13 @@ public class UserController {
         return "job_seeker";
     }
     
+    /**
+     * @param j
+     * @param bindingResult
+     * @param model
+     * @param command
+     * @return post the attributes of the job seeker
+     */
     @RequestMapping(value = "/job_seeker", method = RequestMethod.POST)
     public String jobseeker(@ModelAttribute("jobseeker") JobSeeker j,BindingResult bindingResult, Model model,Object command) {
     	jobseekerValidator.validate(j, bindingResult);
@@ -344,6 +379,12 @@ public class UserController {
         return "job_seeker";
     }
     
+    /**
+     * @param file
+     * @param session
+     * @return upload the image for the user
+     * @throws IOException
+     */
     @PostMapping("/upload")
     public String imageUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
     	AWSCredentials credentials = new BasicAWSCredentials(

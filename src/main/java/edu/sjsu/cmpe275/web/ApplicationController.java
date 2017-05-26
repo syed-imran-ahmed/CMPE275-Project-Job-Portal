@@ -63,6 +63,12 @@ public class ApplicationController {
     
     private static String RESUME_FOLDER = "src/main/webapp/resumes/";
 
+    /**
+     * @param jobid
+     * @param model
+     * @param session
+     * @return applying using the job id and will return the applyjob page
+     */
     @RequestMapping(value = "/applyjob/{jobid}", method = RequestMethod.GET)
     public String applyJob(@PathVariable("jobid") Long jobid, Model model,HttpSession session) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -101,6 +107,10 @@ public class ApplicationController {
     }
 
 
+    /**
+     * @param model
+     * @return get the apply job page for profile
+     */
     @RequestMapping(value = "/applyprofile", method = RequestMethod.GET)
     public String profileget(Model model) {
         String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -111,6 +121,11 @@ public class ApplicationController {
     }
     
     
+    /**
+     * @param model
+     * @param session
+     * @return apply using the profile
+     */
     @PostMapping("/applyprofile")
     public String profilepost(Model model, HttpSession session) {
     	String resume = null;
@@ -130,6 +145,12 @@ public class ApplicationController {
     }
     
     
+    /**
+     * @param file
+     * @param session
+     * @return apply using the resume
+     * @throws IOException
+     */
     @PostMapping("/applyresume")
     public String resumeUpload(@RequestParam("file") MultipartFile file,HttpSession session) throws IOException {
     	System.out.println("apply Resume");
@@ -192,12 +213,20 @@ public class ApplicationController {
     }
     
     
+    /**
+     * @return the apply resume page
+     */
     @GetMapping("/applyresume")
     public String resumeget() {
   
         return "applyresume";
     }
     
+    /**
+     * @param model
+     * @param session
+     * @return cancel or reject the job
+     */
     @RequestMapping(value = "/applicationView", method = RequestMethod.GET)
     public String cancelOrRejectApp(Model model,HttpSession session) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -214,6 +243,10 @@ public class ApplicationController {
         return "applicationView";
     }
     
+    /**
+     * @param id
+     * @return update the job application 
+     */
     @Transactional
     @PostMapping("/applicationView")
     public String updateApp(@RequestParam List<String> id) {
@@ -244,6 +277,11 @@ public class ApplicationController {
     	return "redirect:applicationView";
     }
     
+    /**
+     * @param offered
+     * @param model
+     * @return accept the offer from the company
+     */
     @RequestMapping(value = "/acceptOffer/{offered}", method = RequestMethod.POST)
     public String acceptOffer(@PathVariable("offered") String offered,Model model) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -264,6 +302,11 @@ public class ApplicationController {
         return "redirect:/applicationView";
     }
     
+	/**
+	 * @param model
+	 * @param session
+	 * @return list the interested jobs
+	 */
 	@RequestMapping(value = "/listInterested", method = RequestMethod.GET)
     public String listInterestedJobs(Model model,HttpSession session) {
     	String currentUserName = SecurityContextHolder.getContext().getAuthentication().getName();
